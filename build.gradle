@@ -31,6 +31,18 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	//google smtp
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
+
+	//jasypt
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot:3.0.4'
+
+	//db
+	implementation 'com.mysql:mysql-connector-j'
+
+	//spring security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {

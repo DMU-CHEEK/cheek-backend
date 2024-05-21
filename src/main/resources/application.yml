@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: cheek
+
+  datasource:
+    url: ENC(MFP+zpXUBNiE9fBrExfNp668LALmh/sXJ/ZhWCsJx9qfFxxCsM2Q9Pd9IXLPvCS0uBwyZyQL0fhCBxkfTxyk3QmDeEzhpzx46pd1EXl5EJ1p0r4iveNcM8ydBllZC5fky/u/FFyoqiL+XumrBCFWaeE9OFtsohjOf8tRWn2VBPY=)
+    username: ENC(eB3PCKpRL/tx88ptIc14cQ==)
+    password: ENC(ZWaPfb4Cnghg98Xi6atOFw==)
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+logging:
+  level:
+    org.hibernate.orm.jdbc.bind: trace
+
+jasypt:
+  password: ${PASSWORD}
