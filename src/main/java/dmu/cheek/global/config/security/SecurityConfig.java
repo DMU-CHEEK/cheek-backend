@@ -1,6 +1,8 @@
 package dmu.cheek.global.config.security;
 
+import dmu.cheek.global.config.token.TokenManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -15,7 +17,19 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @RequiredArgsConstructor
 @EnableWebSecurity
-public class WebSecurityConfig {
+public class SecurityConfig {
+
+    @Value("${jwt.access-token-validity-in-seconds}")
+    private long accessTokenExpirationTime;
+    @Value("${jwt.refresh-token-validity-in-seconds}")
+    private long refreshTokenExpirationTime;
+    @Value("${jwt.secret}")
+    private String tokenSecret;
+
+    @Bean
+    public TokenManager tokenManager() {
+        return new TokenManager(accessTokenExpirationTime, refreshTokenExpirationTime, tokenSecret);
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {

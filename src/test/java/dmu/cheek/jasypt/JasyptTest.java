@@ -9,14 +9,14 @@ public class JasyptTest {
     @Test
 //    @Disabled
     public void test() {
-        String password = "QhEhwhdk123"; //jasypt password
+        String password = ""; //jasypt password
 
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         encryptor.setPoolSize(4);
         encryptor.setPassword(password);
         encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
 
-        String content = "QhEhwhdk123"; //암호화 할 내용
+        String content = ""; //암호화 할 내용
         String encryptedContent = encryptor.encrypt(content); //암호화
         String decryptedContent = encryptor.decrypt(encryptedContent); //복호화
         System.out.println("Enc : " + encryptedContent + ", Dec : " + decryptedContent);

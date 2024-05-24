@@ -3,9 +3,9 @@ spring:
     name: cheek
 
   datasource:
-    url: ENC(MFP+zpXUBNiE9fBrExfNp668LALmh/sXJ/ZhWCsJx9qfFxxCsM2Q9Pd9IXLPvCS0uBwyZyQL0fhCBxkfTxyk3QmDeEzhpzx46pd1EXl5EJ1p0r4iveNcM8ydBllZC5fky/u/FFyoqiL+XumrBCFWaeE9OFtsohjOf8tRWn2VBPY=)
-    username: ENC(eB3PCKpRL/tx88ptIc14cQ==)
-    password: ENC(ZWaPfb4Cnghg98Xi6atOFw==)
+    url: ENC(n56+9rtLrf+B12JU3ffKsWxOl+RFcVtv+b4YlJ67avltXIabj9hkeD/Ys0RY8jC7SJ134uA+ewWRWvwgDvlkcZ/9k3oiKj5T1qgwbZJGr5z7+Bgji6NCukJXsYKCE1glhi8napBYZOY4rWhZMl+RPG7Ne24fwO6tlmp+Wix0fLY=)
+    username: ENC(T8eOE2bcZPG4DWbDIqU1Pw==)
+    password: ENC(wNoyxb3BkCJ54JyPy6E2Vw==)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   servlet:
@@ -19,3 +19,11 @@ logging:
 
 jasypt:
   password: ${PASSWORD}
+
+jwt:
+  header: Authorization
+  secret: ENC(zkmSjc5Nt3TYzkJpos6m9Q==)
+  access-token-validity-in-seconds: 6000000 #100 min
+  refresh-token-validity-in-seconds: 1209600000 #15 days
+  token:
+    prefix: Bearer
