@@ -46,6 +46,15 @@ dependencies {
 
 	//jwt
 	implementation "io.jsonwebtoken:jjwt:0.9.1"
+
+	//oauth
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+	//feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+
+
+
 }
 
 tasks.named('test') {

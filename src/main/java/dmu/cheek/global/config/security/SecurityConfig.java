@@ -49,6 +49,7 @@ public class SecurityConfig {
                         .invalidateHttpSession(true) //http 세션 무효화
                 );
 
+
         return httpSecurity.build();
     }
 
