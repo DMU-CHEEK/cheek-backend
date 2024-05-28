@@ -7,6 +7,8 @@ import dmu.cheek.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.ProfileDto;
 import dmu.cheek.member.repository.MemberRepository;
+import dmu.cheek.s3.model.S3Dto;
+import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,7 +29,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final KakaoLoginClient kakaoLoginClient;
-    private final FileService fileService;
+    private final S3Service s3Service;
 
     public boolean isExistMember(String email) {
         return memberRepository.findByEmail(email) == null ? false : true;
@@ -53,11 +55,11 @@ public class MemberService {
     }
 
     @Transactional
-    public void setProfile(ProfileDto profileDto, MultipartFile profilePicture) throws IOException {
+    public void setProfile(ProfileDto profileDto, MultipartFile profilePicture) {
         Member member = findByEmail(profileDto.getEmail());
 
-        String storeFileName = fileService.storeFile(profilePicture);
-        member.setProfile(profileDto.getNickname(), profileDto.getInformation(), storeFileName, profileDto.getRole());
+        S3Dto s3Dto = s3Service.saveFile(profilePicture);
+        member.setProfile(profileDto.getNickname(), profileDto.getInformation(), s3Dto.getStoreFileName(), profileDto.getRole());
 
         log.info("set profile: {}", profileDto.getEmail());
     }
