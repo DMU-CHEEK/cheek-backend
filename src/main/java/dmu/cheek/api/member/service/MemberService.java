@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 
 @Service
@@ -44,6 +46,13 @@ public class MemberService {
     }
 
     @Transactional
+    public void register(Member member) {
+        memberRepository.save(member);
+
+        log.info("save member: {}", member.getEmail());
+    }
+
+    @Transactional
     public void setProfile(ProfileDto profileDto, MultipartFile profilePicture) throws IOException {
         Member member = findByEmail(profileDto.getEmail());
 
@@ -57,14 +66,21 @@ public class MemberService {
         return memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
     }
 
-    public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, String accessToken) {
+    public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, String accessToken) throws ParseException {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getkakaoUserInfo(contentType, accessToken);
 
         String email = kakaoLoginResponseDto.getKakaoAccount().getEmail();
-        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
+//        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
+        Member member = memberRepository.findByEmail(email).orElse(null);
+
+        if (member == null) {
+            register(member);
+        }
 
         log.info("login member: {}", member.getMemberId());
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 
         return KakaoLoginDto.Response.builder()
                 .memberId(member.getMemberId())
@@ -73,9 +89,9 @@ public class MemberService {
                 .profile(member.getProfilePicture())
                 .role(member.getRole())
                 .accessToken(accessToken)
-                .accessTokenExpireTime(requestDto.getAccessTokenExpireTime())
+                .accessTokenExpireTime(formatter.parse(requestDto.getAccessTokenExpireTime()))
                 .refreshToken(requestDto.getRefreshToken())
-                .refreshTokenExpireTime(requestDto.getRefreshTokenExpireTime())
+                .refreshTokenExpireTime(formatter.parse(requestDto.getRefreshTokenExpireTime()))
                 .build();
 
     }

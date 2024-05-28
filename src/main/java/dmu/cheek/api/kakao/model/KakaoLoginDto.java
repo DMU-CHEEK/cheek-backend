@@ -18,9 +18,9 @@ public class KakaoLoginDto {
 
         private String refreshToken;
 
-        private Date accessTokenExpireTime;
+        private String accessTokenExpireTime;
 
-        private Date refreshTokenExpireTime;
+        private String refreshTokenExpireTime;
     }
 
     @Getter @Builder
