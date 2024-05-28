@@ -1,9 +1,9 @@
-package dmu.cheek.api.kakao.controller;
+package dmu.cheek.kakao.controller;
 
-import dmu.cheek.api.kakao.model.KakaoLoginDto;
-import dmu.cheek.api.kakao.model.KakaoLoginResponseDto;
-import dmu.cheek.api.kakao.model.KakaoTokenDto;
-import dmu.cheek.api.member.service.MemberService;
+import dmu.cheek.kakao.model.KakaoLoginDto;
+import dmu.cheek.kakao.model.KakaoLoginResponseDto;
+import dmu.cheek.kakao.model.KakaoTokenDto;
+import dmu.cheek.member.service.MemberService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.text.ParseException;

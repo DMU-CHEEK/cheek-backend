@@ -1,12 +1,12 @@
-package dmu.cheek.api.member.service;
+package dmu.cheek.member.service;
 
-import dmu.cheek.api.file.service.FileService;
-import dmu.cheek.api.kakao.controller.KakaoLoginClient;
-import dmu.cheek.api.kakao.model.KakaoLoginDto;
-import dmu.cheek.api.kakao.model.KakaoLoginResponseDto;
-import dmu.cheek.api.member.model.Member;
-import dmu.cheek.api.member.model.ProfileDto;
-import dmu.cheek.api.member.repository.MemberRepository;
+import dmu.cheek.file.service.FileService;
+import dmu.cheek.kakao.controller.KakaoLoginClient;
+import dmu.cheek.kakao.model.KakaoLoginDto;
+import dmu.cheek.kakao.model.KakaoLoginResponseDto;
+import dmu.cheek.member.model.Member;
+import dmu.cheek.member.model.ProfileDto;
+import dmu.cheek.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

@@ -1,6 +1,6 @@
 package dmu.cheek.global.config.token;
 
-import dmu.cheek.api.member.model.Role;
+import dmu.cheek.member.model.Role;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

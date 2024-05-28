@@ -1,4 +1,4 @@
-package dmu.cheek.api.member.model;
+package dmu.cheek.member.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 

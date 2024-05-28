@@ -1,4 +1,4 @@
-package dmu.cheek.api.highlight.model;
+package dmu.cheek.highlight.model;
 
 import jakarta.persistence.*;
 import lombok.Builder;

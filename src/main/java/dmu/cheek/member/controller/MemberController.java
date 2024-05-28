@@ -1,7 +1,7 @@
-package dmu.cheek.api.member.controller;
+package dmu.cheek.member.controller;
 
-import dmu.cheek.api.member.model.ProfileDto;
-import dmu.cheek.api.member.service.MemberService;
+import dmu.cheek.member.model.ProfileDto;
+import dmu.cheek.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
