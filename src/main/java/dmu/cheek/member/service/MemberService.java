@@ -1,6 +1,5 @@
 package dmu.cheek.member.service;
 
-import dmu.cheek.file.service.FileService;
 import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
