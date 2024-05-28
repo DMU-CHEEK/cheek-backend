@@ -17,15 +17,6 @@ public class KakaoLoginResponseDto {
     @Builder
     public static class KakaoAccount {
         private String email;
-
-        private Profile profile;
-
-        public static class Profile {
-            private String nickname;
-
-            @JsonProperty("thumbnail_image_url")
-            private String thumbnailImageUrl;
-        }
     }
 
 }

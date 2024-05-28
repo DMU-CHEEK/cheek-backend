@@ -7,7 +7,7 @@ import lombok.Getter;
 
 public class KakaoTokenDto {
 
-    @Data @Getter @Builder
+    @Getter @Builder
     public static class Request {
         private String grant_type;
         private String client_id;
@@ -16,7 +16,7 @@ public class KakaoTokenDto {
         private String client_secret;
     }
 
-    @Data @Getter @Builder
+    @Getter @Builder
     public static class Response {
         private String token_type;
         private String access_token;

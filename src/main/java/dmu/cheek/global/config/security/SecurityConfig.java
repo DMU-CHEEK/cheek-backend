@@ -21,8 +21,10 @@ public class SecurityConfig {
 
     @Value("${jwt.access-token-validity-in-seconds}")
     private long accessTokenExpirationTime;
+
     @Value("${jwt.refresh-token-validity-in-seconds}")
     private long refreshTokenExpirationTime;
+
     @Value("${jwt.secret}")
     private String tokenSecret;
 
@@ -41,9 +43,8 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 무상태
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/register", "/", "/login").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated())
-                //TODO: jwt 구현 후 삭제하기
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/") //로그아웃 시 메인 화면으로
                         .invalidateHttpSession(true) //http 세션 무효화

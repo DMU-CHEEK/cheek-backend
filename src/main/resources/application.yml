@@ -31,14 +31,10 @@ spring:
             client-id: ENC(ANR+g2pVhsxkaB17EC6P9ti8yiCmgFSxzCrE8p541uIZogoyYRR6TBQjh/r0HyuF)
             client-secret: ENC(DpKkK7N2gPj3upAtvf417IQDAAkiqgpvswX3KaUhp8WwnKrtRN08TUIcGC02yQF3)
             client-authentication-method: client_secret_post
-            redirect-uri: http://localhost:8080/oauth/kakao/callback
+            redirect-uri: http://localhost:8080/auth/kakao/callback
             authorization-grant-type: authorization_code
             client-name: kakao
-            scope:
-              - profile_nickname
-              - profile_image
-              - account_email
-              - openid
+            scope: account_email
 
   servlet:
     multipart:
@@ -59,3 +55,6 @@ jwt:
   refresh-token-validity-in-seconds: 1209600000 #15 days
   token:
     prefix: Bearer
+
+file:
+  dir: /Users/sejeong/IdeaProjects/cheek/src/main/resources

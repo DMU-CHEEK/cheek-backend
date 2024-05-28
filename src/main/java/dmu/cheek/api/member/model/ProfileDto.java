@@ -9,8 +9,6 @@ public class ProfileDto {
 
     private String email;
 
-    private String profilePicture;
-
     private String nickname;
 
     private String information;

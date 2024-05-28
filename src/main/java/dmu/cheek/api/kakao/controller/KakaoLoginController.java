@@ -1,5 +1,6 @@
 package dmu.cheek.api.kakao.controller;
 
+import dmu.cheek.api.kakao.model.KakaoLoginDto;
 import dmu.cheek.api.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.api.kakao.model.KakaoTokenDto;
 import dmu.cheek.api.member.service.MemberService;
@@ -7,13 +8,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -41,6 +44,8 @@ public class KakaoLoginController {
     public void loginCallBack(String code, HttpServletResponse httpServletResponse) throws IOException {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
 
+        log.info("contentType: ", contentType);
+
         KakaoTokenDto.Request kakaoTokenRequestDto = KakaoTokenDto.Request.builder()
                 .client_id(clientId)
                 .grant_type(authorizationGrantType)
@@ -49,28 +54,51 @@ public class KakaoLoginController {
                 .client_secret(clientSecret)
                 .build();
 
+        KakaoTokenDto.Response kakaoResponse = kakaoTokenClient.requestKakaoToken(contentType, kakaoTokenRequestDto);
 
-        KakaoTokenDto.Response kakaoTokenResponseDto = kakaoTokenClient.requestKakaoToken(contentType, kakaoTokenRequestDto); //토큰 요청
+        log.info("kakaoResponse: ", kakaoResponse.getAccess_token());
 
-        String accessToken = kakaoTokenResponseDto.getAccess_token();
-        String refreshToken = kakaoTokenResponseDto.getRefresh_token();
-        Integer accessTokenExpireTime = kakaoTokenResponseDto.getExpires_in();
-        Integer refreshTokenExpireTime = kakaoTokenResponseDto.getRefresh_token_expires_in();
+        String accessToken = kakaoResponse.getAccess_token();
+        String refreshToken = kakaoResponse.getRefresh_token();
+        Integer accessTokenExpireTime = kakaoResponse.getExpires_in();
+        Integer refreshTokenExpireTime = kakaoResponse.getRefresh_token_expires_in();
 
-        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getkakaoUserInfo();
+        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getkakaoUserInfo(contentType, accessToken);
         if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail()))
             memberService.register(kakaoLoginResponseDto);
 
+        log.info("dtodtodtodtodtodtodtodto: ", kakaoLoginResponseDto.getKakaoAccount().getEmail());
+        log.info("!!!!!!!!!!!!!!!!!!!!!!");
 
         String redirectUri = UriComponentsBuilder
-                .fromUriString("") //TODO: uri 변경
+                .fromUriString("")
                 .queryParam("accessToken", accessToken)
                 .queryParam("refreshToken", refreshToken)
                 .queryParam("accessTokenExpireTime", accessTokenExpireTime)
                 .queryParam("refreshTokenExpireTime", refreshTokenExpireTime)
-                .queryParam("email", kakaoLoginResponseDto.getKakaoAccount().getEmail())
                 .build().toUriString();
 
         httpServletResponse.sendRedirect(redirectUri);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<KakaoLoginDto.Response> loginController(@RequestBody KakaoLoginDto.Request requestDto,
+                                                                  HttpServletResponse httpServletResponse) {
+
+        String authorization = httpServletResponse.getHeader("Authorization");
+
+        if (!StringUtils.hasText(authorization))
+            throw new RuntimeException(); //TODO: exception
+
+        String[] splitHeader = authorization.split(" ");
+
+        if (splitHeader.length < 2 || ("Bearer".equals(splitHeader[0])))
+            throw new RuntimeException(); //TODO: exception
+
+        String accessToken = authorization.split(" ")[1];
+
+        KakaoLoginDto.Response responseDto = memberService.login(requestDto, accessToken);
+
+        return ResponseEntity.ok(responseDto);
     }
 }
