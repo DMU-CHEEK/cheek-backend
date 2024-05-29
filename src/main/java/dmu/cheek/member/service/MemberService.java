@@ -75,7 +75,7 @@ public class MemberService {
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .profilePicture(member.getProfilePicture())
+                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
                 .role(member.getRole())
                 .accessToken(requestDto.getAccessToken())
                 .accessTokenExpireTime(formatter.parse(requestDto.getAccessTokenExpireTime()))

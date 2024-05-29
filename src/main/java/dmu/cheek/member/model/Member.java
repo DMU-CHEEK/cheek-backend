@@ -52,6 +52,7 @@ public class Member {
     public Member(long memberId, String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
         this.memberId = memberId;
         this.email = email;
+        this.nickname = nickname;
         this.information = information;
         this.description = description;
         this.profilePicture = profilePicture;

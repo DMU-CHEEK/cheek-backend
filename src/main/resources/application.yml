@@ -66,9 +66,9 @@ cloud:
     stack:
       auto: false
     region:
-      static: ap-northeast-2
+      static: us-east-1
     s3:
-      bucket-name: cheek
+      bucket-name: dmu.cheek.2024
     credentials:
       access-key: ENC(PgCmDbWnqTNkXUhib6ZoV7IOScmSF+6ImwxuO9/DgO8=)
       secret-key: ENC(Hm/Loje66iPAf0X54EXsYW3tuD3w+34dE1ncQxI9G5A3H2EYIlwQaBNKhSZjOpaE0pc7kdVzTw0=)
