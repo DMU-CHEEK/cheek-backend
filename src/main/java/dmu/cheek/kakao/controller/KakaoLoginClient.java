@@ -11,8 +11,8 @@ import java.util.Map;
 @FeignClient(url = "https://kapi.kakao.com", name = "kakaoLoginClient")
 public interface KakaoLoginClient {
 
-    @GetMapping(value = "/v2/user/me", consumes = "application/json")
-    KakaoLoginResponseDto getkakaoUserInfo(@RequestHeader("Content-Type") String contentType,
+    @PostMapping(value = "/v2/user/me", consumes = "application/json")
+    KakaoLoginResponseDto getKakaoUserInfo(@RequestHeader("Content-Type") String contentType,
                                            @RequestHeader("Authorization") String accessToken);
 
     @PostMapping(value = "/v1/user/logout", consumes = "application/json")

@@ -5,9 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -36,22 +38,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 
-        httpSecurity
-                .csrf(CsrfConfigurer::disable) //CSRF 보호 비활성화
-                .formLogin(AbstractHttpConfigurer::disable) //폼 로그인 비활성화
-                .httpBasic(AbstractHttpConfigurer::disable) //HTTP 기본 인증 비활성화
-                .sessionManagement(sessionManagement ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) //세션 무상태
-                .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/**").permitAll()
-                        .anyRequest().authenticated())
-                .logout((logout) -> logout
-                        .logoutSuccessUrl("/") //로그아웃 시 메인 화면으로
-                        .invalidateHttpSession(true) //http 세션 무효화
-                );
-
-
-        return httpSecurity.build();
+        return httpSecurity
+                .httpBasic(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable()) //CSRF 보호 비활성화
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll()) // 모든 요청에 대해 인증 없이 접근 가능하도록 설정
+                .httpBasic(httpBasic -> httpBasic.disable()) //HTTP 기본 인증 비활성화
+                .formLogin(formLogin -> formLogin.disable()) //폼 로그인 비활성화
+                .build();
     }
 
     @Bean

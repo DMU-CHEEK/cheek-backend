@@ -3,8 +3,7 @@ package dmu.cheek.member.service;
 import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
-import dmu.cheek.member.model.Member;
-import dmu.cheek.member.model.ProfileDto;
+import dmu.cheek.member.model.*;
 import dmu.cheek.member.repository.MemberRepository;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
@@ -26,27 +25,25 @@ import java.text.SimpleDateFormat;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final KakaoLoginClient kakaoLoginClient;
     private final S3Service s3Service;
 
     public boolean isExistMember(String email) {
-        return memberRepository.findByEmail(email) == null ? false : true;
+        return memberRepository.findByEmail(email).isPresent();
     }
 
 
     @Transactional
     public void register(KakaoLoginResponseDto kakaoLoginResponseDto) {
+        //TODO: modify status and role
         Member member = Member.withEmail()
                 .email(kakaoLoginResponseDto.getKakaoAccount().getEmail())
                 .build();
 
-        memberRepository.save(member);
+        if (member == null)
+            log.info("member is null");
+        else
+            log.info("member is not null");
 
-        log.info("save member: {}", member.getEmail());
-    }
-
-    @Transactional
-    public void register(Member member) {
         memberRepository.save(member);
 
         log.info("save member: {}", member.getEmail());
@@ -66,17 +63,9 @@ public class MemberService {
         return memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
     }
 
-    public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, String accessToken) throws ParseException {
-        String contentType = "application/x-www-form-urlencoded/charset=utf-8";
-        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getkakaoUserInfo(contentType, accessToken);
-
+    public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, KakaoLoginResponseDto kakaoLoginResponseDto) throws ParseException {
         String email = kakaoLoginResponseDto.getKakaoAccount().getEmail();
-//        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
-        Member member = memberRepository.findByEmail(email).orElse(null);
-
-        if (member == null) {
-            register(member);
-        }
+        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
 
         log.info("login member: {}", member.getMemberId());
 
@@ -86,9 +75,9 @@ public class MemberService {
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .profile(member.getProfilePicture())
+                .profilePicture(member.getProfilePicture())
                 .role(member.getRole())
-                .accessToken(accessToken)
+                .accessToken(requestDto.getAccessToken())
                 .accessTokenExpireTime(formatter.parse(requestDto.getAccessTokenExpireTime()))
                 .refreshToken(requestDto.getRefreshToken())
                 .refreshTokenExpireTime(formatter.parse(requestDto.getRefreshTokenExpireTime()))

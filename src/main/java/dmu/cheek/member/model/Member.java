@@ -48,6 +48,18 @@ public class Member {
         this.email = email;
     }
 
+    @Builder(builderMethodName = "allFields")
+    public Member(long memberId, String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
+        this.memberId = memberId;
+        this.email = email;
+        this.information = information;
+        this.description = description;
+        this.profilePicture = profilePicture;
+        this.role = role;
+        this.status = status;
+    }
+
+
     public void setProfile(String nickname, String information, String profilePicture, Role role) {
         this.nickname = nickname;
         this.information = information;

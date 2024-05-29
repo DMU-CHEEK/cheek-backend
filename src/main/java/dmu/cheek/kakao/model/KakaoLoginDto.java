@@ -32,7 +32,7 @@ public class KakaoLoginDto {
 
         private String nickname;
 
-        private String profile;
+        private String profilePicture;
 
         private Role role;
 

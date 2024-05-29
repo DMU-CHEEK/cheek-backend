@@ -13,24 +13,24 @@ public class FeignClientExceptionErrorDecoder implements ErrorDecoder {
     private ErrorDecoder errorDecoder = new Default();
 
     @Override
-    public Exception decode(String methodKey, Response respose) {
+    public Exception decode(String methodKey, Response response) {
         log.error("{} 요청 실패", methodKey);
-        log.error("status: {}", respose.status());
-        log.error("reason: {}", respose.reason());
+        log.error("status: {}", response.status());
+        log.error("reason: {}", response.reason());
 
-        FeignException exception = FeignException.errorStatus(methodKey, respose);
-        HttpStatus status = HttpStatus.valueOf(respose.status());
+        FeignException exception = FeignException.errorStatus(methodKey, response);
+        HttpStatus status = HttpStatus.valueOf(response.status());
 
         if (status.is5xxServerError()) {
             return new RetryableException(
-                    respose.status(),
+                    response.status(),
                     exception.getMessage(),
-                    respose.request().httpMethod(),
+                    response.request().httpMethod(),
                     exception,
                     (Long) null,
-                    respose.request()
+                    response.request()
             );
         }
-        return errorDecoder.decode(methodKey, respose);
+        return errorDecoder.decode(methodKey, response);
     }
 }
