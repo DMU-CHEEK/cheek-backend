@@ -8,6 +8,8 @@ import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.model.ProfileDto;
 import dmu.cheek.member.service.MemberService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import java.text.ParseException;
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Member API", description = "회원 기능")
 public class MemberController {
 
     private final MemberService memberService;
@@ -31,6 +34,7 @@ public class MemberController {
     private final MemberConverter memberConverter;
 
     @PostMapping("/login")
+    @Operation(summary = "로그인", description = "로그인/회원가입 API")
     public ResponseEntity<String> loginController(@RequestBody KakaoLoginDto.Request requestDto,
                                                   HttpServletRequest httpServletResponse) throws ParseException {
         String authorization = httpServletResponse.getHeader("Authorization");
@@ -61,6 +65,7 @@ public class MemberController {
     }
 
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "프로필 설정", description = "회원 등록 시 프로필 설정 API")
     public ResponseEntity<String> setProfile(@RequestPart(value = "profileDto") ProfileDto profileDto,
                                              @RequestPart(value = "profilePicture") MultipartFile profilePicture) {
 
@@ -70,6 +75,7 @@ public class MemberController {
     }
 
     @GetMapping("/info")
+    @Operation(summary = "회원정보 조회", description = "회원정보 조회 API")
     public ResponseEntity<MemberDto> getMemberInfo(@RequestParam(value = "accessToken") String accessToken) {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
