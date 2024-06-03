@@ -2,10 +2,8 @@ package dmu.cheek.member.converter;
 
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-@RequiredArgsConstructor
 @Component
 public class MemberConverter {
 

@@ -35,6 +35,9 @@ dependencies {
 	//google smtp
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '3.0.5'
 
+	//JavaMailSender
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	//jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot:3.0.4'
 
