@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -48,6 +49,8 @@ public class EmailVerificationService {
 
         EmailVerification emailVerification = emailVerificationConverter.convertToEntity(emailVerificationDto);
         emailVerificationRepository.save(emailVerification);
+
+        log.info("save emailVerification: ", emailVerification.getEmail());
     }
 
     private String createVerificationCode() {
@@ -62,9 +65,7 @@ public class EmailVerificationService {
     }
 
     private MimeMessage createEmailForm(EmailVerificationDto emailVerificationDto) throws MessagingException {
-        if (isEmailDuplicated(emailVerificationDto.getEmail())) {
-            throw new RuntimeException("duplicated email"); //TODO: exception
-        }
+        isEmailDuplicated(emailVerificationDto.getEmail());
 
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -81,7 +82,7 @@ public class EmailVerificationService {
             helper.setText(content, true);
 
         } catch (IOException e) {
-            throw new RuntimeException("Error while reading email template: " + e.getMessage());
+            throw new RuntimeException("could not read template" + e.getMessage());
         }
 
         return message;
@@ -95,7 +96,24 @@ public class EmailVerificationService {
     }
 
 
-    private boolean isEmailDuplicated(String email) {
-        return emailVerificationRepository.findByEmail(email).isEmpty() ? false : true;
+    private void isEmailDuplicated(String email) {
+        EmailVerification emailVerification = emailVerificationRepository.findLatestByEmail(email).orElse(null);
+        if (emailVerification != null && emailVerification.isVerified() == true)
+            throw new RuntimeException("duplicated email"); //TODO: exception
+    }
+
+    public void verifyCode(EmailVerificationDto emailVerificationDto) {
+        EmailVerification emailVerification = emailVerificationRepository.findLatestByEmail(emailVerificationDto.getEmail())
+                .orElseThrow(RuntimeException::new); //TODO: exception
+
+        LocalDateTime currentTime = LocalDateTime.now();
+
+        if (currentTime.isAfter(emailVerification.getValidityPeriod()))
+            throw new RuntimeException("validity period has expired"); //TODO: exception
+        if (!emailVerification.getVerificationCode().equals(emailVerificationDto.getVerificationCode()))
+            throw new RuntimeException("verification code does not match"); //TODO: exception
+
+        emailVerification.setVerified();
+        log.info("verification code confirmed");
     }
 }

@@ -23,7 +23,6 @@ public class EmailVerificationDto {
 
     private boolean isVerified;
 
-
     @Builder(builderMethodName = "allFields")
     public EmailVerificationDto(long emailVerificationId, String email, String verificationCode, LocalDateTime validityPeriod, boolean isVerified) {
         this.emailVerificationId = emailVerificationId;
@@ -43,7 +42,7 @@ public class EmailVerificationDto {
 
     public void setup(String verificationCode) {
         LocalDateTime currentTime = LocalDateTime.now();
-        long expirationMillis = 180000; // 3분
+        long expirationMillis = 180000; //3분
         LocalDateTime expirationTime = currentTime.plus(expirationMillis, ChronoUnit.MILLIS); //현재시간 + 3분
 
         this.validityPeriod = expirationTime;

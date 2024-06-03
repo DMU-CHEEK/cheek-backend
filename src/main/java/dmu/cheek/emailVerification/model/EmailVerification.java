@@ -44,4 +44,8 @@ public class EmailVerification {
         this.validityPeriod = validityPeriod;
         this.isVerified = isVerified;
     }
+
+    public void setVerified() {
+        this.isVerified = true;
+    }
 }
