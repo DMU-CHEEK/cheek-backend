@@ -64,7 +64,7 @@ public class MemberController {
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "프로필 설정", description = "회원 등록 시 프로필 설정 API")
     public ResponseEntity<String> setProfile(@RequestPart(value = "profileDto") ProfileDto profileDto,
-                                             @RequestPart(value = "profilePicture") MultipartFile profilePicture) {
+                                             @RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture) {
 
         memberService.setProfile(profileDto, profilePicture);
 

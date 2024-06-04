@@ -48,8 +48,12 @@ public class MemberService {
     public void setProfile(ProfileDto profileDto, MultipartFile profilePicture) {
         Member member = findByEmail(profileDto.getEmail());
 
-        S3Dto s3Dto = s3Service.saveFile(profilePicture);
-        member.setProfile(profileDto.getNickname(), profileDto.getInformation(), s3Dto.getStoreFileName(), profileDto.getRole());
+        if (profileDto != null) {
+            S3Dto s3Dto = s3Service.saveFile(profilePicture);
+            member.setProfilePicture(s3Dto.getStoreFileName());
+        }
+
+        member.setProfile(profileDto.getNickname(), profileDto.getInformation(), profileDto.getRole());
 
         log.info("set profile: {}", profileDto.getEmail());
     }
