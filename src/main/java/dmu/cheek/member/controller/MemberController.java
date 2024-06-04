@@ -35,33 +35,30 @@ public class MemberController {
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인/회원가입 API")
-    public ResponseEntity<String> loginController(@RequestBody KakaoLoginDto.Request requestDto,
+    public ResponseEntity<Boolean> loginController(@RequestBody KakaoLoginDto.Request requestDto,
                                                   HttpServletRequest httpServletResponse) throws ParseException {
         String authorization = httpServletResponse.getHeader("Authorization");
         log.info("Authorization: {}", authorization);
-        if (!StringUtils.hasText(authorization))
-            throw new RuntimeException("authorization is null"); //TODO: exception
 
-        String[] splitHeader = authorization.split(" ");
-        if (splitHeader.length < 2)
-            throw new RuntimeException("splitHeader.length < 2"); //TODO: exception
-        if (!"Bearer".equals(splitHeader[0]))
-            throw new RuntimeException("! \"Bearer\".equals(splitHeader[0]");
+        if (!StringUtils.hasText(authorization) || !authorization.startsWith("Bearer "))
+            throw new RuntimeException("invalid authorization header"); //TODO: exception
 
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, authorization);
 
+        KakaoLoginDto.Response loginResponse;
+
         if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail())) {
-            log.info("member does not exists");
+            log.info("member does not exist, registering new member");
             memberService.register(kakaoLoginResponseDto);
-            log.info("register successful");
+            return ResponseEntity.ok(false); //new member registered, profile not complete
         } else {
-            log.info("member already exists");
-            memberService.login(requestDto, kakaoLoginResponseDto);
-            log.info("login successful");
+            log.info("member already exists, logging in");
+            loginResponse = memberService.login(requestDto, kakaoLoginResponseDto);
         }
 
-        return ResponseEntity.ok("ok");
+        boolean profileIncomplete = StringUtils.isEmpty(loginResponse.getNickname()) && StringUtils.isEmpty(loginResponse.getInformation());
+        return ResponseEntity.ok(!profileIncomplete); //if profile is incomplete, return false
     }
 
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -85,4 +82,5 @@ public class MemberController {
 
         return ResponseEntity.ok(memberDto);
     }
+
 }

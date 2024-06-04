@@ -34,6 +34,8 @@ public class KakaoLoginDto {
 
         private String profilePicture;
 
+        private String information;
+
         private Role role;
 
         private String accessToken;

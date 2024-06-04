@@ -39,11 +39,6 @@ public class MemberService {
                 .email(kakaoLoginResponseDto.getKakaoAccount().getEmail())
                 .build();
 
-        if (member == null)
-            log.info("member is null");
-        else
-            log.info("member is not null");
-
         memberRepository.save(member);
 
         log.info("save member: {}", member.getEmail());
@@ -65,17 +60,19 @@ public class MemberService {
 
     public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, KakaoLoginResponseDto kakaoLoginResponseDto) throws ParseException {
         String email = kakaoLoginResponseDto.getKakaoAccount().getEmail();
-        Member member = memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
+        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("member not found")); //TODO: exception
 
         log.info("login member: {}", member.getMemberId());
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String profilePictureUrl = (member.getProfilePicture() != null) ? s3Service.getResourceUrl(member.getProfilePicture()) : null;
 
         return KakaoLoginDto.Response.builder()
                 .memberId(member.getMemberId())
                 .email(member.getEmail())
                 .nickname(member.getNickname())
-                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
+                .profilePicture(profilePictureUrl)
+                .information(member.getInformation())
                 .role(member.getRole())
                 .accessToken(requestDto.getAccessToken())
                 .accessTokenExpireTime(formatter.parse(requestDto.getAccessTokenExpireTime()))
