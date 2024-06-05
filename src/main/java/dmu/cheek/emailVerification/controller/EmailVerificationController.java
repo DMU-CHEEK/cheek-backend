@@ -19,16 +19,7 @@ public class EmailVerificationController {
 
     private final EmailVerificationService emailVerificationService;
 
-    @PostMapping("/domain/validate")
-    @Operation(summary = "도메인 검증", description = "도메인의 유효성 검증 API")
-    public ResponseEntity<Boolean> validateDomain(@RequestParam(name = "domain") String domain) {
-        boolean result = emailVerificationService.validateDomain(domain);
-
-        log.info("domain exists: {}, required domain: {}", result, domain);
-        return ResponseEntity.ok(result);
-    }
-
-    @PostMapping("/domain/register")
+    @PostMapping("/register-domain")
     @Operation(summary = "도메인 추가 요청", description = "무효 도메인 추가 요청 API")
     public ResponseEntity<String> registerDomain(@RequestParam(name = "domain") String domain) {
         emailVerificationService.registerDomain(domain);

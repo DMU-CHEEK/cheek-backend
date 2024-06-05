@@ -1,6 +1,5 @@
 package dmu.cheek.member.service;
 
-import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.member.model.*;
@@ -34,7 +33,6 @@ public class MemberService {
 
     @Transactional
     public void register(KakaoLoginResponseDto kakaoLoginResponseDto) {
-        //TODO: modify status and role
         Member member = Member.withEmail()
                 .email(kakaoLoginResponseDto.getKakaoAccount().getEmail())
                 .build();
@@ -83,7 +81,6 @@ public class MemberService {
                 .refreshToken(requestDto.getRefreshToken())
                 .refreshTokenExpireTime(formatter.parse(requestDto.getRefreshTokenExpireTime()))
                 .build();
-
     }
 
 }
