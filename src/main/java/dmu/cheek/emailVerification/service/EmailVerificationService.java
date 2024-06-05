@@ -3,7 +3,9 @@ package dmu.cheek.emailVerification.service;
 import dmu.cheek.emailVerification.converter.EmailVerificationConverter;
 import dmu.cheek.emailVerification.model.EmailVerification;
 import dmu.cheek.emailVerification.model.EmailVerificationDto;
+import dmu.cheek.emailVerification.repository.DomainRepository;
 import dmu.cheek.emailVerification.repository.EmailVerificationRepository;
+import dmu.cheek.member.model.Domain;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
@@ -35,6 +37,7 @@ public class EmailVerificationService {
     private final EmailVerificationConverter emailVerificationConverter;
     private final JavaMailSender javaMailSender;
     private final ResourceLoader resourceLoader;
+    private final DomainRepository domainRepository;
 
     @Value("${spring.mail.username}")
     private String senderEmail;
@@ -115,5 +118,12 @@ public class EmailVerificationService {
 
         emailVerification.setVerified();
         log.info("verification code confirmed");
+    }
+
+    public boolean domainExists(String domain) {
+        Domain findDomain = domainRepository.findByDomain(domain)
+                .orElse(null);
+
+        return findDomain == null ? false : true;
     }
 }

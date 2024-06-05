@@ -16,6 +16,14 @@ public class EmailVerificationController {
 
     private final EmailVerificationService emailVerificationService;
 
+    @PostMapping("/validate-domain")
+    public ResponseEntity<Boolean> validateDomain(@RequestParam(name = "domain") String domain) {
+        boolean result = emailVerificationService.domainExists(domain);
+
+        log.info("domain exists: {}, required domain: {}", result, domain);
+        return ResponseEntity.ok(result);
+    }
+
     @PostMapping("/send")
     public ResponseEntity<String> sendAuthCode(@RequestBody EmailVerificationDto emailVerificationRequestDto) throws MessagingException {
         emailVerificationService.registerEmailVerification(emailVerificationRequestDto);
