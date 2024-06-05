@@ -8,6 +8,6 @@ import java.util.Optional;
 
 public interface DomainRepository extends JpaRepository<Domain, Long> {
 
-    @Query("select d from Domain d where d.domain = :domain")
-    Optional<Domain> findByDomain(String domain);
+    @Query("select d from Domain d where d.domain = :domain and d.isValid = :isValid")
+    Optional<Domain> findByDomainAndIsValid(String domain, boolean isValid);
 }

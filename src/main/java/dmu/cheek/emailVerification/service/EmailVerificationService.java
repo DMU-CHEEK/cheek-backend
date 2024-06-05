@@ -120,10 +120,26 @@ public class EmailVerificationService {
         log.info("verification code confirmed");
     }
 
-    public boolean domainExists(String domain) {
-        Domain findDomain = domainRepository.findByDomain(domain)
+    public boolean validateDomain(String domain) {
+        Domain findDomain = domainRepository.findByDomainAndIsValid(domain, true)
                 .orElse(null);
 
-        return findDomain == null ? false : true;
+        return findDomain != null;
+    }
+
+    @Transactional
+    public void registerDomain(String domain) {
+        boolean domainValid = validateDomain(domain);
+        if (domainValid)
+            throw new RuntimeException("already exist domain"); //TODO: exception
+
+        domainRepository.save(
+                Domain.builder()
+                        .domain(domain)
+                        .isValid(false)
+                        .build()
+        );
+
+        log.info("domain registration request successful: {}", domain);
     }
 }

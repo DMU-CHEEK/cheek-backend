@@ -17,8 +17,12 @@ public class Domain {
 
     private String domain;
 
+    @Column(name = "is_valid")
+    private boolean isValid;
+
     @Builder
-    public void Domain(String domain) {
+    public Domain(String domain, boolean isValid) {
         this.domain = domain;
+        this.isValid = isValid;
     }
 }
