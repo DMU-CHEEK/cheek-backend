@@ -1,9 +1,13 @@
 package dmu.cheek.member.model;
 
+import dmu.cheek.question.model.Question;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -31,6 +35,9 @@ public class Member {
 
     @Enumerated(value = EnumType.STRING)
     private Status status;
+
+    @OneToMany(mappedBy = "member")
+    private List<Question> questionList = new ArrayList<>();
 
     @Builder(builderMethodName = "withoutPrimaryKey")
     public Member(String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
