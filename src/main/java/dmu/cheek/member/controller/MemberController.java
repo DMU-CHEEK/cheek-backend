@@ -34,7 +34,7 @@ public class MemberController {
     private final MemberConverter memberConverter;
 
     @PostMapping("/login")
-    @Operation(summary = "로그인", description = "로그인/회원가입 API")
+    @Operation(summary = "로그인", description = "로그인(회원가입) API")
     public ResponseEntity<Boolean> loginController(@RequestBody KakaoLoginDto.Request requestDto,
                                                   HttpServletRequest httpServletResponse) throws ParseException {
         String authorization = httpServletResponse.getHeader("Authorization");
@@ -46,19 +46,24 @@ public class MemberController {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, authorization);
 
-        KakaoLoginDto.Response loginResponse;
+        boolean isNewMember = !memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail());
 
-        if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail())) {
+        if (isNewMember) {
             log.info("member does not exist, registering new member");
             memberService.register(kakaoLoginResponseDto);
-            return ResponseEntity.ok(false); //new member registered, profile not complete
         } else {
             log.info("member already exists, logging in");
-            loginResponse = memberService.login(requestDto, kakaoLoginResponseDto);
+            KakaoLoginDto.Response loginResponse = memberService.login(requestDto, kakaoLoginResponseDto);
+
+            if (!StringUtils.isEmpty(loginResponse.getNickname()) && StringUtils.isEmpty(loginResponse.getInformation())) {
+                log.info("profile is complete");
+                return ResponseEntity.ok(true);
+            }
         }
 
-        boolean profileIncomplete = StringUtils.isEmpty(loginResponse.getNickname()) && StringUtils.isEmpty(loginResponse.getInformation());
-        return ResponseEntity.ok(!profileIncomplete); //if profile is incomplete, return false
+        //프로필이 완전하지 않은 경우
+        log.info("profile is not complete");
+        return ResponseEntity.ok(false);
     }
 
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -69,6 +74,14 @@ public class MemberController {
         memberService.setProfile(profileDto, profilePicture);
 
         return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("check-nickname")
+    @Operation(summary = "닉네임 유효성 검증", description = "닉네임 유효성 검증 API")
+    public ResponseEntity<Boolean> checkNicknameValidity(@RequestParam(name = "nickname") String nickname) {
+        boolean result = !memberService.isExistNickname(nickname);
+
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/info")

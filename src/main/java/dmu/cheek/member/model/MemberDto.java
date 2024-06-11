@@ -22,4 +22,5 @@ public class MemberDto {
     private Role role;
 
     private Status status;
+
 }

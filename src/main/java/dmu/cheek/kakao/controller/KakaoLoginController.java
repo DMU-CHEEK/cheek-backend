@@ -63,10 +63,6 @@ public class KakaoLoginController {
         if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail()))
             memberService.register(kakaoLoginResponseDto);
 
-
-        log.info("dtodtodtodtodtodtodtodto: ", kakaoLoginResponseDto.getKakaoAccount().getEmail());
-        log.info("!!!!!!!!!!!!!!!!!!!!!!");
-
         return ResponseEntity.ok(kakaoLoginResponseDto);
 
 //        String redirectUri = UriComponentsBuilder

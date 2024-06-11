@@ -8,15 +8,15 @@ import java.util.List;
 
 @Entity
 @Getter
-public class Profession {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "profession_id")
-    private long professionId;
+    @Column(name = "category_id")
+    private long categoryId;
 
-    private String profession;
+    private String name;
 
-    @OneToMany(mappedBy = "profession")
+    @OneToMany(mappedBy = "category")
     private List<Question> questionList = new ArrayList<>();
 }

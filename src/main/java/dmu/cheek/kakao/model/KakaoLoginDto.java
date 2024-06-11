@@ -23,8 +23,11 @@ public class KakaoLoginDto {
         private String refreshTokenExpireTime;
     }
 
-    @Getter @Builder
-    @NoArgsConstructor @AllArgsConstructor
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Response {
         private long memberId;
 
@@ -48,5 +51,6 @@ public class KakaoLoginDto {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private Date refreshTokenExpireTime;
 
+        //TODO: delete
     }
 }

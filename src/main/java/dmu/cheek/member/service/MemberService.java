@@ -53,6 +53,8 @@ public class MemberService {
 
         member.setProfile(profileDto.getNickname(), profileDto.getInformation(), profileDto.getRole());
 
+
+
         log.info("set profile: {}", profileDto.getEmail());
     }
 
@@ -81,6 +83,10 @@ public class MemberService {
                 .refreshToken(requestDto.getRefreshToken())
                 .refreshTokenExpireTime(formatter.parse(requestDto.getRefreshTokenExpireTime()))
                 .build();
+    }
+
+    public boolean isExistNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).isPresent();
     }
 
 }

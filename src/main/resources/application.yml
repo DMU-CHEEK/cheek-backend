@@ -63,15 +63,6 @@ logging:
 jasypt:
   password: ${PASSWORD}
 
-jwt:
-  header: Authorization
-  secret: ENC(zkmSjc5Nt3TYzkJpos6m9Q==)
-#  secret: QhEh123
-  access-token-validity-in-seconds: 6000000 #100 min
-  refresh-token-validity-in-seconds: 1209600000 #15 days
-  token:
-    prefix: Bearer
-
 cloud:
   aws:
     stack:
@@ -92,4 +83,3 @@ springdoc:
     operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능
   paths-to-match:
     - /** # swagger-ui에 표시할 api의 엔드포인트 패턴
-

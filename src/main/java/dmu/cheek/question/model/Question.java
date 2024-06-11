@@ -2,10 +2,13 @@ package dmu.cheek.question.model;
 
 import dmu.cheek.member.model.Member;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Question {
 
     @Id
@@ -20,6 +23,21 @@ public class Question {
     private Member member;
 
     @ManyToOne
-    @JoinColumn(name = "profession_id")
-    private Profession profession;
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @Builder(builderMethodName = "withoutPrimaryKey")
+    public Question(String content, Member member, Category category) {
+        this.content = content;
+        this.member = member;
+        this.category = category;
+    }
+
+    @Builder(builderMethodName = "allFields")
+    public Question(long questionId, String content, Member member, Category category) {
+        this.questionId = questionId;
+        this.content = content;
+        this.member = member;
+        this.content = content;
+    }
 }
