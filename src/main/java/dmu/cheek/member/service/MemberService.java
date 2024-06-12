@@ -63,12 +63,14 @@ public class MemberService {
     }
 
     public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(RuntimeException::new); //TODO: exception
+        return memberRepository.findByEmail(email).orElseThrow(
+                () -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
     }
 
     public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, KakaoLoginResponseDto kakaoLoginResponseDto) throws ParseException {
         String email = kakaoLoginResponseDto.getKakaoAccount().getEmail();
-        Member member = memberRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("member not found")); //TODO: exception
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                () -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
 
         log.info("login member: {}", member.getMemberId());
 

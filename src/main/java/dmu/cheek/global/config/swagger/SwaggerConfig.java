@@ -34,8 +34,8 @@ public class SwaggerConfig {
 
     private Info apiInfo() {
         return new Info()
-                .title("CHEEK! API") // API의 제목
-                .description("CHEEK! Swagger UI") // API에 대한 설명
-                .version("1.0.0"); // API의 버전
+                .title("CHEEK! API") //API 제목
+                .description("CHEEK! Swagger UI") // API 설명
+                .version("1.0.0"); // API 버전
     }
 }

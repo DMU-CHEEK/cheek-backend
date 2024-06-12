@@ -9,14 +9,34 @@ public enum ErrorCode {
 
     TEST(HttpStatus.INTERNAL_SERVER_ERROR, "001", "business-exception-test"),
 
+    //Authentication & Authorization
+    MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "A-001", "invalid token format"),
+    EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A-002", "expired token"),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-003", "invalid token"),
+
+
     //Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),
+
+    //Email Verification
+    EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "E-001", "email not found"),
+    DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST, "E-002", "duplicated email"),
+    EXPIRED_CODE(HttpStatus.BAD_REQUEST, "E-003", "validity period has expired"),
+    CODE_NOT_MATCH(HttpStatus.BAD_REQUEST , "E-004", "verification code does not match"),
+    CANNOT_READ_TEMPLATE(HttpStatus.NOT_FOUND, "E-005", "could not read template"),
+
+    //Domain
+    DUPLICATED_DOMAIN(HttpStatus.BAD_REQUEST, "D-001", "already exist domain"),
+
 
     //Question
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Q-001", "question not found"),
 
     //Category
-    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "category not found")
+    CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "category not found"),
+
+    //Image
+    UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "I-001", "failed to upload image"),
     ;
 
     ErrorCode(HttpStatus httpStatus, String errorCode, String message) {

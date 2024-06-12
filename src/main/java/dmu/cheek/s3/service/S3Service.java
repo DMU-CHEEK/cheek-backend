@@ -3,6 +3,8 @@ package dmu.cheek.s3.service;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.s3.model.S3Dto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +38,7 @@ public class S3Service {
             amazonS3.putObject(bucketName, storeFileName, multipartFile.getInputStream(), objectMetadata);
         } catch (IOException | RuntimeException exception) {
             log.error("failed to upload image: {}", exception);
-            throw new RuntimeException(); //TODO: exception
+            throw new BusinessException(ErrorCode.UPLOAD_FAILED);
         }
 
         log.info("image uploaded to AWS S3: {}", originalFileName);

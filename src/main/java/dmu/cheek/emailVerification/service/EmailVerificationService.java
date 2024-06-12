@@ -5,6 +5,8 @@ import dmu.cheek.emailVerification.model.EmailVerification;
 import dmu.cheek.emailVerification.model.EmailVerificationDto;
 import dmu.cheek.emailVerification.repository.DomainRepository;
 import dmu.cheek.emailVerification.repository.EmailVerificationRepository;
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Domain;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -85,7 +87,7 @@ public class EmailVerificationService {
             helper.setText(content, true);
 
         } catch (IOException e) {
-            throw new RuntimeException("could not read template" + e.getMessage());
+            throw new BusinessException(ErrorCode.CANNOT_READ_TEMPLATE);
         }
 
         return message;
@@ -102,19 +104,19 @@ public class EmailVerificationService {
     private void isEmailDuplicated(String email) {
         EmailVerification emailVerification = emailVerificationRepository.findLatestByEmail(email).orElse(null);
         if (emailVerification != null && emailVerification.isVerified() == true)
-            throw new RuntimeException("duplicated email"); //TODO: exception
+            throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
     }
 
     public void verifyCode(EmailVerificationDto emailVerificationDto) {
         EmailVerification emailVerification = emailVerificationRepository.findLatestByEmail(emailVerificationDto.getEmail())
-                .orElseThrow(RuntimeException::new); //TODO: exception
+                .orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
 
         LocalDateTime currentTime = LocalDateTime.now();
 
         if (currentTime.isAfter(emailVerification.getValidityPeriod()))
-            throw new RuntimeException("validity period has expired"); //TODO: exception
+            throw new BusinessException(ErrorCode.EXPIRED_CODE);
         if (!emailVerification.getVerificationCode().equals(emailVerificationDto.getVerificationCode()))
-            throw new RuntimeException("verification code does not match"); //TODO: exception
+            throw new BusinessException(ErrorCode.CODE_NOT_MATCH);
 
         emailVerification.setVerified();
         log.info("verification code confirmed");
@@ -131,7 +133,7 @@ public class EmailVerificationService {
     public void registerDomain(String domain) {
         boolean domainValid = validateDomain(domain);
         if (domainValid)
-            throw new RuntimeException("already exist domain"); //TODO: exception
+            throw new BusinessException(ErrorCode.DUPLICATED_DOMAIN);
 
         domainRepository.save(
                 Domain.builder()

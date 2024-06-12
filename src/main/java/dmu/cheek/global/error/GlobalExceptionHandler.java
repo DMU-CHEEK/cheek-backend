@@ -67,7 +67,7 @@ public class GlobalExceptionHandler {
     }
 
     /**
-     * Unchecked Exception 머해????
+     * Unchecked Exception
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
