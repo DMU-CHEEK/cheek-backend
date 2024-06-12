@@ -29,5 +29,6 @@ public class QuestionDto {
     public class Request {
         private String content;
         private long categoryId;
+        private long memberId;
     }
 }

@@ -1,7 +1,10 @@
 package dmu.cheek.member.service;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
+import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.*;
 import dmu.cheek.member.repository.MemberRepository;
 import dmu.cheek.s3.model.S3Dto;
@@ -25,6 +28,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
+    private final MemberConverter memberConverter;
 
     public boolean isExistMember(String email) {
         return memberRepository.findByEmail(email).isPresent();
@@ -87,6 +91,16 @@ public class MemberService {
 
     public boolean isExistNickname(String nickname) {
         return memberRepository.findByNickname(nickname).isPresent();
+    }
+
+    public MemberDto findDtoById(long memberId) {
+        return memberConverter.convertToDto(memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)));
+    }
+
+    public Member findById(long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
 }

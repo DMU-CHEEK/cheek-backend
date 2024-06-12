@@ -2,9 +2,9 @@ package dmu.cheek.question.converter;
 
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.model.QuestionDto;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Component
 public class QuestionConverter {
 
     public Question convertToEntity(QuestionDto questionDto) {

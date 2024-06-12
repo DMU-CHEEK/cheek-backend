@@ -9,7 +9,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-@ComponentScan("dmu.cheek.*.controller")
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -30,7 +29,14 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry interceptorRegistry) {
         interceptorRegistry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/member/login")
+                .excludePathPatterns(
+                        "/member/login",
+                        "/swagger-ui/**",
+                        "/swagger-resources/**",
+                        "/v2/api-docs",
+                        "/v2/api-docs/**",
+                        "/webjars/**"
+                )
                 .order(1);
     }
 }
