@@ -40,9 +40,6 @@ public class MemberController {
         String authorization = httpServletResponse.getHeader("Authorization");
         log.info("Authorization: {}", authorization);
 
-        if (!StringUtils.hasText(authorization) || !authorization.startsWith("Bearer "))
-            throw new RuntimeException("invalid authorization header"); //TODO: exception
-
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, authorization);
 

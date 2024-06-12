@@ -1,20 +1,17 @@
 package dmu.cheek.kakao.controller;
 
-import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.kakao.model.KakaoTokenDto;
-import dmu.cheek.member.converter.MemberConverter;
+import dmu.cheek.kakao.model.KakaoTokenInfoDto;
 import dmu.cheek.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.text.ParseException;
 
 @RestController
 @RequiredArgsConstructor
@@ -76,6 +73,12 @@ public class KakaoLoginController {
 //        httpServletResponse.sendRedirect(redirectUri);
 
 
+    }
+
+    @GetMapping("/token")
+    public ResponseEntity<?> getKakaoTokenInfo(@RequestParam String accessToken) {
+        KakaoTokenInfoDto tokenInfo = kakaoLoginClient.getTokenInfo(accessToken);
+        return ResponseEntity.ok(tokenInfo);
     }
 
 //    @PostMapping("/login")

@@ -31,7 +31,6 @@ public class EmailVerificationController {
     @Operation(summary = "도메인 유효성 검증", description = "도메인 유효성 검증 API")
     public ResponseEntity<Boolean> verifyDomain(@RequestParam(name = "domain") String domain) {
         boolean validateDomain = emailVerificationService.validateDomain(domain);
-
         return ResponseEntity.ok(validateDomain);
     }
 

@@ -125,6 +125,7 @@ public class EmailVerificationService {
     public boolean validateDomain(String domain) {
         Domain findDomain = domainRepository.findByDomainAndIsValid(domain, true)
                 .orElse(null);
+        log.info("domain: {}, isValid: {}", findDomain.getDomain(), findDomain.isValid());
 
         return findDomain != null;
     }

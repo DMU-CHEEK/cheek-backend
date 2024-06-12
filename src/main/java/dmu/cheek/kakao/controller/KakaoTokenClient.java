@@ -1,8 +1,10 @@
 package dmu.cheek.kakao.controller;
 
 import dmu.cheek.kakao.model.KakaoTokenDto;
+import dmu.cheek.kakao.model.KakaoTokenInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.SpringQueryMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 

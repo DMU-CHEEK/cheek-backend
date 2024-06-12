@@ -1,6 +1,7 @@
 package dmu.cheek.kakao.controller;
 
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
+import dmu.cheek.kakao.model.KakaoTokenInfoDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,4 +19,7 @@ public interface KakaoLoginClient {
     @PostMapping(value = "/v1/user/logout", consumes = "application/json")
     Map<String, Object> logoutKakaoUser(@RequestHeader("Content-Type") String contentType,
                                         @RequestHeader("Authorization") String accessToken);
+
+    @GetMapping(value = "/v1/user/access_token_info", consumes = "application/json")
+    KakaoTokenInfoDto getTokenInfo(@RequestHeader("Authorization") String accessToken);
 }
