@@ -3,9 +3,9 @@ spring:
     name: cheek
 
   datasource:
-    url: ENC(n56+9rtLrf+B12JU3ffKsWxOl+RFcVtv+b4YlJ67avltXIabj9hkeD/Ys0RY8jC7SJ134uA+ewWRWvwgDvlkcZ/9k3oiKj5T1qgwbZJGr5z7+Bgji6NCukJXsYKCE1glhi8napBYZOY4rWhZMl+RPG7Ne24fwO6tlmp+Wix0fLY=)
-    username: ENC(1dFjvNmu/z/590fDpymXag==)
-    password: ENC(L4rr2E2gmUkojuKvGytcGdltwh3Ojo1S)
+    url: ENC(NX9UCq/QaoOc6bGhK6HNiCvoBZX5AUGVry89P8KqmFJ7b+jwSEQaf6FgkyVu8ZJEAr99GCLo2UcrdXnkZV7YRdh264HqikwfFhOiGnqbnuLGQT06HKECSw==)
+    username: ENC(4SVZt54EqpZprLj1Ah0P4A==)
+    password: ENC(ztIJQ7tdmQvEvUOX0u65zhgxIbr6rc/N)
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
