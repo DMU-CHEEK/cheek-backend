@@ -27,6 +27,14 @@ public class EmailVerificationController {
         return ResponseEntity.ok("ok");
     }
 
+    @GetMapping("/verify-domain")
+    @Operation(summary = "도메인 유효성 검증", description = "도메인 유효성 검증 API")
+    public ResponseEntity<Boolean> verifyDomain(@RequestParam(name = "domain") String domain) {
+        boolean validateDomain = emailVerificationService.validateDomain(domain);
+
+        return ResponseEntity.ok(validateDomain);
+    }
+
     @PostMapping("/send")
     @Operation(summary = "이메일 코드 전송", description = "이메일 인증코드 전송 API")
     public ResponseEntity<String> sendAuthCode(@RequestBody EmailVerificationDto emailVerificationRequestDto) throws MessagingException {
