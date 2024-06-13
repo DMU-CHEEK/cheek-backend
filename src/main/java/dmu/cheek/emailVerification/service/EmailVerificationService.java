@@ -123,18 +123,22 @@ public class EmailVerificationService {
     }
 
     public boolean validateDomain(String domain) {
-        Domain findDomain = domainRepository.findByDomainAndIsValid(domain, true)
-                .orElse(null);
-        log.info("domain: {}, isValid: {}", findDomain.getDomain(), findDomain.isValid());
+        Domain findDomain = domainRepository.findByDomainAndIsValid(domain, true).orElse(null);
 
-        return findDomain != null;
+        if (findDomain != null) {
+            log.info("domain: {}, isValid: {}", findDomain.getDomain(), findDomain.isValid());
+            return findDomain.isValid();
+        } else {
+            log.info("domain: {}, isValid: false", domain);
+            return false;
+        }
     }
 
     @Transactional
     public void registerDomain(String domain) {
-        boolean domainValid = validateDomain(domain);
-        if (domainValid)
-            throw new BusinessException(ErrorCode.DUPLICATED_DOMAIN);
+        Domain findDomain = domainRepository.findByDomainAndIsValid(domain, false).orElse(null);
+        if (findDomain != null)
+            throw new BusinessException(ErrorCode.IN_PROGRESS);
 
         domainRepository.save(
                 Domain.builder()

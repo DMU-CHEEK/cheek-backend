@@ -55,8 +55,7 @@ public class MemberService {
             member.setProfilePicture(s3Dto.getStoreFileName());
         }
 
-        member.setProfile(profileDto.getNickname(), profileDto.getInformation(), profileDto.getRole());
-
+        member.setProfile(profileDto.getNickname(), profileDto.getInformation(), profileDto.getRole(), Status.COMPLETE);
 
 
         log.info("set profile: {}", profileDto.getEmail());

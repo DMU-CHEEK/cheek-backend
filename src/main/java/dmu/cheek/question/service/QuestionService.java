@@ -1,20 +1,19 @@
 package dmu.cheek.question.service;
 
-import dmu.cheek.global.error.ErrorCode;
-import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
-import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
+import dmu.cheek.question.converter.QuestionConverter;
 import dmu.cheek.question.model.Category;
-import dmu.cheek.question.model.CategoryDto;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.model.QuestionDto;
-import dmu.cheek.question.repository.CategoryRepository;
 import dmu.cheek.question.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -24,6 +23,7 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final MemberService memberService;
+    private final QuestionConverter questionConverter;
     private final CategoryService categoryService;
 
     @Transactional
@@ -40,6 +40,18 @@ public class QuestionService {
         questionRepository.save(question);
 
         log.info("register new question: {}", question.getQuestionId());
+    }
+
+    public List<QuestionDto> searchByMember(long memberId) {
+        Member member = memberService.findById(memberId);
+        List<QuestionDto> questionDtoList = questionRepository.findByMember(member)
+                .stream()
+                .map(question -> questionConverter.convertToDto(question))
+                .collect(Collectors.toList());
+
+        log.info("question list by member: {}", memberId);
+
+        return questionDtoList;
     }
 
 }

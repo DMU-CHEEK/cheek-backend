@@ -68,10 +68,11 @@ public class Member {
     }
 
 
-    public void setProfile(String nickname, String information, Role role) {
+    public void setProfile(String nickname, String information, Role role, Status status) {
         this.nickname = nickname;
         this.information = information;
         this.role = role;
+        this.status = status;
     }
 
     public void setProfilePicture(String profilePicture) {

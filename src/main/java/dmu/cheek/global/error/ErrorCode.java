@@ -24,6 +24,7 @@ public enum ErrorCode {
     EXPIRED_CODE(HttpStatus.BAD_REQUEST, "E-003", "validity period has expired"),
     CODE_NOT_MATCH(HttpStatus.BAD_REQUEST , "E-004", "verification code does not match"),
     CANNOT_READ_TEMPLATE(HttpStatus.NOT_FOUND, "E-005", "could not read template"),
+    IN_PROGRESS(HttpStatus.BAD_REQUEST, "E-006", "email registration request is progress"),
 
     //Domain
     DUPLICATED_DOMAIN(HttpStatus.BAD_REQUEST, "D-001", "already exist domain"),
