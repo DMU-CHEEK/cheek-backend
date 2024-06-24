@@ -11,7 +11,7 @@ public class CategoryConverter {
         if (categoryDto == null)
             return null;
 
-        return Category.allFields()
+        return Category.builder()
                 .categoryId(categoryDto.getCategoryId())
                 .name(categoryDto.getName())
                 .build();
@@ -21,7 +21,7 @@ public class CategoryConverter {
         if (category == null)
             return null;
 
-        return CategoryDto.allFields()
+        return CategoryDto.builder()
                 .categoryId(category.getCategoryId())
                 .name(category.getName())
                 .build();

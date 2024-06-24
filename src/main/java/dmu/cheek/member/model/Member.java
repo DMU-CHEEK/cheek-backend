@@ -36,7 +36,7 @@ public class Member {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Question> questionList = new ArrayList<>();
 
     @Builder(builderMethodName = "withoutPrimaryKey")

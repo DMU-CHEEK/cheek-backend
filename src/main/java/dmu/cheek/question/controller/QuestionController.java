@@ -30,7 +30,7 @@ public class QuestionController {
     @GetMapping("/member/{memberId}")
     @Operation(summary = "특정 유저의 질문 리스트 조회", description = "특정 유저의 질문 리스트 조회 API")
     public ResponseEntity<List> searchByMember(@PathVariable(name = "memberId") long memberId) {
-        List<QuestionDto> questionList = questionService.searchByMember(memberId);
+        List<QuestionDto.Response> questionList = questionService.searchByMember(memberId);
         return ResponseEntity.ok(questionList);
     }
 }

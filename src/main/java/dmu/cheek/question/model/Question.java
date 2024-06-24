@@ -18,11 +18,11 @@ public class Question {
 
     private String content;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name =  "member_id")
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
 
@@ -33,11 +33,10 @@ public class Question {
         this.category = category;
     }
 
-    @Builder(builderMethodName = "allFields")
-    public Question(long questionId, String content, Member member, Category category) {
+    @Builder(builderMethodName = "naturalFields")
+    public Question(long questionId, String content) {
         this.questionId = questionId;
         this.content = content;
-        this.member = member;
-        this.content = content;
     }
+
 }
