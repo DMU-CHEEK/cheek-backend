@@ -18,10 +18,16 @@ public class QuestionDto {
 
 
     @Getter
-    public static class Request {
+    public static class RegisterReq {
         private String content;
         private long categoryId;
         private long memberId;
+    }
+
+    @Getter
+    public static class UpdateReq {
+        private String content;
+        private long questionId;
     }
 
     @Getter @Builder

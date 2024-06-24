@@ -20,10 +20,10 @@ public class QuestionController {
 
     private final QuestionService questionService;
 
-    @PostMapping("/register")
+    @PostMapping()
     @Operation(summary = "질문 등록", description = "질문 등록 API")
-    public ResponseEntity<String> register(@RequestBody QuestionDto.Request questionRequestDto) {
-        questionService.register(questionRequestDto);
+    public ResponseEntity<String> register(@RequestBody QuestionDto.RegisterReq registerReq) {
+        questionService.register(registerReq);
         return ResponseEntity.ok("ok");
     }
 
@@ -32,5 +32,13 @@ public class QuestionController {
     public ResponseEntity<List> searchByMember(@PathVariable(name = "memberId") long memberId) {
         List<QuestionDto.Response> questionList = questionService.searchByMember(memberId);
         return ResponseEntity.ok(questionList);
+    }
+
+    @PatchMapping()
+    @Operation(summary = "질문 수정", description = "질문 수정 API")
+    public ResponseEntity<String> update(@RequestBody QuestionDto.UpdateReq updateReq) {
+        questionService.update(updateReq);
+
+        return ResponseEntity.ok("ok");
     }
 }

@@ -1,5 +1,7 @@
 package dmu.cheek.question.service;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
@@ -32,12 +34,12 @@ public class QuestionService {
     private final CategoryService categoryService;
 
     @Transactional
-    public void register(QuestionDto.Request questionRequestDto) {
-        Member member = memberService.findById(questionRequestDto.getMemberId());
-        Category category = categoryService.findById(questionRequestDto.getCategoryId());
+    public void register(QuestionDto.RegisterReq registerReq) {
+        Member member = memberService.findById(registerReq.getMemberId());
+        Category category = categoryService.findById(registerReq.getCategoryId());
 
         Question question = Question.withoutPrimaryKey()
-                .content(questionRequestDto.getContent())
+                .content(registerReq.getContent())
                 .member(member)
                 .category(category)
                 .build();
@@ -65,4 +67,13 @@ public class QuestionService {
         return responseList;
     }
 
+    @Transactional
+    public void update(QuestionDto.UpdateReq updateReq) {
+        Question question = questionRepository.findById(updateReq.getQuestionId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+
+        question.update(updateReq.getContent());
+
+        log.info("update question with questionId: {}", updateReq.getQuestionId());
+    }
 }
