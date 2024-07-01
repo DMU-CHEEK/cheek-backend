@@ -76,4 +76,9 @@ public class QuestionService {
 
         log.info("update question with questionId: {}", updateReq.getQuestionId());
     }
+
+    public Question findById(long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+    }
 }

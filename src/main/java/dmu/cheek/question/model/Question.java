@@ -1,10 +1,14 @@
 package dmu.cheek.question.model;
 
 import dmu.cheek.member.model.Member;
+import dmu.cheek.story.model.Story;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,6 +29,9 @@ public class Question {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
+    private List<Story> storyList = new ArrayList<>();
 
     @Builder(builderMethodName = "withoutPrimaryKey")
     public Question(String content, Member member, Category category) {
