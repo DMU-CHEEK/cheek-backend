@@ -17,4 +17,11 @@ public class StoryDto {
         private long memberId;
         private long questionId;
     }
+
+    @Getter @Builder
+    public static class Response {
+        private long storyId;
+        private long categoryId;
+        private String storyPicture;
+    }
 }

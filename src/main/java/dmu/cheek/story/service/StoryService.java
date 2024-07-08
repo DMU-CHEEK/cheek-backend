@@ -1,5 +1,7 @@
 package dmu.cheek.story.service;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.model.Category;
@@ -16,6 +18,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -45,5 +51,27 @@ public class StoryService {
 
         storyRepository.save(story);
         log.info("register new story: {}, memberId: {}, questionId: {}", story.getStoryId(), story.getMember().getMemberId(), story.getQuestion().getQuestionId());
+    }
+
+    @Transactional
+    public void delete(long storyId) {
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
+        storyRepository.delete(story);
+
+        log.info("delete story: {}", story.getStoryId());
+    }
+
+    public List<StoryDto.Response> searchByMember(long memberId) {
+        Member member = memberService.findById(memberId);
+        List<Story> storyList = storyRepository.findByMember(member);
+
+        return storyList.stream()
+                .map(s -> StoryDto.Response.builder()
+                        .storyId(s.getStoryId())
+                        .categoryId(s.getCategory().getCategoryId())
+                        .storyPicture(s.getStoryPicture())
+                        .build())
+                .collect(Collectors.toList());
     }
 }

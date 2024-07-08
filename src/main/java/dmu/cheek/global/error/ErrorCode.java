@@ -33,6 +33,9 @@ public enum ErrorCode {
     //Question
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Q-001", "question not found"),
 
+    //Story
+    STORY_NOT_FOUND(HttpStatus.NOT_FOUND, "S-001", "story not foune"),
+
     //Category
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "category not found"),
 
