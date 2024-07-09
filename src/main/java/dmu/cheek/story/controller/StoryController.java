@@ -45,4 +45,12 @@ public class StoryController {
 
         return ResponseEntity.ok(storyList);
     }
+
+    @GetMapping("/{storyId}")
+    @Operation(summary = "스토리 조회", description = "스토리 단건 조회 API")
+    public ResponseEntity<StoryDto.Response> search(@PathVariable(name = "storyId") long storyId) {
+        StoryDto.Response storyDto = storyService.search(storyId);
+
+        return ResponseEntity.ok(storyDto);
+    }
 }

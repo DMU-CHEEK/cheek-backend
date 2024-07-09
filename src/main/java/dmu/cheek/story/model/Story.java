@@ -42,4 +42,10 @@ public class Story {
         this.question = question;
     }
 
+    @Builder(builderMethodName = "naturalFields")
+    public Story(long storyId, String storyPicture) {
+        this.storyId = storyId;
+        this.storyPicture = storyPicture;
+    }
+
 }

@@ -10,6 +10,7 @@ import dmu.cheek.question.service.CategoryService;
 import dmu.cheek.question.service.QuestionService;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
+import dmu.cheek.story.converter.StoryConverter;
 import dmu.cheek.story.model.Story;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.repository.StoryRepository;
@@ -34,6 +35,7 @@ public class StoryService {
     private final MemberService memberService;
     private final QuestionService questionService;
     private final CategoryService categoryService;
+    private final StoryConverter storyConverter;
 
     @Transactional
     public void register(MultipartFile storyPicture, StoryDto.Request storyDto) {
@@ -66,6 +68,8 @@ public class StoryService {
         Member member = memberService.findById(memberId);
         List<Story> storyList = storyRepository.findByMember(member);
 
+        log.info("story list by memberId: {}", memberId);
+
         return storyList.stream()
                 .map(s -> StoryDto.Response.builder()
                         .storyId(s.getStoryId())
@@ -73,5 +77,18 @@ public class StoryService {
                         .storyPicture(s.getStoryPicture())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public StoryDto.Response search(long storyId) {
+        Story story = storyRepository.findById(storyId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
+
+        log.info("search by storyId: {}", storyId);
+
+        return StoryDto.Response.builder()
+                .storyId(storyId)
+                .storyPicture(story.getStoryPicture())
+                .categoryId(story.getCategory().getCategoryId())
+                .build();
     }
 }
