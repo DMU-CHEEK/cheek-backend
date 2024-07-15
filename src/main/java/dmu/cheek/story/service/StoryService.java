@@ -35,7 +35,6 @@ public class StoryService {
     private final MemberService memberService;
     private final QuestionService questionService;
     private final CategoryService categoryService;
-    private final StoryConverter storyConverter;
 
     @Transactional
     public void register(MultipartFile storyPicture, StoryDto.Request storyDto) {
@@ -90,5 +89,10 @@ public class StoryService {
                 .storyPicture(story.getStoryPicture())
                 .categoryId(story.getCategory().getCategoryId())
                 .build();
+    }
+
+    public Story findById(long storyId) {
+        return storyRepository.findById(storyId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
     }
 }

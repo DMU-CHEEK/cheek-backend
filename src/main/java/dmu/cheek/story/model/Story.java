@@ -1,5 +1,6 @@
 package dmu.cheek.story.model;
 
+import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.question.model.Question;
@@ -33,6 +34,10 @@ public class Story {
     @JoinColumn(name = "profession_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
+
+    @JoinColumn(name = "highlight_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Highlight highlight;
 
     @Builder
     public Story(String storyPicture, Member member, Category category, Question question) {

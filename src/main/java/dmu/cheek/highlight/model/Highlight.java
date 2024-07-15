@@ -1,9 +1,14 @@
 package dmu.cheek.highlight.model;
 
+import dmu.cheek.member.model.Member;
+import dmu.cheek.story.model.Story;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -18,12 +23,17 @@ public class Highlight {
     @Column(name = "thumbnail_picture")
     private String thumbnailPicture;
 
-    @Column(name = "story_id")
-    private long storyId;
+    @OneToMany(mappedBy = "highlight", fetch = FetchType.LAZY)
+    private List<Story> storyList = new ArrayList<>();
 
-    @Builder
-    public void Highlight(String thumbnailPicture, long storyId) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @Builder(builderMethodName = "withoutPrimaryKey")
+    public Highlight(String thumbnailPicture, List<Story> storyList, Member member) {
         this.thumbnailPicture = thumbnailPicture;
-        this.storyId = storyId;
+        this.storyList = storyList;
+        this.member = member;
     }
 }

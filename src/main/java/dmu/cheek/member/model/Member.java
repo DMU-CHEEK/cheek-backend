@@ -1,5 +1,6 @@
 package dmu.cheek.member.model;
 
+import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.story.model.Story;
 import jakarta.persistence.*;
@@ -42,6 +43,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<Story> storyList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<Highlight> highlightList = new ArrayList<>();
 
     @Builder(builderMethodName = "withoutPrimaryKey")
     public Member(String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
