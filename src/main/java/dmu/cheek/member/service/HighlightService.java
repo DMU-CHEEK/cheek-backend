@@ -1,5 +1,7 @@
 package dmu.cheek.member.service;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.repository.HighlightRepository;
@@ -46,5 +48,15 @@ public class HighlightService {
         highlightRepository.save(highlight);
 
         log.info("register new highlight: {}, memberId: {}", highlight.getHighlightId(), highlightDto.getMemberId());
+    }
+
+    @Transactional
+    public void delete(long highlightId) {
+        Highlight highlight = highlightRepository.findById(highlightId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+
+        highlightRepository.delete(highlight);
+
+        log.info("delete highlight: {}", highlightId);
     }
 }

@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
@@ -26,6 +23,15 @@ public class HighlightController {
                                            @RequestPart(value = "highlightDto") HighlightDto.Request highlightDto) {
 
         highlightService.register(thumbnailPicture, highlightDto);
+
+        return ResponseEntity.ok("ok");
+    }
+
+    @DeleteMapping("/{highlightId}")
+    @Operation(summary = "하이라이트 삭제", description = "하이하이트 삭제 API")
+    public ResponseEntity<String> delete(@PathVariable(value = "highlightId") long highlightId) {
+
+        highlightService.delete(highlightId);
 
         return ResponseEntity.ok("ok");
     }
