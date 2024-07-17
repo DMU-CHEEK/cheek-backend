@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/highlight")
 @RequiredArgsConstructor
@@ -34,5 +36,14 @@ public class HighlightController {
         highlightService.delete(highlightId);
 
         return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/member/{memberId}")
+    @Operation(summary = "하이라이트 리스트 조회", description = "하이라이트 리스트 조회 API")
+    public ResponseEntity<List> searchByMember(@PathVariable(value = "memberId") long memberId) {
+
+        List<HighlightDto> highlightList = highlightService.searchByMember(memberId);
+
+        return ResponseEntity.ok(highlightList);
     }
 }

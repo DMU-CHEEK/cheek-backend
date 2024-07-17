@@ -13,7 +13,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Highlight {
+public class
+Highlight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

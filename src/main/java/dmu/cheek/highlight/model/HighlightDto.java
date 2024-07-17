@@ -1,5 +1,6 @@
 package dmu.cheek.highlight.model;
 
+import dmu.cheek.story.model.StoryDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,6 +17,11 @@ public class HighlightDto {
     public static class Request {
         private List<Long> storyIdList;
         private long memberId;
+    }
+
+    @Getter
+    public static class Response {
+        private List<StoryDto.Response> storyList;
     }
 
     @Builder

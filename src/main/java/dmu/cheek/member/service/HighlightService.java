@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,5 +59,19 @@ public class HighlightService {
         highlightRepository.delete(highlight);
 
         log.info("delete highlight: {}", highlightId);
+    }
+
+    public List<HighlightDto> searchByMember(long memberId) {
+        Member member = memberService.findById(memberId);
+
+        log.info("search highlight list by member: {}", memberId);
+
+        return highlightRepository.findByMember(member)
+                .stream().map(
+                        h -> HighlightDto.builder()
+                                .highlightId(h.getHighlightId())
+                                .thumbnailPicture(h.getThumbnailPicture())
+                                .build()
+                ).collect(Collectors.toList());
     }
 }
