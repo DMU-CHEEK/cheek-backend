@@ -13,10 +13,13 @@ public class HighlightDto {
 
     private String thumbnailPicture;
 
+    private String subject;
+
     @Getter
     public static class Request {
         private List<Long> storyIdList;
         private long memberId;
+        private String subject;
     }
 
     @Getter @Builder
@@ -25,8 +28,9 @@ public class HighlightDto {
     }
 
     @Builder
-    public HighlightDto(long highlightId, String thumbnailPicture) {
+    public HighlightDto(long highlightId, String thumbnailPicture, String subject) {
         this.highlightId = highlightId;
         this.thumbnailPicture = thumbnailPicture;
+        this.subject = subject;
     }
 }

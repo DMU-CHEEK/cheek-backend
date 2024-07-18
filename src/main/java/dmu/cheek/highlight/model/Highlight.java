@@ -24,6 +24,8 @@ Highlight {
     @Column(name = "thumbnail_picture")
     private String thumbnailPicture;
 
+    private String subject;
+
     @OneToMany(mappedBy = "highlight", fetch = FetchType.LAZY)
     private List<Story> storyList = new ArrayList<>();
 
@@ -32,8 +34,9 @@ Highlight {
     private Member member;
 
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public Highlight(String thumbnailPicture, List<Story> storyList, Member member) {
+    public Highlight(String thumbnailPicture, String subject, List<Story> storyList, Member member) {
         this.thumbnailPicture = thumbnailPicture;
+        this.subject = subject;
         this.storyList = storyList;
         this.member = member;
     }

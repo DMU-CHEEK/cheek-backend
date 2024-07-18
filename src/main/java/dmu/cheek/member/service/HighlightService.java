@@ -45,6 +45,7 @@ public class HighlightService {
         Highlight highlight = Highlight.withoutPrimaryKey()
                 .thumbnailPicture(s3Dto.getStoreFileName())
                 .storyList(storyList)
+                .subject(highlightDto.getSubject())
                 .member(member)
                 .build();
 
@@ -73,6 +74,7 @@ public class HighlightService {
                         h -> HighlightDto.builder()
                                 .highlightId(h.getHighlightId())
                                 .thumbnailPicture(h.getThumbnailPicture())
+                                .subject(h.getSubject())
                                 .build()
                 ).collect(Collectors.toList());
     }
