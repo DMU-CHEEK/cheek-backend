@@ -39,11 +39,20 @@ public class HighlightController {
     }
 
     @GetMapping("/member/{memberId}")
-    @Operation(summary = "하이라이트 리스트 조회", description = "하이라이트 리스트 조회 API")
+    @Operation(summary = "하이라이트 리스트 조회", description = "특정 회읜의 하이라이트 리스트 조회 API(썸네일만 노출)")
     public ResponseEntity<List> searchByMember(@PathVariable(value = "memberId") long memberId) {
 
         List<HighlightDto> highlightList = highlightService.searchByMember(memberId);
 
         return ResponseEntity.ok(highlightList);
+    }
+
+    @GetMapping("/{highlightId}")
+    @Operation(summary = "하이라이트 단건 조회", description = "하이라이트 단건 조회 API")
+    public ResponseEntity<HighlightDto.Response> search(@PathVariable(value = "highlightId") long highlightId) {
+
+        HighlightDto.Response highlight = highlightService.search(highlightId);
+
+        return ResponseEntity.ok(highlight);
     }
 }

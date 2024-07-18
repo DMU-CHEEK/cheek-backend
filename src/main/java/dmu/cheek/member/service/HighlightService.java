@@ -8,7 +8,9 @@ import dmu.cheek.highlight.repository.HighlightRepository;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
+import dmu.cheek.story.converter.StoryConverter;
 import dmu.cheek.story.model.Story;
+import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.service.StoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,7 @@ public class HighlightService {
     private final StoryService storyService;
     private final S3Service s3Service;
     private final HighlightRepository highlightRepository;
+    private final StoryConverter storyConverter;
 
     @Transactional
     public void register(MultipartFile thumbnailPicture, HighlightDto.Request highlightDto) {
@@ -73,5 +75,18 @@ public class HighlightService {
                                 .thumbnailPicture(h.getThumbnailPicture())
                                 .build()
                 ).collect(Collectors.toList());
+    }
+
+    public HighlightDto.Response search(long highlightId) {
+        Highlight highlight = highlightRepository.findById(highlightId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+
+        List<StoryDto> storyList = highlight.getStoryList().stream().map(s -> storyConverter.convertToDto(s)).collect(Collectors.toList());
+
+        log.info("search highlight: ", highlightId);
+
+        return HighlightDto.Response.builder()
+                .storyList(storyList)
+                .build();
     }
 }

@@ -19,9 +19,9 @@ public class HighlightDto {
         private long memberId;
     }
 
-    @Getter
+    @Getter @Builder
     public static class Response {
-        private List<StoryDto.Response> storyList;
+        private List<StoryDto> storyList;
     }
 
     @Builder
