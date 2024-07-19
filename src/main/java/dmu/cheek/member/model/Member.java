@@ -1,5 +1,6 @@
 package dmu.cheek.member.model;
 
+import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.story.model.Story;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Member {
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
