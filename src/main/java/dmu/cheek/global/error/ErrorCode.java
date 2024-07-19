@@ -14,9 +14,9 @@ public enum ErrorCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A-002", "expired token"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-003", "invalid token"),
 
-
     //Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),
+    MENTEE_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "M-002", "mentee not available"),
 
     //Email Verification
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "E-001", "email not found"),
@@ -28,7 +28,6 @@ public enum ErrorCode {
 
     //Domain
     DUPLICATED_DOMAIN(HttpStatus.BAD_REQUEST, "D-001", "already exist domain"),
-
 
     //Question
     QUESTION_NOT_FOUND(HttpStatus.NOT_FOUND, "Q-001", "question not found"),

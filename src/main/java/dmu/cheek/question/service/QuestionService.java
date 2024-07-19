@@ -5,6 +5,7 @@ import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
+import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.converter.CategoryConverter;
 import dmu.cheek.question.converter.QuestionConverter;
@@ -36,6 +37,10 @@ public class QuestionService {
     @Transactional
     public void register(QuestionDto.RegisterReq registerReq) {
         Member member = memberService.findById(registerReq.getMemberId());
+
+        if (member.getRole() != Role.MENTOR)
+            throw new BusinessException(ErrorCode.EXPIRED_TOKEN);
+
         Category category = categoryService.findById(registerReq.getCategoryId());
 
         Question question = Question.withoutPrimaryKey()
