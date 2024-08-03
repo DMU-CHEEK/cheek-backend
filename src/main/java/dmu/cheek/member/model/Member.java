@@ -4,6 +4,7 @@ import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.story.model.Story;
+import dmu.cheek.upvote.model.Upvote;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,14 +40,17 @@ public class Member extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Question> questionList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Story> storyList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Highlight> highlightList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Upvote> upvoteList = new ArrayList<>();
 
     @Builder(builderMethodName = "withoutPrimaryKey")
     public Member(String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
