@@ -34,4 +34,8 @@ public class Upvote extends BaseTimeEntity {
         this.story = story;
         this.isUpvoted = isUpvoted;
     }
+
+    public void toggleUpvote(boolean status) {
+        this.isUpvoted = status;
+    }
 }
