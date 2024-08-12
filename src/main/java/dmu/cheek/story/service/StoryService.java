@@ -72,7 +72,7 @@ public class StoryService {
 
         List<Story> storyList = storyRepository.findByMember(targetMember);
 
-        log.info("story list by memberId: {}", targetMemberId);
+        log.info("search story list by memberId: {}", targetMemberId);
 
         return storyList.stream()
                 .map(s -> StoryDto.Response.builder()
@@ -89,7 +89,7 @@ public class StoryService {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
 
-        log.info("search by storyId: {}", storyId);
+        log.info("search story by storyId: {}", storyId);
 
         return StoryDto.Response.builder()
                 .storyId(storyId)
