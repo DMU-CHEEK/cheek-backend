@@ -81,6 +81,7 @@ public class StoryService {
                         .storyPicture(s.getStoryPicture())
                         .isUpvoted(s.getUpvoteList().stream()
                                 .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
+                        .upvoteCount((int) s.getUpvoteList().stream().count())
                         .build())
                 .collect(Collectors.toList());
     }
@@ -97,6 +98,7 @@ public class StoryService {
                 .categoryId(story.getCategory().getCategoryId())
                 .isUpvoted(story.getUpvoteList().stream()
                         .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
+                .upvoteCount((int) story.getUpvoteList().stream().count())
                 .build();
     }
 
