@@ -38,18 +38,21 @@ public class StoryController {
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping("/member/{memberId}")
-    @Operation(summary = "특정 유저의 스토리 리스트 조회", description = "특정 유저의 스토리 리스트 조회 API")
-    public ResponseEntity<List> searchByMember(@PathVariable(name = "memberId") long memberId) {
-        List<StoryDto.Response> storyList = storyService.searchByMember(memberId);
+    @GetMapping("/member/{targetMemberId}")
+    @Operation(summary = "스토리 리스트 조회", description = "특정 유저의 스토리 리스트 조회 API")
+    public ResponseEntity<List> searchByMember(@PathVariable(name = "targetMemberId") long targetMemberId,
+                                               @RequestParam(name = "loginMemberId") long loginMemberId) {
+        //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
+        List<StoryDto.Response> storyList = storyService.searchListByMember(loginMemberId, targetMemberId);
 
         return ResponseEntity.ok(storyList);
     }
 
     @GetMapping("/{storyId}")
-    @Operation(summary = "스토리 조회", description = "스토리 단건 조회 API")
-    public ResponseEntity<StoryDto.Response> search(@PathVariable(name = "storyId") long storyId) {
-        StoryDto.Response storyDto = storyService.search(storyId);
+    @Operation(summary = "스토리 조회", description = "특정 유저의 스토리 단건 조회 API")
+    public ResponseEntity<StoryDto.Response> search(@PathVariable(name = "storyId") long storyId,
+                                                    @RequestParam(name = "loginMemberId") long loginMemberId) {
+        StoryDto.Response storyDto = storyService.searchByMember(storyId, loginMemberId);
 
         return ResponseEntity.ok(storyDto);
     }

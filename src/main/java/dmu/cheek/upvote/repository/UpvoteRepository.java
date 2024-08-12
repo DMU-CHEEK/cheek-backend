@@ -12,4 +12,7 @@ public interface UpvoteRepository extends JpaRepository<Upvote, Long> {
 
     @Query("select u from Upvote u where u.member = :member and u.story = :story")
     Optional<Upvote> findByStoryAndMember(Member member, Story story);
+
+    @Query("select u from Upvote u where u.member.memberId = :memberId")
+    Optional<Upvote> findByMemberId(Long memberId);
 }

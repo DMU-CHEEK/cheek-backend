@@ -23,5 +23,7 @@ public class StoryDto {
         private long storyId;
         private long categoryId;
         private String storyPicture;
+        private boolean isUpvoted;
+        private int upvoteCount;
     }
 }

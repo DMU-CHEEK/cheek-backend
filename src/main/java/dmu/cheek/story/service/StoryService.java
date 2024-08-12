@@ -14,6 +14,8 @@ import dmu.cheek.story.converter.StoryConverter;
 import dmu.cheek.story.model.Story;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.repository.StoryRepository;
+import dmu.cheek.upvote.model.Upvote;
+import dmu.cheek.upvote.service.UpvoteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,22 +66,26 @@ public class StoryService {
         log.info("delete story: {}", story.getStoryId());
     }
 
-    public List<StoryDto.Response> searchByMember(long memberId) {
-        Member member = memberService.findById(memberId);
-        List<Story> storyList = storyRepository.findByMember(member);
+    public List<StoryDto.Response> searchListByMember(long loginMemberId, long targetMemberId) {
+        //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
+        Member targetMember = memberService.findById(targetMemberId);
 
-        log.info("story list by memberId: {}", memberId);
+        List<Story> storyList = storyRepository.findByMember(targetMember);
+
+        log.info("story list by memberId: {}", targetMemberId);
 
         return storyList.stream()
                 .map(s -> StoryDto.Response.builder()
                         .storyId(s.getStoryId())
                         .categoryId(s.getCategory().getCategoryId())
                         .storyPicture(s.getStoryPicture())
+                        .isUpvoted(s.getUpvoteList().stream()
+                                .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
                         .build())
                 .collect(Collectors.toList());
     }
 
-    public StoryDto.Response search(long storyId) {
+    public StoryDto.Response searchByMember(long storyId, long loginMemberId) {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
 
@@ -88,6 +95,8 @@ public class StoryService {
                 .storyId(storyId)
                 .storyPicture(story.getStoryPicture())
                 .categoryId(story.getCategory().getCategoryId())
+                .isUpvoted(story.getUpvoteList().stream()
+                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
                 .build();
     }
 

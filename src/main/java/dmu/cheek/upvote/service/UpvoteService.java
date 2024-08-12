@@ -37,4 +37,9 @@ public class UpvoteService {
 
         log.info("storyId: {}, upvote status: {}", story.getStoryId(), findUpvote.isUpvoted());
     }
+
+    public Optional<Upvote> findByUpvoteMemberId(Long id){
+
+        return upvoteRepository.findByMemberId(id);
+    }
 }
