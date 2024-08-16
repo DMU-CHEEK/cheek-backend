@@ -24,6 +24,7 @@ public class UpvoteService {
     private final MemberService memberService;
     private final StoryService storyService;
 
+    @Transactional
     public void toggleUpvote(UpvoteDto.Request upvoteDto) {
         Member member = memberService.findById(upvoteDto.getMemberId());
         Story story = storyService.findById(upvoteDto.getStoryId());
@@ -31,11 +32,26 @@ public class UpvoteService {
         Upvote findUpvote = upvoteRepository.findByStoryAndMember(member, story)
                 .orElse(null);
 
-        if (findUpvote == null || !findUpvote.isUpvoted())
-            findUpvote.toggleUpvote(true);
-        else findUpvote.toggleUpvote(false);
+        if (findUpvote == null) {
+            upvoteRepository.save(
+                    Upvote.builder().
+                            member(member)
+                            .story(story)
+                            .isUpvoted(true)
+                            .build()
+            );
+            log.info("register upvote, storyId: {}", story.getStoryId());
+        }
 
-        log.info("storyId: {}, upvote status: {}", story.getStoryId(), findUpvote.isUpvoted());
+        else {
+            if (!findUpvote.isUpvoted())
+                findUpvote.toggleUpvote(true);
+
+            else
+                findUpvote.toggleUpvote(false);
+
+            log.info("storyId: {}, upvote status: {}", story.getStoryId(), findUpvote.isUpvoted());
+        }
     }
 
     public Optional<Upvote> findByUpvoteMemberId(Long id){
