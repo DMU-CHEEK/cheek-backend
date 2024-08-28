@@ -3,6 +3,8 @@ package dmu.cheek.collection.service;
 import dmu.cheek.collection.model.Collection;
 import dmu.cheek.collection.model.CollectionDto;
 import dmu.cheek.collection.repository.CollectionRepository;
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.model.Category;
@@ -40,7 +42,17 @@ public class CollectionService {
                         .build()
         );
 
-        log.info("register collection, memberId: {}, categoryId: {}",
-                collectionDto.getMemberId(), collectionDto.getCategoryId());
+        log.info("register collection, memberId: {}, categoryId: {}, storyId: {}",
+                collectionDto.getMemberId(), collectionDto.getCategoryId(), collectionDto.getStoryId());
+    }
+
+    @Transactional
+    public void delete(long collectionId) {
+        Collection collection = collectionRepository.findById(collectionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.COLLECTION_NOT_FOUND));
+
+        collectionRepository.delete(collection);
+
+        log.info("delete collection, collectionId: {}", collectionId);
     }
 }

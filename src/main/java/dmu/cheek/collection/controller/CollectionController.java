@@ -25,4 +25,12 @@ public class CollectionController {
         return ResponseEntity.ok("ok");
     }
 
+    @DeleteMapping("/{collectionId}")
+    @Operation(summary = "스크랩 삭제", description = "스크랩 스토리 삭제 API")
+    public ResponseEntity<String> delete(@PathVariable(name = "collectionId") long collectionId) {
+
+        collectionService.delete(collectionId);
+
+        return ResponseEntity.ok("ok");
+    }
 }

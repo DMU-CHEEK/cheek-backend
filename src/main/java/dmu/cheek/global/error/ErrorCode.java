@@ -38,6 +38,9 @@ public enum ErrorCode {
     //HIGHLIGHT
     HIGHLIGHT_NOT_FOUND(HttpStatus.NOT_FOUND, "H-001", "highlight not found"),
 
+    //COLLECTION
+    COLLECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "collection not found"),
+
     //Category
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "category not found"),
 
