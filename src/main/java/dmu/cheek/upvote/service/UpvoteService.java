@@ -54,7 +54,7 @@ public class UpvoteService {
         }
     }
 
-    public Optional<Upvote> findByUpvoteMemberId(Long id){
+    public Optional<Upvote> findByUpvoteMemberId(Long id) {
 
         return upvoteRepository.findByMemberId(id);
     }
