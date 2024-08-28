@@ -7,8 +7,9 @@ public class CollectionDto {
 
     private long collectionId;
 
-    private String thumbnail_picture;
+    private String thumbnailPicture;
 
+    @Getter
     public static class Request {
         private long memberId;
         private long categoryId;

@@ -1,19 +1,20 @@
 package dmu.cheek.collection.model;
 
+import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.story.model.Story;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class Collection {
+public class Collection extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +32,26 @@ public class Collection {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "collection", fetch = FetchType.LAZY)
-    private List<Story> storyList = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "story_id")
+    private Story story;
 
+    @Builder(builderMethodName = "allFields")
+    public Collection(long collectionId, String thumbnailPicture, Category category,
+                            Member member, Story story) {
+        this.collectionId = collectionId;
+        this.thumbnailPicture = thumbnailPicture;
+        this.category = category;
+        this.member = member;
+        this.story = story;
+    }
 
-
-
+    @Builder(builderMethodName = "withoutPrimaryKey")
+    public Collection(String thumbnailPicture, Category category,
+                      Member member, Story story) {
+        this.thumbnailPicture = thumbnailPicture;
+        this.category = category;
+        this.member = member;
+        this.story = story;
+    }
 }
