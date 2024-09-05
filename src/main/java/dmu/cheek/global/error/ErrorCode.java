@@ -41,6 +41,9 @@ public enum ErrorCode {
     //COLLECTION
     COLLECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "collection not found"),
 
+    //FOLDER
+    FOLDER_NOT_FOUND(HttpStatus.NOT_FOUND, "F-001", "folder not found"),
+
     //Category
     CATEGORY_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "category not found"),
 

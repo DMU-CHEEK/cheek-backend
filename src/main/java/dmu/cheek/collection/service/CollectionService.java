@@ -2,6 +2,7 @@ package dmu.cheek.collection.service;
 
 import dmu.cheek.collection.model.Collection;
 import dmu.cheek.collection.model.CollectionDto;
+import dmu.cheek.collection.model.Folder;
 import dmu.cheek.collection.repository.CollectionRepository;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
@@ -16,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class CollectionService {
     private final MemberService memberService;
     private final CategoryService categoryService;
     private final StoryService storyService;
+    private final FolderService folderService;
 
     @Transactional
     public void register(CollectionDto.Request collectionDto) {
@@ -33,17 +37,23 @@ public class CollectionService {
         Category category = categoryService.findById(collectionDto.getCategoryId());
         Story story = storyService.findById(collectionDto.getStoryId());
 
+        Folder folder = folderService.findByFolderNameAndMember(collectionDto.getFolderName(), member);
+
+        if (folder == null)
+            folder = folderService.register(collectionDto.getFolderName(), member);
+
         collectionRepository.save(
                 Collection.withoutPrimaryKey()
                         .story(story)
                         .member(member)
                         .category(category)
                         .thumbnailPicture(story.getStoryPicture())
+                        .folder(folder)
                         .build()
         );
 
-        log.info("register collection, memberId: {}, categoryId: {}, storyId: {}",
-                collectionDto.getMemberId(), collectionDto.getCategoryId(), collectionDto.getStoryId());
+        log.info("register collection, memberId: {}, folderId: {}, storyId: {}",
+                collectionDto.getMemberId(), folder.getFolderId(), collectionDto.getStoryId());
     }
 
     @Transactional
@@ -55,4 +65,12 @@ public class CollectionService {
 
         log.info("delete collection, collectionId: {}", collectionId);
     }
+
+//    public List<CollectionDto.ResponseList> searchList(long memberId) {
+//        Member member = memberService.findById(memberId);
+//        List<Collection> collectionList = collectionRepository.findByMember(member);
+//
+//
+//    }
+
 }

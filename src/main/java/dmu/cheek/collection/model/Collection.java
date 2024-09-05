@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Entity
 @Getter
@@ -36,22 +35,28 @@ public class Collection extends BaseTimeEntity {
     @JoinColumn(name = "story_id")
     private Story story;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "folder_id")
+    private Folder folder;
+
     @Builder(builderMethodName = "allFields")
     public Collection(long collectionId, String thumbnailPicture, Category category,
-                            Member member, Story story) {
+                            Member member, Story story, Folder folder) {
         this.collectionId = collectionId;
         this.thumbnailPicture = thumbnailPicture;
         this.category = category;
         this.member = member;
         this.story = story;
+        this.folder = folder;
     }
 
     @Builder(builderMethodName = "withoutPrimaryKey")
     public Collection(String thumbnailPicture, Category category,
-                      Member member, Story story) {
+                      Member member, Story story, Folder folder) {
         this.thumbnailPicture = thumbnailPicture;
         this.category = category;
         this.member = member;
         this.story = story;
+        this.folder = folder;
     }
 }

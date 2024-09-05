@@ -14,5 +14,9 @@ public class CollectionDto {
         private long memberId;
         private long categoryId;
         private long storyId;
+        private String folderName;
+    }
+
+    public static class ResponseList {
     }
 }
