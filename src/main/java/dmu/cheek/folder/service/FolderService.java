@@ -51,7 +51,10 @@ public class FolderService {
     }
 
     @Transactional
-    public void delete(Folder folder) {
+    public void delete(long folderId) {
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FOLDER_NOT_FOUND));
+
         folderRepository.delete(folder);
 
         log.info("delete folder, memberId: {}", folder.getMember().getMemberId(), folder.getFolderId());
