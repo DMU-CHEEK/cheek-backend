@@ -38,8 +38,15 @@ public class FolderService {
 
         folderRepository.save(folder);
 
-        log.info("register folder, memberId: {}, folderName: {}", member.getMemberId(), folderName);
+        log.info("register folder, memberId: {}, folderId: {}", member.getMemberId(), folder.getFolderId());
 
         return folder;
+    }
+
+    @Transactional
+    public void delete(Folder folder) {
+        folderRepository.delete(folder);
+
+        log.info("delete folder, memberId: {}", folder.getMember().getMemberId(), folder.getFolderId());
     }
 }
