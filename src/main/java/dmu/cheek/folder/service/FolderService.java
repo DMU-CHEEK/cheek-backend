@@ -1,14 +1,20 @@
-package dmu.cheek.collection.service;
+package dmu.cheek.folder.service;
 
-import dmu.cheek.collection.model.Folder;
-import dmu.cheek.collection.repository.FolderRepository;
+import dmu.cheek.folder.model.Folder;
+import dmu.cheek.folder.model.FolderDto;
+import dmu.cheek.folder.repository.FolderRepository;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
+import dmu.cheek.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -16,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class FolderService {
 
+    private final MemberService memberService;
     private final FolderRepository folderRepository;
 
     public Folder findById(long folderId) {
@@ -48,5 +55,25 @@ public class FolderService {
         folderRepository.delete(folder);
 
         log.info("delete folder, memberId: {}", folder.getMember().getMemberId(), folder.getFolderId());
+    }
+
+    public List<FolderDto.Response> findDtoByMember(long memberId) {
+        Member member = memberService.findById(memberId);
+        List<Folder> folderList = folderRepository.findByMember(member);
+
+        log.info("search folder list, memberId: {]", memberId);
+
+        return folderList.stream()
+                .map(folder -> FolderDto.Response.builder()
+                        .folderId(folder.getFolderId())
+                        .folderName(folder.getFolderName())
+                        .thumbnailPicture(folder.getThumbnailPicture())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void updateThumbnail(Folder folder, String thumbnailPicture) {
+        folder.updateThumbnailPicture(thumbnailPicture);
     }
 }

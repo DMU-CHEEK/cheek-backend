@@ -1,5 +1,6 @@
-package dmu.cheek.collection.model;
+package dmu.cheek.folder.model;
 
+import dmu.cheek.collection.model.Collection;
 import dmu.cheek.member.model.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -21,6 +22,9 @@ public class Folder {
     @Column(name = "folder_name")
     private String folderName;
 
+    @Column(name = "thumbnail_picture")
+    private String thumbnailPicture;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -29,8 +33,13 @@ public class Folder {
     private List<Collection> collectionList;
 
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public Folder(String folderName, Member member) {
+    public Folder(String folderName, Member member, String thumbnailPicture) {
         this.folderName = folderName;
         this.member = member;
+        this.thumbnailPicture = thumbnailPicture;
+    }
+
+    public void updateThumbnailPicture(String thumbnailPicture) {
+        this.thumbnailPicture = thumbnailPicture;
     }
 }

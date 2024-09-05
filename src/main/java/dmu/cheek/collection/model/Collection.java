@@ -1,5 +1,6 @@
 package dmu.cheek.collection.model;
 
+import dmu.cheek.folder.model.Folder;
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.question.model.Category;
@@ -20,9 +21,6 @@ public class Collection extends BaseTimeEntity {
     @Column(name = "collection_id")
     private long collectionId;
 
-    @Column(name = "thumbnail_picture")
-    private String thumbnailPicture;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
@@ -40,10 +38,9 @@ public class Collection extends BaseTimeEntity {
     private Folder folder;
 
     @Builder(builderMethodName = "allFields")
-    public Collection(long collectionId, String thumbnailPicture, Category category,
+    public Collection(long collectionId, Category category,
                             Member member, Story story, Folder folder) {
         this.collectionId = collectionId;
-        this.thumbnailPicture = thumbnailPicture;
         this.category = category;
         this.member = member;
         this.story = story;
@@ -51,9 +48,8 @@ public class Collection extends BaseTimeEntity {
     }
 
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public Collection(String thumbnailPicture, Category category,
+    public Collection(Category category,
                       Member member, Story story, Folder folder) {
-        this.thumbnailPicture = thumbnailPicture;
         this.category = category;
         this.member = member;
         this.story = story;

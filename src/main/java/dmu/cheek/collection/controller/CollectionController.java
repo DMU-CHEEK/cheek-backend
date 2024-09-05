@@ -34,13 +34,4 @@ public class CollectionController {
 
         return ResponseEntity.ok("ok");
     }
-
-//    @GetMapping("/{memberId}")
-//    @Operation(summary = "스크랩 리스트 조회", description = "스크랩 리스트 조회 API")
-//    public ResponseEntity<List> searchList(@PathVariable(name = "memberId") long memberId) {
-//
-//        collectionService.searchList(memberId);
-//
-//
-//    }
 }

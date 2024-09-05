@@ -2,8 +2,9 @@ package dmu.cheek.collection.service;
 
 import dmu.cheek.collection.model.Collection;
 import dmu.cheek.collection.model.CollectionDto;
-import dmu.cheek.collection.model.Folder;
+import dmu.cheek.folder.model.Folder;
 import dmu.cheek.collection.repository.CollectionRepository;
+import dmu.cheek.folder.service.FolderService;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
@@ -17,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -47,10 +47,11 @@ public class CollectionService {
                         .story(story)
                         .member(member)
                         .category(category)
-                        .thumbnailPicture(story.getStoryPicture())
                         .folder(folder)
                         .build()
         );
+
+        folderService.updateThumbnail(folder, story.getStoryPicture());
 
         log.info("register collection, memberId: {}, folderId: {}, storyId: {}",
                 collectionDto.getMemberId(), folder.getFolderId(), collectionDto.getStoryId());
@@ -65,12 +66,4 @@ public class CollectionService {
 
         log.info("delete collection, collectionId: {}", collectionId);
     }
-
-//    public List<CollectionDto.ResponseList> searchList(long memberId) {
-//        Member member = memberService.findById(memberId);
-//        List<Collection> collectionList = collectionRepository.findByMember(member);
-//
-//
-//    }
-
 }
