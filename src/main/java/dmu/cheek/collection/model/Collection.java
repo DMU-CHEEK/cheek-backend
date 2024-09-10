@@ -55,4 +55,9 @@ public class Collection extends BaseTimeEntity {
         this.story = story;
         this.folder = folder;
     }
+
+    @Builder(builderMethodName = "naturalFields")
+    public Collection(long collectionId) {
+        this.collectionId = collectionId;
+    }
 }

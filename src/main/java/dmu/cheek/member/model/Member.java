@@ -1,7 +1,7 @@
 package dmu.cheek.member.model;
 
 import dmu.cheek.collection.model.Collection;
-import dmu.cheek.follow.model.MemberConnection;
+import dmu.cheek.memberConnection.model.MemberConnection;
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.question.model.Question;

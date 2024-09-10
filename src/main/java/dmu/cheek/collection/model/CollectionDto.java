@@ -1,13 +1,13 @@
 package dmu.cheek.collection.model;
 
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 public class CollectionDto {
 
     private long collectionId;
-
-    private String thumbnailPicture;
 
     @Getter
     public static class Request {

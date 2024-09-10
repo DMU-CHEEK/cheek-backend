@@ -27,10 +27,24 @@ public class Upvote extends BaseTimeEntity {
     @JoinColumn(name = "story_id")
     private Story story;
 
-    @Builder
+    @Builder(builderMethodName = "allFields")
+    public Upvote(long upvoteId, boolean isUpvoted, Member member, Story story) {
+        this.upvoteId = upvoteId;
+        this.isUpvoted = isUpvoted;
+        this.member = member;
+        this.story = story;
+    }
+
+    @Builder(builderMethodName = "withoutPrimaryKey")
     public Upvote(Member member, Story story, boolean isUpvoted) {
         this.member = member;
         this.story = story;
+        this.isUpvoted = isUpvoted;
+    }
+
+    @Builder(builderMethodName = "naturalFields")
+    public Upvote(long upvoteId, boolean isUpvoted) {
+        this.upvoteId = upvoteId;
         this.isUpvoted = isUpvoted;
     }
 
