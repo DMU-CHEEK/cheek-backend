@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,9 +18,17 @@ public class MemberConnectionController {
     private final MemberConnectionService memberConnectionService;
 
     @PostMapping()
-    @Operation(summary = "팔로우 신청", description = "팔로우 신청 API")
+    @Operation(summary = "팔로우 등록", description = "팔로우 등록 API")
     public ResponseEntity<String> register(@RequestBody MemberConnectionDto.Request memberConnectionDto) {
         memberConnectionService.register(memberConnectionDto);
+
+        return ResponseEntity.ok("ok");
+    }
+
+    @DeleteMapping()
+    @Operation(summary = "팔로우 취소", description = "팔로우 취소 API")
+    public ResponseEntity<String> delete(@RequestBody MemberConnectionDto.Request memberConnectionDto) {
+        memberConnectionService.delete(memberConnectionDto);
 
         return ResponseEntity.ok("ok");
     }

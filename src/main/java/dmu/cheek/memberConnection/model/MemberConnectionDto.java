@@ -9,7 +9,7 @@ public class MemberConnectionDto {
 
     @Getter
     public static class Request {
-        private long toMemberId; //요청받는 회원
+        private long toMemberId; //요청받은 회원
         private long fromMemberId; //요청한 회원
     }
 }

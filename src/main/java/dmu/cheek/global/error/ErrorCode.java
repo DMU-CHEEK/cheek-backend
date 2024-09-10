@@ -18,6 +18,9 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),
     MENTEE_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "M-002", "mentee not available"),
 
+    //Member Connection
+    CONNECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "member connection not found"),
+
     //Email Verification
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "E-001", "email not found"),
     DUPLICATED_EMAIL(HttpStatus.BAD_REQUEST, "E-002", "duplicated email"),
