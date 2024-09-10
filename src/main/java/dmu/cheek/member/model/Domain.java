@@ -12,12 +12,10 @@ public class Domain {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "domain_id")
     private long domainId;
 
     private String domain;
 
-    @Column(name = "is_valid")
     private boolean isValid;
 
     @Builder

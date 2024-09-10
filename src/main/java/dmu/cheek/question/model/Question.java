@@ -18,7 +18,6 @@ public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "question_id")
     private long questionId;
 
     private String content;

@@ -16,13 +16,10 @@ public class Folder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "folder_id")
     private long folderId;
 
-    @Column(name = "folder_name")
     private String folderName;
 
-    @Column(name = "thumbnail_picture")
     private String thumbnailPicture;
 
     @ManyToOne(fetch = FetchType.LAZY)

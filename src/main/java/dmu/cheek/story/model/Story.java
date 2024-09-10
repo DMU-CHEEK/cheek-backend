@@ -22,10 +22,8 @@ public class Story extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "story_id")
     private long storyId;
 
-    @Column(name = "story_picture")
     private String storyPicture;
 
     @JoinColumn(name = "member_id")

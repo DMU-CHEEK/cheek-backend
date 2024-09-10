@@ -15,7 +15,6 @@ public class Upvote extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "upvote_id")
     private long upvoteId;
 
     private boolean isUpvoted;

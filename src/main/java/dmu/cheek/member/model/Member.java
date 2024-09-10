@@ -1,6 +1,7 @@
 package dmu.cheek.member.model;
 
 import dmu.cheek.collection.model.Collection;
+import dmu.cheek.follow.model.MemberConnection;
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.question.model.Question;
@@ -21,7 +22,6 @@ public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
     private long memberId;
 
     private String nickname;
@@ -32,7 +32,6 @@ public class Member extends BaseTimeEntity {
 
     private String description;
 
-    @Column(name = "profile_picture")
     private String profilePicture;
 
     @Enumerated(value = EnumType.STRING)
@@ -55,6 +54,13 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Collection> collectionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "toMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberConnection> toMemberConnectionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<MemberConnection> fromMemberConnectionList = new ArrayList<>();
+
 
     @Builder(builderMethodName = "withoutPrimaryKey")
     public Member(String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {

@@ -14,18 +14,14 @@ public class EmailVerification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "email_verification_id")
     private long emailVerificationId;
 
     private String email;
 
-    @Column(name = "verifation_code")
     private String verificationCode;
 
-    @Column(name = "validity_period")
     private LocalDateTime validityPeriod;
 
-    @Column(name = "is_verified")
     private boolean isVerified;
 
     @Builder(builderMethodName = "withoutPrimaryKey")

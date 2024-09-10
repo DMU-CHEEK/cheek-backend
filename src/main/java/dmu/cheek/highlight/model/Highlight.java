@@ -21,7 +21,6 @@ public class Highlight extends BaseTimeEntity {
     @Column(name = "highlight_id")
     private long highlightId;
 
-    @Column(name = "thumbnail_picture")
     private String thumbnailPicture;
 
     private String subject;
