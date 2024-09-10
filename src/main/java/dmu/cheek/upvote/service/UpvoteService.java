@@ -34,8 +34,8 @@ public class UpvoteService {
 
         if (findUpvote == null) {
             upvoteRepository.save(
-                    Upvote.builder().
-                            member(member)
+                    Upvote.withoutPrimaryKey()
+                            .member(member)
                             .story(story)
                             .isUpvoted(true)
                             .build()
