@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member-connection")
@@ -31,5 +33,14 @@ public class MemberConnectionController {
         memberConnectionService.delete(memberConnectionDto);
 
         return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/follower/{memberId}")
+    @Operation(summary = "팔로워 목록 조회", description = "본인을 팔로우한 회원 목록 조회 API")
+    public ResponseEntity<List> getFollowerList(@PathVariable(name = "memberId") long memberId) {
+        List<MemberConnectionDto.Response> followerList = memberConnectionService.getFollowerList(memberId);
+
+        return ResponseEntity.ok(followerList);
+
     }
 }

@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -38,11 +40,26 @@ public class MemberConnectionService {
 
     @Transactional
     public void delete(MemberConnectionDto.Request memberConnectionDto) {
-        MemberConnection memberConnection = memberConnectionRepository.findByToMemberAndfromMember(memberConnectionDto.getToMemberId(), memberConnectionDto.getFromMemberId())
+        MemberConnection memberConnection = memberConnectionRepository.findByToMemberAndFromMember(memberConnectionDto.getToMemberId(), memberConnectionDto.getFromMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONNECTION_NOT_FOUND));
 
         memberConnectionRepository.delete(memberConnection);
 
-        log.info("Member {} unfollowed Member {}", memberConnectionDto.getFromMemberId(), memberConnectionDto.getToMemberId());
+        log.info("member {} unfollowed member {}", memberConnectionDto.getFromMemberId(), memberConnectionDto.getToMemberId());
+    }
+
+    public List<MemberConnectionDto.Response> getFollowerList(long memberId) {
+        List<MemberConnection> memberConnectionList = memberConnectionRepository.findByToMember(memberId);
+
+        log.info("get follower list, memberId: {}", memberId);
+
+        return memberConnectionList.stream()
+                .map(memberConnection -> MemberConnectionDto.Response
+                        .builder()
+                        .memberId(memberConnection.getFromMember().getMemberId())
+                        .profilePicture(memberConnection.getFromMember().getProfilePicture())
+                        .isFollowing(true)
+                        .build())
+                .toList();
     }
 }
