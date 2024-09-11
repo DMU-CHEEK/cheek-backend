@@ -62,4 +62,19 @@ public class MemberConnectionService {
                         .build())
                 .toList();
     }
+
+    public List<MemberConnectionDto.Response> getFollowingList(long memberId) {
+        List<MemberConnection> memberConnectionList = memberConnectionRepository.findByFromMember(memberId);
+
+        log.info("get following list, memberId: {}", memberId);
+
+        return memberConnectionList.stream()
+                .map(memberConnection -> MemberConnectionDto.Response
+                        .builder()
+                        .memberId(memberConnection.getToMember().getMemberId())
+                        .profilePicture(memberConnection.getToMember().getProfilePicture())
+                        .isFollowing(true)
+                        .build()
+                ).toList();
+    }
 }

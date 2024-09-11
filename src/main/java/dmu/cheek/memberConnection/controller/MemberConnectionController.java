@@ -41,6 +41,13 @@ public class MemberConnectionController {
         List<MemberConnectionDto.Response> followerList = memberConnectionService.getFollowerList(memberId);
 
         return ResponseEntity.ok(followerList);
+    }
 
+    @GetMapping("/following/{memberId}")
+    @Operation(summary = "팔로잉 목록 조회", description = "본인이 팔로우한 회원 목록 조회 API")
+    public ResponseEntity<List> getFollowingList(@PathVariable(name = "memberId") long memberId) {
+        List<MemberConnectionDto.Response> followingList = memberConnectionService.getFollowingList(memberId);
+
+        return ResponseEntity.ok(followingList);
     }
 }
