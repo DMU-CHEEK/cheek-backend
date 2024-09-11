@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -48,32 +50,36 @@ public class MemberConnectionService {
         log.info("member {} unfollowed member {}", memberConnectionDto.getFromMemberId(), memberConnectionDto.getToMemberId());
     }
 
-    public List<MemberConnectionDto.Response> getFollowerList(long memberId) {
-        List<MemberConnection> memberConnectionList = memberConnectionRepository.findByToMember(memberId);
+    public List<MemberConnectionDto.Response> getFollowerList(long targetMemberId, long loginMemberId) {
+        List<MemberConnection> targetMemberConnectionList = memberConnectionRepository.findByToMember(targetMemberId);
+        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByFromMember(loginMemberId)
+                .stream().map(memberConnection -> memberConnection.getToMember().getMemberId()).collect(Collectors.toSet());
 
-        log.info("get follower list, memberId: {}", memberId);
+        log.info("get member {}'s follower list", targetMemberId);
 
-        return memberConnectionList.stream()
+        return targetMemberConnectionList.stream()
                 .map(memberConnection -> MemberConnectionDto.Response
                         .builder()
                         .memberId(memberConnection.getFromMember().getMemberId())
                         .profilePicture(memberConnection.getFromMember().getProfilePicture())
-                        .isFollowing(true)
+                        .isFollowing(loginMemberConnectionList.contains(memberConnection.getFromMember().getMemberId()))
                         .build())
                 .toList();
     }
 
-    public List<MemberConnectionDto.Response> getFollowingList(long memberId) {
-        List<MemberConnection> memberConnectionList = memberConnectionRepository.findByFromMember(memberId);
+    public List<MemberConnectionDto.Response> getFollowingList(long targetMemberId, long loginMemberId) {
+        List<MemberConnection> targetMemberConnectionList = memberConnectionRepository.findByFromMember(targetMemberId);
+        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByToMember(loginMemberId)
+                .stream().map(memberConnection -> memberConnection.getFromMember().getMemberId()).collect(Collectors.toSet());
 
-        log.info("get following list, memberId: {}", memberId);
+        log.info("get member {}'s following list, memberId", targetMemberId);
 
-        return memberConnectionList.stream()
+        return targetMemberConnectionList.stream()
                 .map(memberConnection -> MemberConnectionDto.Response
                         .builder()
                         .memberId(memberConnection.getToMember().getMemberId())
                         .profilePicture(memberConnection.getToMember().getProfilePicture())
-                        .isFollowing(true)
+                        .isFollowing(loginMemberConnectionList.contains(memberConnection.getToMember().getMemberId()))
                         .build()
                 ).toList();
     }

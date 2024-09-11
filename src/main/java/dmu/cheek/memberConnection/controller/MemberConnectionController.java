@@ -35,18 +35,20 @@ public class MemberConnectionController {
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping("/follower/{memberId}")
+    @GetMapping("/follower/{targetMemberId}")
     @Operation(summary = "팔로워 목록 조회", description = "본인을 팔로우한 회원 목록 조회 API")
-    public ResponseEntity<List> getFollowerList(@PathVariable(name = "memberId") long memberId) {
-        List<MemberConnectionDto.Response> followerList = memberConnectionService.getFollowerList(memberId);
+    public ResponseEntity<List> getFollowerList(@PathVariable(name = "targetMemberId") long targetMemberId,
+                                                @RequestParam(name = "loginMemberId") long loginMemberId) {
+        List<MemberConnectionDto.Response> followerList = memberConnectionService.getFollowerList(targetMemberId, loginMemberId);
 
         return ResponseEntity.ok(followerList);
     }
 
-    @GetMapping("/following/{memberId}")
+    @GetMapping("/following/{targetMemberId}")
     @Operation(summary = "팔로잉 목록 조회", description = "본인이 팔로우한 회원 목록 조회 API")
-    public ResponseEntity<List> getFollowingList(@PathVariable(name = "memberId") long memberId) {
-        List<MemberConnectionDto.Response> followingList = memberConnectionService.getFollowingList(memberId);
+    public ResponseEntity<List> getFollowingList(@PathVariable(name = "targetMemberId") long targetMemberId,
+                                                 @RequestParam(name = "loginMemberId") long loginMemberId) {
+        List<MemberConnectionDto.Response> followingList = memberConnectionService.getFollowingList(targetMemberId, loginMemberId);
 
         return ResponseEntity.ok(followingList);
     }
