@@ -1,5 +1,6 @@
 package dmu.cheek.folder.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 

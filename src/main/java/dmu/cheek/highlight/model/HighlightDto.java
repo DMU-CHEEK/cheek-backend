@@ -1,6 +1,8 @@
 package dmu.cheek.highlight.model;
 
 import dmu.cheek.story.model.StoryDto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,7 +20,11 @@ public class HighlightDto {
     @Getter
     public static class Request {
         private List<Long> storyIdList;
+
         private long memberId;
+
+        @Size(max = 8, message = "subject must be between 1 and 8 characters")
+        @NotBlank(message = "subject cannot be blank")
         private String subject;
     }
 
