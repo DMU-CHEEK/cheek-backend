@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +23,7 @@ public class StoryController {
     private final StoryService storyService;
 
     @PostMapping()
+//    @PreAuthorize("hasRole('ROLE_MENTOR')")
     @Operation(summary = "스토리 등록", description = "스토리 등록 API")
     public ResponseEntity<String> register(@RequestPart(value = "storyPicture") MultipartFile storyPicture,
                                            @RequestPart(value = "storyDto") StoryDto.Request storyDto) {
@@ -31,6 +33,7 @@ public class StoryController {
     }
 
     @DeleteMapping("/{storyId}")
+//    @PreAuthorize("hasRole('ROLE_MENTOR')")
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(name = "storyId") long storyId) {
         storyService.delete(storyId);

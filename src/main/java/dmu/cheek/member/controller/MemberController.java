@@ -52,7 +52,7 @@ public class MemberController {
             log.info("member already exists, logging in");
             KakaoLoginDto.Response loginResponse = memberService.login(requestDto, kakaoLoginResponseDto);
 
-            if (!StringUtils.isEmpty(loginResponse.getNickname()) && StringUtils.isEmpty(loginResponse.getInformation())) {
+            if (!StringUtils.isEmpty(loginResponse.getNickname()) && !StringUtils.isEmpty(loginResponse.getInformation())) {
                 log.info("profile is complete");
                 return ResponseEntity.ok(true);
             }
