@@ -7,6 +7,7 @@ import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
+import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class FolderService {
 
     private final MemberService memberService;
     private final FolderRepository folderRepository;
+    private final S3Service s3Service;
 
     public Folder findById(long folderId) {
         return folderRepository.findById(folderId)
@@ -70,7 +72,7 @@ public class FolderService {
                 .map(folder -> FolderDto.Response.builder()
                         .folderId(folder.getFolderId())
                         .folderName(folder.getFolderName())
-                        .thumbnailPicture(folder.getThumbnailPicture())
+                        .thumbnailPicture(s3Service.getResourceUrl(folder.getThumbnailPicture()))
                         .build())
                 .collect(Collectors.toList());
     }

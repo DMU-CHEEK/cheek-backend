@@ -78,7 +78,7 @@ public class StoryService {
                 .map(s -> StoryDto.Response.builder()
                         .storyId(s.getStoryId())
                         .categoryId(s.getCategory().getCategoryId())
-                        .storyPicture(s.getStoryPicture())
+                        .storyPicture(s3Service.getResourceUrl(s.getStoryPicture()))
                         .isUpvoted(s.getUpvoteList().stream()
                                 .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
                         .upvoteCount((int) s.getUpvoteList().stream().count())
@@ -94,7 +94,7 @@ public class StoryService {
 
         return StoryDto.Response.builder()
                 .storyId(storyId)
-                .storyPicture(story.getStoryPicture())
+                .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                 .categoryId(story.getCategory().getCategoryId())
                 .isUpvoted(story.getUpvoteList().stream()
                         .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))

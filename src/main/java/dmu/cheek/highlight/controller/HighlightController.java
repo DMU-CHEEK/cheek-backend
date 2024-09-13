@@ -1,7 +1,7 @@
 package dmu.cheek.highlight.controller;
 
 import dmu.cheek.highlight.model.HighlightDto;
-import dmu.cheek.member.service.HighlightService;
+import dmu.cheek.highlight.service.HighlightService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package dmu.cheek.member.service;
+package dmu.cheek.highlight.service;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
@@ -6,6 +6,7 @@ import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.repository.HighlightRepository;
 import dmu.cheek.member.model.Member;
+import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
 import dmu.cheek.story.converter.StoryConverter;
@@ -73,7 +74,7 @@ public class HighlightService {
                 .stream().map(
                         h -> HighlightDto.builder()
                                 .highlightId(h.getHighlightId())
-                                .thumbnailPicture(h.getThumbnailPicture())
+                                .thumbnailPicture(s3Service.getResourceUrl(h.getThumbnailPicture()))
                                 .subject(h.getSubject())
                                 .build()
                 ).collect(Collectors.toList());
@@ -83,7 +84,12 @@ public class HighlightService {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
-        List<StoryDto> storyList = highlight.getStoryList().stream().map(s -> storyConverter.convertToDto(s)).collect(Collectors.toList());
+        List<StoryDto> storyList = highlight.getStoryList().stream().map(
+                story -> StoryDto.builder()
+                        .storyId(story.getStoryId())
+                        .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
+                        .build()
+        ).toList();
 
         log.info("search highlight: ", highlightId);
 

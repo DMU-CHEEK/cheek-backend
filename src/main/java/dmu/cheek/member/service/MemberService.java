@@ -104,4 +104,22 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
+    public MemberDto getMemberInfo(String email) {
+        Member member = memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        log.info("get member info: {}", member.getMemberId());
+
+        return MemberDto.builder()
+                .memberId(member.getMemberId())
+                .email(member.getEmail())
+                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
+                .nickname(member.getNickname())
+                .information(member.getInformation())
+                .role(member.getRole())
+                .description(member.getDescription())
+                .status(member.getStatus())
+                .build();
+    }
+
 }

@@ -7,6 +7,7 @@ import dmu.cheek.member.service.MemberService;
 import dmu.cheek.memberConnection.model.MemberConnection;
 import dmu.cheek.memberConnection.model.MemberConnectionDto;
 import dmu.cheek.memberConnection.repository.MemberConnectionRepository;
+import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class MemberConnectionService {
 
     private final MemberConnectionRepository memberConnectionRepository;
     private final MemberService memberService;
+    private final S3Service s3Service;
 
     @Transactional
     public void register(MemberConnectionDto.Request memberConnectionDto) {
@@ -61,7 +63,7 @@ public class MemberConnectionService {
                 .map(memberConnection -> MemberConnectionDto.Response
                         .builder()
                         .memberId(memberConnection.getFromMember().getMemberId())
-                        .profilePicture(memberConnection.getFromMember().getProfilePicture())
+                        .profilePicture(s3Service.getResourceUrl(memberConnection.getFromMember().getProfilePicture()))
                         .isFollowing(loginMemberConnectionList.contains(memberConnection.getFromMember().getMemberId()))
                         .build())
                 .toList();
@@ -78,7 +80,7 @@ public class MemberConnectionService {
                 .map(memberConnection -> MemberConnectionDto.Response
                         .builder()
                         .memberId(memberConnection.getToMember().getMemberId())
-                        .profilePicture(memberConnection.getToMember().getProfilePicture())
+                        .profilePicture(s3Service.getResourceUrl(memberConnection.getToMember().getProfilePicture()))
                         .isFollowing(loginMemberConnectionList.contains(memberConnection.getToMember().getMemberId()))
                         .build()
                 ).toList();

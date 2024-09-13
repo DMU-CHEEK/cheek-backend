@@ -86,11 +86,9 @@ public class MemberController {
     public ResponseEntity<MemberDto> getMemberInfo(@RequestParam(value = "accessToken") String accessToken) {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
-        MemberDto memberDto = memberConverter.convertToDto(memberService.findByEmail(kakaoLoginResponseDto.getKakaoAccount().getEmail()));
+        MemberDto memberInfo = memberService.getMemberInfo(kakaoLoginResponseDto.getKakaoAccount().getEmail());
 
-        log.info("get member info: {}", memberDto.getEmail());
-
-        return ResponseEntity.ok(memberDto);
+        return ResponseEntity.ok(memberInfo);
     }
 
 }
