@@ -42,9 +42,11 @@ public class StoryController {
     }
 
     @GetMapping("/member/{targetMemberId}")
+    @PreAuthorize("hasRole('ROLE_MENTEE')")
     @Operation(summary = "스토리 리스트 조회", description = "특정 유저의 스토리 리스트 조회 API")
     public ResponseEntity<List> searchByMember(@PathVariable(name = "targetMemberId") long targetMemberId,
                                                @RequestParam(name = "loginMemberId") long loginMemberId) {
+
         //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
         List<StoryDto.Response> storyList = storyService.searchListByMember(loginMemberId, targetMemberId);
 

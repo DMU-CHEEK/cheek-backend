@@ -4,12 +4,14 @@ import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoTokenInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 @Component
+@Slf4j
 public class AuthInterceptor implements HandlerInterceptor {
 
     @Autowired @Lazy
@@ -27,6 +29,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
 
         String token = getTokenFromRequest(request);
+
         if (token == null || !isValidToken(token)) {
             response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or missing token");
             return false;
@@ -46,6 +49,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     private boolean isValidToken(String token) {
         try {
             KakaoTokenInfoDto tokenInfo = kakaoLoginClient.getTokenInfo("Bearer " + token);
+
             //토큰 만료 여부 검증
             return tokenInfo != null && tokenInfo.getExpires_in() > 0;
         } catch (Exception e) {

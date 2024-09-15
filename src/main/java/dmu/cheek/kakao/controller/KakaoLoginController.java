@@ -5,11 +5,13 @@ import dmu.cheek.kakao.model.KakaoTokenDto;
 import dmu.cheek.kakao.model.KakaoTokenInfoDto;
 import dmu.cheek.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -33,8 +35,7 @@ public class KakaoLoginController {
     private String redirectUri;
 
     @GetMapping("/kakao/callback")
-    public ResponseEntity<KakaoLoginResponseDto> loginCallBack(@RequestParam(name = "code") String code,
-                                                               HttpServletRequest httpServletResponse) throws IOException {
+    public ResponseEntity<KakaoLoginResponseDto> loginCallBack(@RequestParam(name = "code") String code) throws IOException {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
 
         log.info("contentType: ", contentType);
@@ -51,28 +52,24 @@ public class KakaoLoginController {
         log.info("kakaoResponse: ", kakaoResponse.getAccess_token());
 
         String accessToken = kakaoResponse.getAccess_token();
-//        String refreshToken = kakaoResponse.getRefresh_token();
-//        Integer accessTokenExpireTime = kakaoResponse.getExpires_in();
-//        Integer refreshTokenExpireTime = kakaoResponse.getRefresh_token_expires_in();
+        String refreshToken = kakaoResponse.getRefresh_token();
+        Integer accessTokenExpireTime = kakaoResponse.getExpires_in();
+        Integer refreshTokenExpireTime = kakaoResponse.getRefresh_token_expires_in();
 
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
 
         if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail()))
             memberService.register(kakaoLoginResponseDto);
 
-        return ResponseEntity.ok(kakaoLoginResponseDto);
-
-//        String redirectUri = UriComponentsBuilder
-//                .fromUriString("")
+//        response.sendRedirect(UriComponentsBuilder
+//                .fromUriString("http://localhost:3000/kakao/login/callback")
 //                .queryParam("accessToken", accessToken)
 //                .queryParam("refreshToken", refreshToken)
 //                .queryParam("accessTokenExpireTime", accessTokenExpireTime)
 //                .queryParam("refreshTokenExpireTime", refreshTokenExpireTime)
-//                .build().toUriString();
-//
-//        httpServletResponse.sendRedirect(redirectUri);
+//                .build().toUriString());
 
-
+        return ResponseEntity.ok(kakaoLoginResponseDto);
     }
 
     @GetMapping("/token")

@@ -7,16 +7,16 @@ import org.junit.jupiter.api.Test;
 public class JasyptTest {
 
     @Test
-    @Disabled
+//    @Disabled
     public void test() {
-        String password = ""; //jasypt password
+        String password = "QhEh123"; //jasypt password
 
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         encryptor.setPoolSize(4);
         encryptor.setPassword(password);
         encryptor.setAlgorithm("PBEWithMD5AndTripleDES");
 
-        String content = ""; //암호화 할 내용
+        String content = "QhEhwhdk123"; //암호화 할 내용
         String encryptedContent = encryptor.encrypt(content); //암호화
         String decryptedContent = encryptor.decrypt(encryptedContent); //복호화
 

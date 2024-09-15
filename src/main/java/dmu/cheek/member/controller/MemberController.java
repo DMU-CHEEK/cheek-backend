@@ -43,9 +43,9 @@ public class MemberController {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, authorization);
 
-        boolean isNewMember = !memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail());
+        boolean isNewMember = memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail());
 
-        if (isNewMember) {
+        if (!isNewMember) {
             log.info("member does not exist, registering new member");
             memberService.register(kakaoLoginResponseDto);
         } else {
@@ -54,13 +54,14 @@ public class MemberController {
 
             if (!StringUtils.isEmpty(loginResponse.getNickname()) && !StringUtils.isEmpty(loginResponse.getInformation())) {
                 log.info("profile is complete");
-                return ResponseEntity.ok(true);
             }
         }
 
+        // TODO: token 발급 로직
+
         //프로필이 완전하지 않은 경우
         log.info("profile is not complete");
-        return ResponseEntity.ok(false);
+        return ResponseEntity.ok(isNewMember);
     }
 
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})

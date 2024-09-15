@@ -83,3 +83,7 @@ springdoc:
     operations-sorter: method  # delete - get - patch - post - put 순으로 정렬, alpha를 사용하면 알파벳 순으로 정렬 가능
   paths-to-match:
     - /** # swagger-ui에 표시할 api의 엔드포인트 패턴
+
+jwt:
+  issuer: sejyom
+  secret_key: ENC(iQ/ZSaz/VWoBC00u6pnkDNk2N/f9kdQP)
