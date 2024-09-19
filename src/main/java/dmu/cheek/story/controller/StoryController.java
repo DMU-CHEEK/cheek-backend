@@ -1,5 +1,8 @@
 package dmu.cheek.story.controller;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.member.service.MemberService;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.service.StoryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,12 +24,16 @@ import java.util.List;
 public class StoryController {
 
     private final StoryService storyService;
+    private final MemberService memberService;
 
     @PostMapping("/mentor")
     @Operation(summary = "스토리 등록", description = "스토리 등록 API")
     public ResponseEntity<String> register(@RequestPart(value = "storyPicture") MultipartFile storyPicture,
                                            @RequestPart(value = "storyDto") StoryDto.Request storyDto) {
-        storyService.register(storyPicture, storyDto);
+        //TODO: refactor to create a token
+        if (memberService.isMentor(storyDto.getMemberId()))
+            storyService.register(storyPicture, storyDto);
+        else new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }
@@ -34,7 +41,11 @@ public class StoryController {
     @DeleteMapping("/mentor/{storyId}")
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(name = "storyId") long storyId) {
-        storyService.delete(storyId);
+        //TODO: refactor to create a token
+        if (memberService.isMentor(
+                storyService.findById(storyId).getMember().getMemberId()))
+            storyService.delete(storyId);
+        else new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }

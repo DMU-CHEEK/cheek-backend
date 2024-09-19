@@ -1,7 +1,10 @@
 package dmu.cheek.highlight.controller;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.service.HighlightService;
+import dmu.cheek.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +21,16 @@ import java.util.List;
 public class HighlightController {
 
     private final HighlightService highlightService;
+    private final MemberService memberService;
 
     @PostMapping()
     @Operation(summary = "하이라이트 등록", description = "하이라이트 등록 API")
     public ResponseEntity<String> register(@RequestPart(value = "thumbnailPicture") MultipartFile thumbnailPicture,
                                            @RequestPart(value = "highlightDto") HighlightDto.Request highlightDto) {
-
-        highlightService.register(thumbnailPicture, highlightDto);
+        //TODO: refactor to create a token
+        if (memberService.isMentor(highlightDto.getMemberId()))
+            highlightService.register(thumbnailPicture, highlightDto);
+        else new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }
@@ -32,8 +38,11 @@ public class HighlightController {
     @DeleteMapping("/{highlightId}")
     @Operation(summary = "하이라이트 삭제", description = "하이하이트 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(value = "highlightId") long highlightId) {
-
-        highlightService.delete(highlightId);
+        //TODO: refactor to create a token
+        if (memberService.isMentor(
+                highlightService.findById(highlightId).getMember().getMemberId()))
+            highlightService.delete(highlightId);
+        else new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }

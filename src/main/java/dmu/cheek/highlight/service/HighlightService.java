@@ -95,4 +95,9 @@ public class HighlightService {
                 .storyList(storyList)
                 .build();
     }
+
+    public Highlight findById(long highlightId) {
+        return highlightRepository.findById(highlightId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+    }
 }

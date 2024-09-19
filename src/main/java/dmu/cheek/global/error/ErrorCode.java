@@ -13,6 +13,7 @@ public enum ErrorCode {
     MALFORMED_TOKEN(HttpStatus.UNAUTHORIZED, "A-001", "invalid token format"),
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A-002", "expired token"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-003", "invalid token"),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-004", "do not have permission to access this resource"),
 
     //Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),
