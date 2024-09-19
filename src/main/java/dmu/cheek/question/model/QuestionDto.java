@@ -45,7 +45,7 @@ public class QuestionDto {
 
         private String content;
 
-        private MemberDto memberDto;
+        private long memberId;
 
         private CategoryDto categoryDto;
     }

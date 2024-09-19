@@ -56,6 +56,10 @@ spring:
           auth: true
     auth-code-expiration-millis: 180000
 
+    redis:
+      host: localhost
+      port: 6379
+
 logging:
   level:
     org.hibernate.orm.jdbc.bind: trace

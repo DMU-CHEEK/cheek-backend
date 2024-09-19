@@ -62,7 +62,7 @@ public class QuestionService {
                 .map(q -> QuestionDto.Response.builder()
                         .questionId(q.getQuestionId())
                         .content(q.getContent())
-                        .memberDto(memberConverter.convertToDto(member))
+                        .memberId(memberId)
                         .categoryDto(categoryConverter.convertToDto(q.getCategory()))
                         .build())
                 .collect(Collectors.toList());
