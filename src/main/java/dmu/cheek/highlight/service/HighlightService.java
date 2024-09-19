@@ -84,12 +84,10 @@ public class HighlightService {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
-        List<StoryDto> storyList = highlight.getStoryList().stream().map(
-                story -> StoryDto.builder()
-                        .storyId(story.getStoryId())
-                        .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
-                        .build()
-        ).toList();
+        List<StoryDto> storyList = highlight.getStoryList().stream()
+                .map(
+                story -> storyConverter.convertToDto(story))
+                .toList();
 
         log.info("search highlight: ", highlightId);
 

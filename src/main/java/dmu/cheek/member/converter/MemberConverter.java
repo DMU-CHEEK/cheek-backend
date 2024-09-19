@@ -2,10 +2,15 @@ package dmu.cheek.member.converter;
 
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
+import dmu.cheek.s3.service.S3Service;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class MemberConverter {
+
+    private final S3Service s3Service;
 
     public MemberDto convertToDto(Member member) {
         if (member == null)
@@ -17,7 +22,7 @@ public class MemberConverter {
                 .nickname(member.getNickname())
                 .description(member.getDescription())
                 .information(member.getInformation())
-                .profilePicture(member.getProfilePicture())
+                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
                 .role(member.getRole())
                 .status(member.getStatus())
                 .build();

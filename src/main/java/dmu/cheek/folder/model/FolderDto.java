@@ -1,10 +1,9 @@
 package dmu.cheek.folder.model;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
+@Getter @Builder
 public class FolderDto {
 
     private long folderId;

@@ -27,22 +27,38 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
 
+//    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
+//        return httpSecurity
+//                .httpBasic(Customizer.withDefaults())
+//                .csrf(csrf -> csrf.disable()) //CSRF 보호 비활성화
+//                .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll()) //모든 요청에 대해 인증 없이 접근 가능하도록 설정
+//                .httpBasic(httpBasic -> httpBasic.disable()) //HTTP 기본 인증 비활성화
+//                .formLogin(formLogin -> formLogin.disable()) //폼 로그인 비활성화
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("**/admin/**").hasRole("ADMIN")
+//                        .requestMatchers("**/mentor/**").hasRole("MENTOR")
+////                        .requestMatchers("**/mentee/**").hasRole("MENTEE")
+//                        .anyRequest().authenticated())
+//                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
+//                .build();
+//    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
-                .httpBasic(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable()) //CSRF 보호 비활성화
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll()) //모든 요청에 대해 인증 없이 접근 가능하도록 설정
-                .httpBasic(httpBasic -> httpBasic.disable()) //HTTP 기본 인증 비활성화
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasRole("ADMIN")   //ADMIN 역할만 접근 허용
+                        .requestMatchers("/mentor/**").hasRole("MENTOR") //MENTOR 역할만 접근 허용
+                        .requestMatchers("/mentee/**").hasRole("MENTEE") //MENTEE 역할만 접근 허용
+                        .anyRequest().permitAll()                   //나머지 요청은 인증 필요
+                )
+                .httpBasic(Customizer.withDefaults()) //HTTP 기본 인증 사용
                 .formLogin(formLogin -> formLogin.disable()) //폼 로그인 비활성화
-//                .authorizeHttpRequests(auth -> auth
-//                        .mat("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/story/**").hasRole("MENTOR")
-//                        .antMatchers("/mentee/**").hasRole("MENTEE")
-//                        .anyRequest().authenticated())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
                 .build();
     }
+
 
     @Bean
     public RoleHierarchy roleHierarchy() {

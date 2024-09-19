@@ -22,8 +22,7 @@ public class StoryController {
 
     private final StoryService storyService;
 
-    @PostMapping()
-//    @PreAuthorize("hasRole('ROLE_MENTOR')")
+    @PostMapping("/mentor")
     @Operation(summary = "스토리 등록", description = "스토리 등록 API")
     public ResponseEntity<String> register(@RequestPart(value = "storyPicture") MultipartFile storyPicture,
                                            @RequestPart(value = "storyDto") StoryDto.Request storyDto) {
@@ -32,8 +31,7 @@ public class StoryController {
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping("/{storyId}")
-//    @PreAuthorize("hasRole('ROLE_MENTOR')")
+    @DeleteMapping("/mentor/{storyId}")
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(name = "storyId") long storyId) {
         storyService.delete(storyId);
@@ -42,7 +40,6 @@ public class StoryController {
     }
 
     @GetMapping("/member/{targetMemberId}")
-    @PreAuthorize("hasRole('ROLE_MENTEE')")
     @Operation(summary = "스토리 리스트 조회", description = "특정 유저의 스토리 리스트 조회 API")
     public ResponseEntity<List> searchByMember(@PathVariable(name = "targetMemberId") long targetMemberId,
                                                @RequestParam(name = "loginMemberId") long loginMemberId) {

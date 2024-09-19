@@ -66,8 +66,15 @@ public class S3Service {
         amazonS3.deleteObject(bucketName, storeFileName);
     }
 
+//    public String getResourceUrl(String storeFileName) {
+//        return amazonS3Client.getResourceUrl(bucketName, storeFileName);
+//    }
+
     public String getResourceUrl(String storeFileName) {
-        return amazonS3Client.getResourceUrl(bucketName, storeFileName);
+        //S3 Path-Style URL format: https://s3.amazonaws.com/<bucket-name>/<file-name>
+        String s3Url = String.format("https://s3.amazonaws.com/%s/%s", bucketName, storeFileName);
+        return s3Url;
     }
+
 
 }

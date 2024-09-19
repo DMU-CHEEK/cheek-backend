@@ -1,11 +1,16 @@
 package dmu.cheek.story.converter;
 
+import dmu.cheek.s3.service.S3Service;
 import dmu.cheek.story.model.Story;
 import dmu.cheek.story.model.StoryDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class StoryConverter {
+
+    private final S3Service s3Service;
 
     public Story convertToEntity(StoryDto storyDto) {
         if (storyDto == null)
@@ -13,7 +18,7 @@ public class StoryConverter {
 
         return Story.naturalFields()
                 .storyId(storyDto.getStoryId())
-                .storyPicture(storyDto.getStoryPicture())
+                .storyPicture(s3Service.getResourceUrl(storyDto.getStoryPicture()))
                 .build();
     }
 
