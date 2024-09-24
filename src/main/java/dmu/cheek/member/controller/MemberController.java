@@ -96,7 +96,7 @@ public class MemberController {
     }
 
     @GetMapping("/top-members")
-    @Operation(summary = "상위 멤버 3명 조회", description = "좋아요 수에 따른 상위 멤버 3명 조회 API")
+    @Operation(summary = "상위 회원 3명 조회", description = "주간 좋아요 상위 회원 3명 조회 API")
     public ResponseEntity<List> getTop3MembersWithMostUpvotesInWeek() {
         List<MemberDto> memberDtoList = memberService.getTop3MembersWithMostUpvotesInWeek();
 
