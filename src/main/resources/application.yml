@@ -3,10 +3,16 @@ spring:
     name: cheek
 
   datasource:
-    url: ENC(NX9UCq/QaoOc6bGhK6HNiCvoBZX5AUGVry89P8KqmFJ7b+jwSEQaf6FgkyVu8ZJEAr99GCLo2UcrdXnkZV7YRdh264HqikwfFhOiGnqbnuLGQT06HKECSw==)
-    username: ENC(4SVZt54EqpZprLj1Ah0P4A==)
-    password: ENC(ztIJQ7tdmQvEvUOX0u65zhgxIbr6rc/N)
+    url: ENC(i7DpwZe5UCcklnbWMuU5fMSkhhYx/NbVGKEQTYcqOZM7ZzwM8RyDWyonQJfXec3m3oVWFXaAetVolbExIzCzHZAfcS8qPND4cqQjwAuTapUWU9+IemUZ1w==)
+    username: ENC(F14FnQmrzY9c7en+5y+IHQ==)
+    password: ENC(t56hI2u4CWhnEbGuaYNQDnIu2eIadJRQ)
     driver-class-name: com.mysql.cj.jdbc.Driver
+
+  redis:
+    data:
+      host: localhost
+      port: 6379
+      password: ENC(QmJ35aHgY04UPrv34nIlcWAzqxbL/wbt)
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
@@ -29,7 +35,7 @@ spring:
             user-name-attribute: id
         registration:
           kakao:
-            client-id: ENC(ANR+g2pVhsxkaB17EC6P9ti8yiCmgFSxzCrE8p541uIZogoyYRR6TBQjh/r0HyuF)
+            client-id: ENC(ulWcFPORkulXQN0BaioV86QzYBxpPCXnPz5CPM6h1mcmAFC8Ry9ll6zcSe0HMq7d)
             client-authentication-method: client_secret_post
             redirect-uri: http://localhost:8080/auth/kakao/callback
             authorization-grant-type: authorization_code
@@ -45,8 +51,8 @@ spring:
     protocol: smtp
     host: smtp.gmail.com
     port: 587
-    username: ENC(UIDfs23ER50YXKFPH6LlAGwaazY73y8uvZPnYA5Z0eA=)
-    password: ENC(DNMjb0tPz1ercoPfeN0J3ju5voX2tMFcJ/KLtUicEEQ=)
+    username: ENC(BkmpGlE6yb5IhDgepvh8/WDb7dAZDONvA5xqnlvJL90=)
+    password: ENC(HCh5UyX3lHJWTgaZrrWy7NTwKMq8NVk/y1CHGUOcsB4=)
     default-encoding: utf-8
     properties:
       mail:
@@ -55,10 +61,6 @@ spring:
             enable: true
           auth: true
     auth-code-expiration-millis: 180000
-
-    redis:
-      host: localhost
-      port: 6379
 
 logging:
   level:
@@ -76,8 +78,8 @@ cloud:
     s3:
       bucket-name: dmu.cheek.2024
     credentials:
-      access-key: ENC(PgCmDbWnqTNkXUhib6ZoV7IOScmSF+6ImwxuO9/DgO8=)
-      secret-key: ENC(Hm/Loje66iPAf0X54EXsYW3tuD3w+34dE1ncQxI9G5A3H2EYIlwQaBNKhSZjOpaE0pc7kdVzTw0=)
+      access-key: ENC(k4b2AANtVO5dUO3xGwK40j6hvzGPK0JHPchlCrDUPTY=)
+      secret-key: ENC(to0fxpyQh8zDNZhnbfWVxcgAu6JNMYnZSnE0Vb9e8W96Ox2JXniVW8OIjeA3wEblxuB8Ip5+UvA=)
 
 springdoc:
   swagger-ui:
@@ -90,4 +92,4 @@ springdoc:
 
 jwt:
   issuer: sejyom
-  secret_key: ENC(iQ/ZSaz/VWoBC00u6pnkDNk2N/f9kdQP)
+  secret_key: ENC(46UbNqJc0V0vkcFPbNde8/tTJiVpRmwO)

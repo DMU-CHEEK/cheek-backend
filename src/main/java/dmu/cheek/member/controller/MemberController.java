@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
@@ -33,6 +34,7 @@ public class MemberController {
     private final MemberService memberService;
     private final KakaoLoginClient kakaoLoginClient;
     private final MemberConverter memberConverter;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인(회원가입) API")
@@ -93,11 +95,11 @@ public class MemberController {
         return ResponseEntity.ok(memberDto);
     }
 
-//    @GetMapping("/top-members")
-//    @Operation(summary = "상위 멤버 3명 조회", description = "좋아요 수에 따른 상위 멤버 3명 조회 API")
-//    public ResponseEntity<List> getTop3MembersWithMostLikesInWeek() {
-//
-//    }
+    @GetMapping("/top-members")
+    @Operation(summary = "상위 멤버 3명 조회", description = "좋아요 수에 따른 상위 멤버 3명 조회 API")
+    public ResponseEntity<List> getTop3MembersWithMostLikesInWeek() {
+        List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
 
-
+        return ResponseEntity.ok(topMembers);
+    }
 }

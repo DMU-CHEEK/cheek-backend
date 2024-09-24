@@ -9,9 +9,12 @@ import dmu.cheek.upvote.model.UpvoteDto;
 import dmu.cheek.upvote.repository.UpvoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -55,7 +58,11 @@ public class UpvoteService {
     }
 
     public Optional<Upvote> findByUpvoteMemberId(Long id) {
-
         return upvoteRepository.findByMemberId(id);
+    }
+
+    public List<Member> findTop3MembersWithMostLikesInWeek(
+            LocalDate startOfWeek, LocalDate endOfWeek, Pageable pageable) {
+        return upvoteRepository.findTop3MembersWithMostLikesInWeek(startOfWeek, endOfWeek, pageable);
     }
 }
