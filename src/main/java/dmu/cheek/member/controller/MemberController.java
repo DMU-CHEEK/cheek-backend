@@ -1,5 +1,6 @@
 package dmu.cheek.member.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
@@ -34,7 +35,6 @@ public class MemberController {
     private final MemberService memberService;
     private final KakaoLoginClient kakaoLoginClient;
     private final MemberConverter memberConverter;
-    private final RedisTemplate<String, Object> redisTemplate;
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인(회원가입) API")
@@ -97,9 +97,9 @@ public class MemberController {
 
     @GetMapping("/top-members")
     @Operation(summary = "상위 멤버 3명 조회", description = "좋아요 수에 따른 상위 멤버 3명 조회 API")
-    public ResponseEntity<List> getTop3MembersWithMostLikesInWeek() {
-        List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
+    public ResponseEntity<List> getTop3MembersWithMostUpvotesInWeek() {
+        List<MemberDto> memberDtoList = memberService.getTop3MembersWithMostUpvotesInWeek();
 
-        return ResponseEntity.ok(topMembers);
+        return ResponseEntity.ok(memberDtoList);
     }
 }

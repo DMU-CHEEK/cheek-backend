@@ -1,5 +1,6 @@
 package dmu.cheek.member.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.kakao.model.KakaoLoginDto;
@@ -12,12 +13,14 @@ import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 @Service
@@ -29,6 +32,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final S3Service s3Service;
     private final MemberConverter memberConverter;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     public boolean isExistMember(String email) {
         return memberRepository.findByEmail(email).isPresent();
@@ -110,5 +114,15 @@ public class MemberService {
 
         return member.getRole() == Role.MENTOR;
     }
+
+    public List<MemberDto> getTop3MembersWithMostUpvotesInWeek() {
+        List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
+        List<MemberDto> memberDtoList = topMembers.stream().map(member -> new ObjectMapper().convertValue(member, MemberDto.class)).toList();
+
+        log.info("retrieving the top 3 members with the most upvotes this week");
+
+        return memberDtoList;
+    }
+
 
 }
