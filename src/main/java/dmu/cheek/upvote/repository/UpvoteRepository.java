@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +22,10 @@ public interface UpvoteRepository extends JpaRepository<Upvote, Long> {
     Optional<Upvote> findByMemberId(Long memberId);
 
     @Query("SELECT u.member FROM Upvote u " +
-            "WHERE u.isUpvoted = true AND u.createdAt BETWEEN :startDate AND :endDate " +
+            "WHERE u.isUpvoted = true AND u.modifiedAt BETWEEN :startDate AND :endDate " +
             "GROUP BY u.member ORDER BY COUNT(u) DESC")
-    List<Member> findTop3MembersWithMostLikesInWeek(@Param("startDate") LocalDate startDate,
-                                                    @Param("endDate") LocalDate endDate,
+    List<Member> findTop3MembersWithMostLikesInWeek(@Param("startDate") LocalDateTime startDate,
+                                                    @Param("endDate") LocalDateTime endDate,
                                                     Pageable pageable);
 
 }

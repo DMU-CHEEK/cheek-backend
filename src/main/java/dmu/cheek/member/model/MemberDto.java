@@ -4,8 +4,10 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -32,5 +34,14 @@ public class MemberDto {
     private Role role;
 
     private Status status;
+
+    @Builder @Getter @NoArgsConstructor @AllArgsConstructor
+    public static class Top3MemberInfo {
+        private long memberId;
+        private String nickname;
+        private String profilePicture;
+        private String information;
+        private String description;
+    }
 
 }

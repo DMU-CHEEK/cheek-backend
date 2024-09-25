@@ -24,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
@@ -98,8 +99,8 @@ public class MemberController {
     @GetMapping("/top-members")
     @Operation(summary = "상위 회원 3명 조회", description = "주간 좋아요 상위 회원 3명 조회 API")
     public ResponseEntity<List> getTop3MembersWithMostUpvotesInWeek() {
-        List<MemberDto> memberDtoList = memberService.getTop3MembersWithMostUpvotesInWeek();
+        List<MemberDto.Top3MemberInfo> top3MembersWithMostUpvotesInWeek = memberService.getTop3MembersWithMostUpvotesInWeek();
 
-        return ResponseEntity.ok(memberDtoList);
+        return ResponseEntity.ok(top3MembersWithMostUpvotesInWeek);
     }
 }

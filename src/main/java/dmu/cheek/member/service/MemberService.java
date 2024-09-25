@@ -1,5 +1,7 @@
 package dmu.cheek.member.service;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
@@ -20,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
+import java.util.*;
 
 
 @Service
@@ -115,14 +117,27 @@ public class MemberService {
         return member.getRole() == Role.MENTOR;
     }
 
-    public List<MemberDto> getTop3MembersWithMostUpvotesInWeek() {
+    public List<MemberDto.Top3MemberInfo> getTop3MembersWithMostUpvotesInWeek() {
         List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
-        List<MemberDto> memberDtoList = topMembers.stream().map(member -> new ObjectMapper().convertValue(member, MemberDto.class)).toList();
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<MemberDto.Top3MemberInfo> memberInfoList = new ArrayList<>();
 
-        log.info("retrieving the top 3 members with the most upvotes this week");
+        for (Object topMember : topMembers) {
+            try {
+                String stringValue = objectMapper.writeValueAsString(topMember);
 
-        return memberDtoList;
+                MemberDto.Top3MemberInfo[] memberArray = objectMapper.readValue(stringValue, MemberDto.Top3MemberInfo[].class);
+                memberInfoList.addAll(Arrays.asList(memberArray));
+            } catch (Exception e) {
+                log.error("Error converting Redis data to MemberDto", e);
+            }
+        }
+
+        log.info("retrieving top 3 members by upvotes");
+
+        return memberInfoList;
     }
+
 
 
 }
