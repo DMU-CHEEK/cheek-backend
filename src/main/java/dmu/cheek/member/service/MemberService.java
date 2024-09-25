@@ -110,13 +110,6 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
-    public boolean isMentor(long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
-
-        return member.getRole() == Role.MENTOR;
-    }
-
     public List<MemberDto.Top3MemberInfo> getTop3MembersWithMostUpvotesInWeek() {
         List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -129,7 +122,7 @@ public class MemberService {
                 MemberDto.Top3MemberInfo[] memberArray = objectMapper.readValue(stringValue, MemberDto.Top3MemberInfo[].class);
                 memberInfoList.addAll(Arrays.asList(memberArray));
             } catch (Exception e) {
-                log.error("Error converting Redis data to MemberDto", e);
+                log.error("Error converting Redis data to MemberDto.Top3MemberInfo", e);
             }
         }
 
@@ -138,6 +131,20 @@ public class MemberService {
         return memberInfoList;
     }
 
+    @Transactional
+    public void updateRole(long memberId, String role) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
+        member.updateRole(Role.from(role));
+
+        log.info("update member {} role: {} to {}", memberId, member.getRole(), role);
+    }
+
+    public boolean checkRole(long memberId, Role role) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        return member.getRole() == role;
+    }
 
 }

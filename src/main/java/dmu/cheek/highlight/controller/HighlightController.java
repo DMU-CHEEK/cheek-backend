@@ -4,6 +4,7 @@ import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.service.HighlightService;
+import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,7 +29,7 @@ public class HighlightController {
     public ResponseEntity<String> register(@RequestPart(value = "thumbnailPicture") MultipartFile thumbnailPicture,
                                            @RequestPart(value = "highlightDto") HighlightDto.Request highlightDto) {
         //TODO: refactor to create a token
-        if (memberService.isMentor(highlightDto.getMemberId()))
+        if (memberService.checkRole(highlightDto.getMemberId(), Role.MENTOR))
             highlightService.register(thumbnailPicture, highlightDto);
         else new BusinessException(ErrorCode.ACCESS_DENIED);
 
@@ -39,8 +40,7 @@ public class HighlightController {
     @Operation(summary = "하이라이트 삭제", description = "하이하이트 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(value = "highlightId") long highlightId) {
         //TODO: refactor to create a token
-        if (memberService.isMentor(
-                highlightService.findById(highlightId).getMember().getMemberId()))
+        if (memberService.checkRole(highlightService.findById(highlightId).getMember().getMemberId(), Role.MENTOR))
             highlightService.delete(highlightId);
         else new BusinessException(ErrorCode.ACCESS_DENIED);
 

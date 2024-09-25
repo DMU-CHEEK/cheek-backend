@@ -1,30 +1,26 @@
 package dmu.cheek.member.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.member.converter.MemberConverter;
-import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.model.ProfileDto;
+import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/member")
@@ -102,5 +98,24 @@ public class MemberController {
         List<MemberDto.Top3MemberInfo> top3MembersWithMostUpvotesInWeek = memberService.getTop3MembersWithMostUpvotesInWeek();
 
         return ResponseEntity.ok(top3MembersWithMostUpvotesInWeek);
+    }
+
+    @PostMapping("/role/{memberId}")
+    @Operation(summary = "상태(역할) 변경", description = "상태(역할) 변경 API")
+    public ResponseEntity<String> updateRole(@PathVariable(name = "memberId") long memberId,
+                                             @RequestParam(name = "role") String role) {
+        memberService.checkRole(memberId, Role.valueOf(role)); //TODO: @PreAuthorize 적용
+        memberService.updateRole(memberId, role);
+
+        return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/role/check/{memberId}")
+    @Operation(summary = "역할 검증", description = "역할 검증 API(임시)")
+    public ResponseEntity<Boolean> checkRole(@PathVariable(name = "memberId") long memberId,
+                                             @RequestParam(name = "role") String role) {
+        boolean result = memberService.checkRole(memberId, Role.valueOf(role));
+
+        return ResponseEntity.ok(result);
     }
 }

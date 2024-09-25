@@ -2,6 +2,7 @@ package dmu.cheek.story.controller;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.service.StoryService;
@@ -31,7 +32,7 @@ public class StoryController {
     public ResponseEntity<String> register(@RequestPart(value = "storyPicture") MultipartFile storyPicture,
                                            @RequestPart(value = "storyDto") StoryDto.Request storyDto) {
         //TODO: refactor to create a token
-        if (memberService.isMentor(storyDto.getMemberId()))
+        if (memberService.checkRole(storyDto.getMemberId(), Role.MENTOR))
             storyService.register(storyPicture, storyDto);
         else new BusinessException(ErrorCode.ACCESS_DENIED);
 
@@ -42,8 +43,7 @@ public class StoryController {
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(name = "storyId") long storyId) {
         //TODO: refactor to create a token
-        if (memberService.isMentor(
-                storyService.findById(storyId).getMember().getMemberId()))
+        if (memberService.checkRole(storyService.findById(storyId).getMember().getMemberId(), Role.MENTOR))
             storyService.delete(storyId);
         else new BusinessException(ErrorCode.ACCESS_DENIED);
 
