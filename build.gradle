@@ -41,8 +41,9 @@ dependencies {
 
 	//jasypt
 	implementation 'com.github.ulisesbocchio:jasypt-spring-boot:3.0.4'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.4'
 
-	//db
+	//mysql
 	implementation 'com.mysql:mysql-connector-j'
 
 	//spring security
@@ -68,9 +69,10 @@ dependencies {
 
 	//queryDSL
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-	annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+	annotationProcessor 'com.querydsl:querydsl-apt:5.0.0:jakarta'
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
 
 	//redis
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
@@ -78,10 +80,16 @@ dependencies {
 	//datatype
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
-	//gson
-	implementation 'com.google.code.gson:gson:2.8.8'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+clean {
+	delete file('src/main/generated')
+}
+
+tasks.withType(JavaCompile) {
+	options.compilerArgs += "-Xlint:deprecation"
 }

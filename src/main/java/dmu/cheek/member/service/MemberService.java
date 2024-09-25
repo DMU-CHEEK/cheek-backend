@@ -143,7 +143,7 @@ public class MemberService {
 
     public boolean checkRole(long memberId, Role role) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCESS_DENIED));
         return member.getRole() == role;
     }
 
