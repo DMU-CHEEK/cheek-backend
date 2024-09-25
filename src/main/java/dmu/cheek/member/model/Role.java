@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import java.util.stream.Stream;
 
 public enum Role {
-    MENTOR, MENTEE, ADMIN, NONE;
+    MENTOR, MENTEE, ADMIN, NONE, REJECTED;
 
     @JsonCreator
     public static Role from(String role) {
