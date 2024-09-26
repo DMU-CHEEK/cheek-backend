@@ -26,6 +26,8 @@ public class Story extends BaseTimeEntity {
 
     private String storyPicture;
 
+    private String text;
+
     @JoinColumn(name = "member_id")
     @ManyToOne(fetch = FetchType.LAZY)
     private Member member;
@@ -46,17 +48,19 @@ public class Story extends BaseTimeEntity {
     private List<Upvote> upvoteList = new ArrayList<>();
 
     @Builder
-    public Story(String storyPicture, Member member, Category category, Question question) {
+    public Story(String storyPicture, String text, Member member, Category category, Question question) {
         this.storyPicture = storyPicture;
+        this.text = text;
         this.member = member;
         this.category = category;
         this.question = question;
     }
 
     @Builder(builderMethodName = "naturalFields")
-    public Story(long storyId, String storyPicture) {
+    public Story(long storyId, String storyPicture, String text) {
         this.storyId = storyId;
         this.storyPicture = storyPicture;
+        this.text = text;
     }
 
 }

@@ -11,11 +11,14 @@ public class StoryDto {
 
     private String storyPicture;
 
+    private String text;
+
     @Getter
     public static class Request {
         private long categoryId;
         private long memberId;
         private long questionId;
+        private String text;
     }
 
     @Getter @Builder

@@ -19,6 +19,7 @@ public class StoryConverter {
         return Story.naturalFields()
                 .storyId(storyDto.getStoryId())
                 .storyPicture(s3Service.getResourceUrl(storyDto.getStoryPicture()))
+                .text(storyDto.getText())
                 .build();
     }
 
@@ -29,6 +30,7 @@ public class StoryConverter {
         return StoryDto.builder()
                 .storyId(story.getStoryId())
                 .storyPicture(story.getStoryPicture())
+                .text(story.getText())
                 .build();
     }
 }
