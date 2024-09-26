@@ -1,11 +1,14 @@
-package dmu.cheek.search.service.model;
+package dmu.cheek.search.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
+@Builder @Getter
+@NoArgsConstructor @AllArgsConstructor
 public class SearchDto {
 
     private List<Member> memberDto;
@@ -13,6 +16,7 @@ public class SearchDto {
     private List<Question> questionDto;
 
     @Builder @Getter
+    @NoArgsConstructor @AllArgsConstructor
     public static class Member {
         private long memberId;
         private String profilePicture;
@@ -23,7 +27,8 @@ public class SearchDto {
         private long resultCnt;
     }
 
-    @Builder
+    @Builder @Getter
+    @NoArgsConstructor @AllArgsConstructor
     public static class Story {
         private long storyId;
         private String storyPicture;
@@ -31,7 +36,8 @@ public class SearchDto {
         private long resultCnt;
     }
 
-    @Builder
+    @Builder @Getter
+    @NoArgsConstructor @AllArgsConstructor
     public static class Question {
         private long questionId;
         private String content;
