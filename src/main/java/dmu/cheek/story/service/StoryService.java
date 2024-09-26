@@ -48,6 +48,7 @@ public class StoryService {
         S3Dto s3Dto = s3Service.saveFile(storyPicture);
         Story story = Story.builder()
                 .storyPicture(s3Dto.getStoreFileName())
+                .text(storyDto.getText().toLowerCase())
                 .member(member)
                 .category(category)
                 .question(question)
