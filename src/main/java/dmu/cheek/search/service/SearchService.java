@@ -30,14 +30,14 @@ public class SearchService {
 
     public SearchDto searchAll(String keyword, long categoryId, long loginMemberId) {
         List<SearchDto.Member> memberList = searchMember(keyword, categoryId, loginMemberId);
-//        List<SearchDto.Story> storyList = searchStory(keyword, categoryId);
+        List<SearchDto.Story> storyList = searchStory(keyword, categoryId);
         List<SearchDto.Question> questionList = searchQuestion(keyword, categoryId);
 
         log.info("search all, keyword: {}", keyword);
 
         return SearchDto.builder()
                 .memberDto(memberList)
-//                .storyDto(storyList)
+                .storyDto(storyList)
                 .questionDto(questionList)
                 .build();
     }
@@ -76,15 +76,24 @@ public class SearchService {
 
     }
 
-//    public List<SearchDto.Story> searchStory(String keyword, long categoryId) {
-//        BooleanBuilder booleanBuilder = new BooleanBuilder();
+    public List<SearchDto.Story> searchStory(String keyword, long categoryId) {
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        //        QStory story = QStory.story;
-        //        booleanBuilder.or(story.contentString.containsIgnoreCase(keyword));
-        //        List<Story> storyList = jpaQueryFactory.selectFrom(story).where(builder).fetch();
+        QStory story = QStory.story;
+        booleanBuilder.or(story.text.containsIgnoreCase(keyword));
+        List<Story> storyList = jpaQueryFactory.selectFrom(story).where(booleanBuilder).fetch();
 
-//        log.info("search in stories, keyword: {}", keyword);
-//    }
+        log.info("search in stories, keyword: {}", keyword);
+
+        return storyList.stream()
+                .map(storyData -> SearchDto.Story.builder()
+                        .storyId(storyData.getStoryId())
+                        .storyPicture(s3Service.getResourceUrl(storyData.getStoryPicture()))
+                        .text(storyData.getText())
+                        .resultCnt(storyList.size())
+                        .build())
+                .toList();
+    }
 
     public List<SearchDto.Question> searchQuestion(String keyword, long categoryId) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();

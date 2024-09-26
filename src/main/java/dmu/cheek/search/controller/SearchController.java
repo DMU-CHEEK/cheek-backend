@@ -12,9 +12,9 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping("/all/{categoryId}/{keyword}")
+    @GetMapping("/all/{categoryId}")
     public ResponseEntity<SearchDto> searchAll(@PathVariable(name = "categoryId") long categoryId,
-                                          @PathVariable(name = "keyword") String keyword,
+                                          @RequestParam(name = "keyword") String keyword,
                                           @RequestParam(name = "loginMemberId") long loginMemberId) {
         SearchDto searchDto = searchService.searchAll(keyword, categoryId, loginMemberId);
 

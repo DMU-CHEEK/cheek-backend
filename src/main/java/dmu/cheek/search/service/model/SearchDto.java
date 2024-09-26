@@ -27,6 +27,7 @@ public class SearchDto {
     public static class Story {
         private long storyId;
         private String storyPicture;
+        private String text;
         private long resultCnt;
     }
 
