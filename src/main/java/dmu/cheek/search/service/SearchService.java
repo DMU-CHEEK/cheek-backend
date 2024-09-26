@@ -80,7 +80,7 @@ public class SearchService {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         QStory story = QStory.story;
-        booleanBuilder.or(story.text.containsIgnoreCase(keyword));
+        booleanBuilder.or(story.text.containsIgnoreCase(keyword.toLowerCase()));
         List<Story> storyList = jpaQueryFactory.selectFrom(story).where(booleanBuilder).fetch();
 
         log.info("search in stories, keyword: {}", keyword);
