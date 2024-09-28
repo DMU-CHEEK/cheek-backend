@@ -37,7 +37,7 @@ jobs:
 
     # 3. Docker 이미지 빌드
     - name: docker image build
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/meeti-backend .
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/cheek .
 
     # 4. DockerHub 로그인
     - name: docker login
@@ -48,7 +48,7 @@ jobs:
 
     # 5. Docker Hub 이미지 PUSH
     - name: docker Hub push
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/meeti-backend
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/cheek
 
     - name: EC2에 원격 접속 후 배포하기
       uses: appleboy/ssh-action@master
