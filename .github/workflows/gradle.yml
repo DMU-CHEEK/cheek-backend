@@ -64,6 +64,6 @@ jobs:
           
           docker rm ${{ secrets.DOCKERHUB_NAME }}
           
-          docker run --name ${{ secrets.DOCKERHUB_NAME }} -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
+          docker run --name ${{ secrets.DOCKERHUB_NAME }} -e {{ secrets.JASYPT_PASSWORD }} -d -p 8080:8080 ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_REPOSITORY }}
           
           docker image prune -f
