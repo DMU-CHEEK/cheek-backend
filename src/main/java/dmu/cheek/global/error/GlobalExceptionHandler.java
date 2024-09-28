@@ -1,6 +1,7 @@
 package dmu.cheek.global.error;
 
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.error.exception.InProgressException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,17 @@ public class GlobalExceptionHandler {
         ErrorResponse response = ErrorResponse.of(businessException.getErrorCode().getErrorCode(), businessException.getMessage());
 
         return ResponseEntity.status(businessException.getErrorCode().getHttpStatus())
+                .body(response);
+    }
+
+    @ExceptionHandler(InProgressException.class)
+    public ResponseEntity<ErrorResponse> inProgressException(InProgressException exception) {
+
+        log.error("exception", exception);
+
+        ErrorResponse response = ErrorResponse.of(exception.getErrorCode().getErrorCode(), exception.getMessage());
+
+        return ResponseEntity.status(exception.getErrorCode().getHttpStatus())
                 .body(response);
     }
 

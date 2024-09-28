@@ -7,6 +7,7 @@ import dmu.cheek.emailVerification.repository.DomainRepository;
 import dmu.cheek.emailVerification.repository.EmailVerificationRepository;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.error.exception.InProgressException;
 import dmu.cheek.member.model.Domain;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -25,7 +26,6 @@ import org.springframework.util.FileCopyUtils;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 
@@ -55,7 +55,7 @@ public class EmailVerificationService {
         EmailVerification emailVerification = emailVerificationConverter.convertToEntity(emailVerificationDto);
         emailVerificationRepository.save(emailVerification);
 
-        log.info("save emailVerification: ", emailVerification.getEmail());
+        log.info("save emailVerification: {}", emailVerification.getEmail());
     }
 
     private String createVerificationCode() {
@@ -138,7 +138,7 @@ public class EmailVerificationService {
     public void registerDomain(String domain) {
         Domain findDomain = domainRepository.findByDomainAndIsValid(domain, false).orElse(null);
         if (findDomain != null)
-            throw new BusinessException(ErrorCode.IN_PROGRESS);
+            throw new InProgressException(ErrorCode.IN_PROGRESS);
 
         domainRepository.save(
                 Domain.builder()
