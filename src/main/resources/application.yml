@@ -19,7 +19,7 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
-    opn-in-view: false
+    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:

@@ -30,5 +30,4 @@ public class FeedService {
                 .questionDto(questionList)
                 .build();
     }
-
 }
