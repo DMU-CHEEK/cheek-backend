@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Slf4j
 @RestController
@@ -36,9 +35,9 @@ public class SearchController {
 
     @GetMapping("/recent")
     @Operation(summary = "최근 검색어 조회", description = "최근 검색어 조회 API")
-    public ResponseEntity<List> getRecentSearches(@RequestParam(name = "loginMemberId") long loginMemberId) {
+    public ResponseEntity<SearchDto.Keyword> getRecentSearches(@RequestParam(name = "loginMemberId") long loginMemberId) {
 
-        List<String> recentSearches = recentSearchService.getRecentSearches(loginMemberId);
+        SearchDto.Keyword recentSearches = recentSearchService.getRecentSearches(loginMemberId);
 
         return ResponseEntity.ok(recentSearches);
     }

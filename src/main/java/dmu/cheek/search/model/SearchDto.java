@@ -43,4 +43,10 @@ public class SearchDto {
         private String content;
         private long resultCnt;
     }
+
+    @Builder @Getter
+    @NoArgsConstructor @AllArgsConstructor
+    public static class Keyword {
+        private List<String> keyword;
+    }
 }
