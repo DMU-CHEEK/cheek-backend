@@ -115,8 +115,11 @@ public class EmailVerificationService {
 
         if (currentTime.isAfter(emailVerification.getValidityPeriod()))
             throw new BusinessException(ErrorCode.EXPIRED_CODE);
-        if (!emailVerification.getVerificationCode().equals(emailVerificationDto.getVerificationCode()))
+        if (!emailVerification.getVerificationCode().equals(emailVerificationDto.getVerificationCode())) {
+            log.info("dto code: {}", emailVerificationDto.getVerificationCode());
+            log.info("code: {}", emailVerification.getVerificationCode());
             throw new BusinessException(ErrorCode.CODE_NOT_MATCH);
+        }
 
         emailVerification.setVerified();
         log.info("verification code confirmed");

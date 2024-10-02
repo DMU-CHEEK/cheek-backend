@@ -1,24 +1,18 @@
 package dmu.cheek.search.service;
 
-import com.querydsl.core.BooleanBuilder;
 import dmu.cheek.member.model.Member;
-import dmu.cheek.member.model.QMember;
 import dmu.cheek.member.repository.MemberRepository;
-import dmu.cheek.question.model.QQuestion;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.repository.QuestionRepository;
 import dmu.cheek.s3.service.S3Service;
 import dmu.cheek.search.model.SearchDto;
-import dmu.cheek.story.model.QStory;
 import dmu.cheek.story.model.Story;
-import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.repository.StoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

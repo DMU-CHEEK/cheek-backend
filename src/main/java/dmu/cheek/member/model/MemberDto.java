@@ -44,4 +44,11 @@ public class MemberDto {
         private String description;
     }
 
+    @Builder @Getter @NoArgsConstructor @AllArgsConstructor
+    public static class Concise {
+        private long memberId;
+        private String nickname;
+        private String profilePicture;
+    }
+
 }

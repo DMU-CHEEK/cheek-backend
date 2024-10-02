@@ -1,8 +1,10 @@
 package dmu.cheek.story.service;
 
+import dmu.cheek.feed.model.FeedDto;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
+import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.question.model.Question;
@@ -106,5 +108,24 @@ public class StoryService {
     public Story findById(long storyId) {
         return storyRepository.findById(storyId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
+    }
+
+    public List<FeedDto.Story> getStoriesForFeed(long loginMemberId) {
+        return storyRepository.findAllByModifiedAtDesc()
+                .stream()
+                .map(story ->
+                        FeedDto.Story.builder()
+                                .storyId(story.getStoryId())
+                                .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
+                                .isUpvoted(story.getUpvoteList().stream()
+                                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
+                                .upvoteCount((int) story.getUpvoteList().stream().count())
+                                .memberDto(MemberDto.Concise.builder()
+                                        .memberId(story.getMember().getMemberId())
+                                        .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
+                                        .nickname(story.getMember().getNickname())
+                                        .build()
+                                ).build()
+                ).toList();
     }
 }

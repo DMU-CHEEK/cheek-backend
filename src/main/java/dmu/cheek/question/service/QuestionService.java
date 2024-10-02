@@ -1,5 +1,6 @@
 package dmu.cheek.question.service;
 
+import dmu.cheek.feed.model.FeedDto;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.converter.MemberConverter;
@@ -13,6 +14,7 @@ import dmu.cheek.question.model.Category;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.model.QuestionDto;
 import dmu.cheek.question.repository.QuestionRepository;
+import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,7 @@ public class QuestionService {
     private final MemberConverter memberConverter;
     private final CategoryConverter categoryConverter;
     private final CategoryService categoryService;
+    private final S3Service s3Service;
 
     @Transactional
     public void register(QuestionDto.RegisterReq registerReq) {
@@ -85,5 +88,22 @@ public class QuestionService {
     public Question findById(long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+    }
+
+    public List<FeedDto.Question> getQuestionsForFeed() {
+        return questionRepository.findAllByOrderByModifiedAtDesc()
+                .stream()
+                .map(question ->
+                        FeedDto.Question.builder()
+                                .questionId(question.getQuestionId())
+                                .content(question.getContent())
+                                .memberDto(MemberDto.Concise.builder()
+                                        .memberId(question.getMember().getMemberId())
+                                        .profilePicture(s3Service.getResourceUrl(question.getMember().getProfilePicture()))
+                                        .nickname(question.getMember().getNickname())
+                                        .build()
+                                )
+                                .build()
+                ).toList();
     }
 }
