@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,15 +52,14 @@ public class MemberController {
             log.info("member already exists, logging in");
             KakaoLoginDto.Response loginResponse = memberService.login(requestDto, kakaoLoginResponseDto);
 
-            if (!StringUtils.isEmpty(loginResponse.getNickname()) && !StringUtils.isEmpty(loginResponse.getInformation())) {
+            if (!ObjectUtils.isEmpty(loginResponse.getNickname()) && !ObjectUtils.isEmpty(loginResponse.getInformation()))
                 log.info("profile is complete");
-            }
+            else
+                log.info("profile is not complete");
         }
 
         // TODO: token 발급 로직
 
-        //프로필이 완전하지 않은 경우
-        log.info("profile is not complete");
         return ResponseEntity.ok(isNewMember);
     }
 
