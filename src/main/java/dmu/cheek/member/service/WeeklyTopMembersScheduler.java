@@ -27,7 +27,7 @@ public class WeeklyTopMembersScheduler {
     private final RedisTemplate<String, Object> redisTemplate;
 
     @Scheduled(cron = "0 0 0 * * MON")
-    public void selectTopMembers() {
+    public void saveTopMembers() {
         LocalDate today = LocalDate.now();
         LocalDate startOfWeek = today.minusWeeks(1).with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
         LocalDate endOfWeek = today.minusWeeks(1).with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
