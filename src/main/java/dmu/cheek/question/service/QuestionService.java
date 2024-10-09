@@ -57,6 +57,20 @@ public class QuestionService {
         log.info("register new question: {}, memberId: {}", question.getQuestionId(), member.getMemberId());
     }
 
+    public QuestionDto.Response search(long questionId) {
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
+
+        log.info("get question by id: {}", questionId);
+
+        return QuestionDto.Response.builder()
+                .questionId(question.getQuestionId())
+                .content(question.getContent())
+                .memberId(question.getMember().getMemberId())
+                .categoryDto(categoryConverter.convertToDto(question.getCategory()))
+                .build();
+    }
+
     public List<QuestionDto.Response> searchByMember(long memberId) {
         Member member = memberService.findById(memberId);
         List<Question> questionList = questionRepository.findByMember(member);
@@ -70,7 +84,7 @@ public class QuestionService {
                         .build())
                 .collect(Collectors.toList());
 
-        log.info("question list by member: {}, number of posts: {}", memberId, responseList.size());
+        log.info("get question list by member: {}, number of posts: {}", memberId, responseList.size());
 
         return responseList;
     }
