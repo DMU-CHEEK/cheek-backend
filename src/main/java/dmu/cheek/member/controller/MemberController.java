@@ -91,6 +91,17 @@ public class MemberController {
         return ResponseEntity.ok(memberDto);
     }
 
+    @GetMapping("/info/{targetMemberId}")
+    @Operation(summary = "프로필 조회", description = "회원 프로필 조회 API")
+    public ResponseEntity<ProfileDto.Profile> getProfile(@PathVariable(name = "targetMemberId") long targetMemberId,
+                                                @RequestParam(name = "loginMemberId") long loginMemberId) {
+        ProfileDto.Profile profile = memberService.getProfile(targetMemberId, loginMemberId);
+
+        return ResponseEntity.ok(profile);
+    }
+
+
+
     @GetMapping("/top-members")
     @Operation(summary = "상위 회원 3명 조회", description = "주간 좋아요 상위 회원 3명 조회 API")
     public ResponseEntity<List> getTop3MembersWithMostUpvotesInWeek() {

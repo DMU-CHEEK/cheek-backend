@@ -3,8 +3,10 @@ package dmu.cheek.member.model;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
@@ -22,5 +24,16 @@ public class ProfileDto {
     private String information;
 
     private Role role;
+
+    @Builder @Getter
+    @NoArgsConstructor @AllArgsConstructor
+    public static class Profile {
+        private long memberId;
+        private String nickname;
+        private String information;
+        private String description;
+        private Role role;
+        private boolean isFollowing;
+    }
 }
 

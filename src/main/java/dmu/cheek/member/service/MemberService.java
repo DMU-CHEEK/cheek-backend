@@ -105,6 +105,25 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)));
     }
 
+    public ProfileDto.Profile getProfile(long targetMemberId, long loginMemberId) {
+        Member targetMember = memberRepository.findById(targetMemberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+        Member loginMember = memberRepository.findById(loginMemberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        boolean isFollowing = loginMember.getFromMemberConnectionList().stream()
+                .anyMatch(connection -> connection.getToMember().getMemberId() == targetMemberId);
+
+        return ProfileDto.Profile.builder()
+                .memberId(targetMemberId)
+                .nickname(targetMember.getNickname())
+                .description(targetMember.getDescription())
+                .information(targetMember.getInformation())
+                .isFollowing(isFollowing)
+                .role(targetMember.getRole())
+                .build();
+    }
+
     public Member findById(long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
