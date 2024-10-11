@@ -26,12 +26,11 @@ public class HighlightController {
 
     @PostMapping()
     @Operation(summary = "하이라이트 등록", description = "하이라이트 등록 API")
-    public ResponseEntity<String> register(@RequestPart(value = "thumbnailPicture") MultipartFile thumbnailPicture,
-                                           @RequestPart(value = "highlightDto") HighlightDto.Request highlightDto) {
+    public ResponseEntity<String> register(@RequestPart(value = "highlightDto") HighlightDto.Request highlightDto) {
         //TODO: refactor to create a token
         if (memberService.checkRole(highlightDto.getMemberId(), Role.MENTOR))
-            highlightService.register(thumbnailPicture, highlightDto);
-        else new BusinessException(ErrorCode.ACCESS_DENIED);
+            highlightService.register(highlightDto);
+        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }

@@ -7,7 +7,6 @@ import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.repository.HighlightRepository;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
-import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
 import dmu.cheek.story.converter.StoryConverter;
 import dmu.cheek.story.model.Story;
@@ -30,21 +29,18 @@ public class HighlightService {
 
     private final MemberService memberService;
     private final StoryService storyService;
-    private final S3Service s3Service;
     private final HighlightRepository highlightRepository;
     private final StoryConverter storyConverter;
 
     @Transactional
-    public void register(MultipartFile thumbnailPicture, HighlightDto.Request highlightDto) {
+    public void register(HighlightDto.Request highlightDto) {
         Member member = memberService.findById(highlightDto.getMemberId());
         List<Story> storyList = highlightDto.getStoryIdList().stream()
                 .map(storyService::findById)
                 .collect(Collectors.toList());
 
-        S3Dto s3Dto = s3Service.saveFile(thumbnailPicture);
-
         Highlight highlight = Highlight.withoutPrimaryKey()
-                .thumbnailPicture(s3Dto.getStoreFileName())
+                .thumbnailPicture(storyList.getFirst().getStoryPicture())
                 .storyList(storyList)
                 .subject(highlightDto.getSubject())
                 .member(member)
@@ -85,11 +81,10 @@ public class HighlightService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
         List<StoryDto> storyList = highlight.getStoryList().stream()
-                .map(
-                story -> storyConverter.convertToDto(story))
+                .map(storyConverter::convertToDto)
                 .toList();
 
-        log.info("search highlight: ", highlightId);
+        log.info("search highlight: {}", highlightId);
 
         return HighlightDto.Response.builder()
                 .storyList(storyList)
