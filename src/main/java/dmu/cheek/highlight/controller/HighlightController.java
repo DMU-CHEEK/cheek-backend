@@ -26,7 +26,7 @@ public class HighlightController {
 
     @PostMapping()
     @Operation(summary = "하이라이트 등록", description = "하이라이트 등록 API")
-    public ResponseEntity<String> register(@RequestPart(value = "highlightDto") HighlightDto.Request highlightDto) {
+    public ResponseEntity<String> register(@RequestBody HighlightDto.Request highlightDto) {
         //TODO: refactor to create a token
         if (memberService.checkRole(highlightDto.getMemberId(), Role.MENTOR))
             highlightService.register(highlightDto);
@@ -41,7 +41,7 @@ public class HighlightController {
         //TODO: refactor to create a token
         if (memberService.checkRole(highlightService.findById(highlightId).getMember().getMemberId(), Role.MENTOR))
             highlightService.delete(highlightId);
-        else new BusinessException(ErrorCode.ACCESS_DENIED);
+        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }
@@ -62,5 +62,16 @@ public class HighlightController {
         HighlightDto.Response highlight = highlightService.search(highlightId);
 
         return ResponseEntity.ok(highlight);
+    }
+
+    @PatchMapping("/{highlightId}")
+    @Operation(summary = "하이라이트 수정", description = "하이라이트 스토리 리스트 수정 API")
+    public ResponseEntity<String> update(@PathVariable(name = "highlightId") long highlightId,
+                                         @RequestBody HighlightDto.Request highlightDto) {
+        if (memberService.checkRole(highlightDto.getMemberId(), Role.MENTOR))
+            highlightService.updateHighlightStorylist(highlightId, highlightDto);
+        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
+
+        return ResponseEntity.ok("ok");
     }
 }

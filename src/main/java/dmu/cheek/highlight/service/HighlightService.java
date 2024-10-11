@@ -37,7 +37,7 @@ public class HighlightService {
         Member member = memberService.findById(highlightDto.getMemberId());
         List<Story> storyList = highlightDto.getStoryIdList().stream()
                 .map(storyService::findById)
-                .collect(Collectors.toList());
+                .toList();
 
         Highlight highlight = Highlight.withoutPrimaryKey()
                 .thumbnailPicture(storyList.getFirst().getStoryPicture())
@@ -94,5 +94,19 @@ public class HighlightService {
     public Highlight findById(long highlightId) {
         return highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+    }
+
+    @Transactional
+    public void updateHighlightStorylist(long highlightId, HighlightDto.Request highlightDto) {
+        Highlight highlight = highlightRepository.findById(highlightId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+
+        List<Story> storyList = highlightDto.getStoryIdList().stream()
+                .map(storyService::findById)
+                .toList();
+
+        highlight.update(highlightDto.getSubject(), storyList);
+
+        log.info("update highlight: {}", highlightId);
     }
 }
