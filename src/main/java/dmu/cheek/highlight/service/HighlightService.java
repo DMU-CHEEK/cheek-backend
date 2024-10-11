@@ -16,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +30,7 @@ public class HighlightService {
     private final StoryService storyService;
     private final HighlightRepository highlightRepository;
     private final StoryConverter storyConverter;
+    private final S3Service s3Service;
 
     @Transactional
     public void register(HighlightDto.Request highlightDto) {
