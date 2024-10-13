@@ -67,7 +67,7 @@ public class QuestionService {
                 .questionId(question.getQuestionId())
                 .content(question.getContent())
                 .memberId(question.getMember().getMemberId())
-                .categoryDto(categoryConverter.convertToDto(question.getCategory()))
+                .categoryId(question.getCategory().getCategoryId())
                 .build();
     }
 
@@ -80,7 +80,7 @@ public class QuestionService {
                         .questionId(q.getQuestionId())
                         .content(q.getContent())
                         .memberId(memberId)
-                        .categoryDto(categoryConverter.convertToDto(q.getCategory()))
+                        .categoryId(q.getCategory().getCategoryId())
                         .build())
                 .collect(Collectors.toList());
 

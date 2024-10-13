@@ -2,7 +2,6 @@ package dmu.cheek.question.controller;
 
 import dmu.cheek.question.model.QuestionDto;
 import dmu.cheek.question.service.QuestionService;
-import io.opencensus.metrics.export.Summary;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

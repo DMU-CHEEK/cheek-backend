@@ -47,6 +47,6 @@ public class QuestionDto {
 
         private long memberId;
 
-        private CategoryDto categoryDto;
+        private long categoryId;
     }
 }
