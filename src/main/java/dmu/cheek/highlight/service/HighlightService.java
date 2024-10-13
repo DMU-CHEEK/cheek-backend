@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -66,7 +67,7 @@ public class HighlightService {
 
         log.info("search highlight list by member: {}", memberId);
 
-        return highlightRepository.findByMember(member)
+        return highlightRepository.findByMemberOrderByIdDesc(member)
                 .stream().map(
                         h -> HighlightDto.builder()
                                 .highlightId(h.getHighlightId())
@@ -82,6 +83,7 @@ public class HighlightService {
 
         List<StoryDto> storyList = highlight.getStoryList().stream()
                 .map(storyConverter::convertToDto)
+                .sorted(Comparator.comparing(StoryDto::getStoryId).reversed())
                 .toList();
 
         log.info("search highlight: {}", highlightId);

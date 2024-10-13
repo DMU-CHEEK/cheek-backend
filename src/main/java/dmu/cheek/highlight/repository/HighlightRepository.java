@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface HighlightRepository extends JpaRepository<Highlight, Long> {
 
-    @Query("select h from Highlight h where h.member = :member")
-    List<Highlight> findByMember(Member member);
+    @Query("select h from Highlight h where h.member = :member order by h.highlightId desc")
+    List<Highlight> findByMemberOrderByIdDesc(Member member);
 
 }

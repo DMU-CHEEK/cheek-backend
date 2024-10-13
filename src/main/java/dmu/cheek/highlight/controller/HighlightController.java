@@ -47,7 +47,7 @@ public class HighlightController {
     }
 
     @GetMapping("/member/{memberId}")
-    @Operation(summary = "하이라이트 리스트 조회", description = "특정 회읜의 하이라이트 리스트 조회 API(썸네일만 노출)")
+    @Operation(summary = "하이라이트 리스트 조회", description = "특정 회원의 하이라이트 리스트 조회 API(썸네일만 노출)")
     public ResponseEntity<List> searchByMember(@PathVariable(value = "memberId") long memberId) {
 
         List<HighlightDto> highlightList = highlightService.searchByMember(memberId);
