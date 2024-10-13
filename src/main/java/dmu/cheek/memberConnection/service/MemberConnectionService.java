@@ -64,6 +64,9 @@ public class MemberConnectionService {
                         .builder()
                         .memberId(memberConnection.getFromMember().getMemberId())
                         .profilePicture(s3Service.getResourceUrl(memberConnection.getFromMember().getProfilePicture()))
+                        .nickname(memberConnection.getFromMember().getNickname())
+                        .information(memberConnection.getFromMember().getInformation())
+                        .followerCnt(memberConnection.getFromMember().getToMemberConnectionList().size())
                         .isFollowing(loginMemberConnectionList.contains(memberConnection.getFromMember().getMemberId()))
                         .build())
                 .toList();
@@ -81,6 +84,9 @@ public class MemberConnectionService {
                         .builder()
                         .memberId(memberConnection.getToMember().getMemberId())
                         .profilePicture(s3Service.getResourceUrl(memberConnection.getToMember().getProfilePicture()))
+                        .nickname(memberConnection.getToMember().getNickname())
+                        .information(memberConnection.getToMember().getInformation())
+                        .followerCnt(memberConnection.getToMember().getToMemberConnectionList().size())
                         .isFollowing(loginMemberConnectionList.contains(memberConnection.getToMember().getMemberId()))
                         .build()
                 ).toList();

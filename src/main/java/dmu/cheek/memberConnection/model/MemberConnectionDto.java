@@ -18,6 +18,9 @@ public class MemberConnectionDto {
     public static class Response {
         private long memberId;
         private String profilePicture;
+        private String nickname;
+        private String information;
+        private long followerCnt;
         private boolean isFollowing;
     }
 }
