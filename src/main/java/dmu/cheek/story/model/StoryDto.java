@@ -1,5 +1,6 @@
 package dmu.cheek.story.model;
 
+import dmu.cheek.member.model.MemberDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -28,5 +29,6 @@ public class StoryDto {
         private String storyPicture;
         private boolean isUpvoted;
         private int upvoteCount;
+        private MemberDto.Concise memberDto;
     }
 }

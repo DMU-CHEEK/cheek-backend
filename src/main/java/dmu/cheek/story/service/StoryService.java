@@ -12,22 +12,16 @@ import dmu.cheek.question.service.CategoryService;
 import dmu.cheek.question.service.QuestionService;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
-import dmu.cheek.story.converter.StoryConverter;
 import dmu.cheek.story.model.Story;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.repository.StoryRepository;
-import dmu.cheek.upvote.model.Upvote;
-import dmu.cheek.upvote.service.UpvoteService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -84,9 +78,15 @@ public class StoryService {
                         .storyPicture(s3Service.getResourceUrl(s.getStoryPicture()))
                         .isUpvoted(s.getUpvoteList().stream()
                                 .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
-                        .upvoteCount((int) s.getUpvoteList().stream().count())
+                        .upvoteCount(s.getUpvoteList().size())
+                        .memberDto(MemberDto.Concise.builder()
+                                .memberId(s.getMember().getMemberId())
+                                .nickname(s.getMember().getNickname())
+                                .profilePicture(s3Service.getResourceUrl(s.getStoryPicture()))
+                                .build()
+                        )
                         .build())
-                .collect(Collectors.toList());
+                .toList();
     }
 
     public StoryDto.Response searchByMember(long storyId, long loginMemberId) {
