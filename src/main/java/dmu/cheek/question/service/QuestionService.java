@@ -104,8 +104,8 @@ public class QuestionService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
     }
 
-    public List<FeedDto.Question> getQuestionsForFeed() {
-        return questionRepository.findAllByOrderByModifiedAtDesc()
+    public List<FeedDto.Question> getQuestionsForFeed(long categoryId) {
+        return questionRepository.findByCategoryIdOrderByModifiedAtDesc(categoryId)
                 .stream()
                 .map(question ->
                         FeedDto.Question.builder()
@@ -117,6 +117,7 @@ public class QuestionService {
                                         .nickname(question.getMember().getNickname())
                                         .build()
                                 )
+                                .modifiedAt(question.getModifiedAt())
                                 .build()
                 ).toList();
     }

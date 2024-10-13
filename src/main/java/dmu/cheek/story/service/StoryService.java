@@ -110,22 +110,25 @@ public class StoryService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
     }
 
-    public List<FeedDto.Story> getStoriesForFeed(long loginMemberId) {
-        return storyRepository.findAllByModifiedAtDesc()
+    public List<FeedDto.Story> getStoriesForFeed(long loginMemberId, long categoryId) {
+        return storyRepository.findByCategoryIdOrderByModifiedAtDesc(categoryId)
                 .stream()
                 .map(story ->
                         FeedDto.Story.builder()
                                 .storyId(story.getStoryId())
                                 .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                                 .isUpvoted(story.getUpvoteList().stream()
-                                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
-                                .upvoteCount((int) story.getUpvoteList().stream().count())
+                                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId)
+                                )
+                                .upvoteCount((int) story.getUpvoteList().size())
                                 .memberDto(MemberDto.Concise.builder()
                                         .memberId(story.getMember().getMemberId())
                                         .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
                                         .nickname(story.getMember().getNickname())
                                         .build()
-                                ).build()
+                                )
+                                .modifiedAt(story.getModifiedAt())
+                                .build()
                 ).toList();
     }
 }

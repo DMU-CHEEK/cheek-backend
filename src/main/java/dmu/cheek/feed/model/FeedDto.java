@@ -1,12 +1,12 @@
 package dmu.cheek.feed.model;
 
 import dmu.cheek.member.model.MemberDto;
-import dmu.cheek.question.model.CategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder @Getter
@@ -23,6 +23,7 @@ public class FeedDto {
         private String storyPicture;
         private boolean isUpvoted;
         private int upvoteCount;
+        private LocalDateTime modifiedAt;
         private MemberDto.Concise memberDto;
     }
 
@@ -32,6 +33,7 @@ public class FeedDto {
         private long questionId;
         private String content;
         private MemberDto.Concise memberDto;
+        private LocalDateTime modifiedAt;
     }
 
 }

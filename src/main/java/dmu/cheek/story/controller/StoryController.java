@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,7 +33,7 @@ public class StoryController {
         //TODO: refactor to create a token
         if (memberService.checkRole(storyDto.getMemberId(), Role.MENTOR))
             storyService.register(storyPicture, storyDto);
-        else new BusinessException(ErrorCode.ACCESS_DENIED);
+        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }
@@ -45,7 +44,7 @@ public class StoryController {
         //TODO: refactor to create a token
         if (memberService.checkRole(storyService.findById(storyId).getMember().getMemberId(), Role.MENTOR))
             storyService.delete(storyId);
-        else new BusinessException(ErrorCode.ACCESS_DENIED);
+        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");
     }

@@ -19,11 +19,11 @@ public class FeedService {
     private final QuestionService questionService;
     private final StoryService storyService;
 
-    public FeedDto getFeed(long loginMemberId) {
-        List<FeedDto.Question> questionList = questionService.getQuestionsForFeed();
-        List<FeedDto.Story> storyList = storyService.getStoriesForFeed(loginMemberId);
+    public FeedDto getFeed(long loginMemberId, long categoryId) {
+        List<FeedDto.Question> questionList = questionService.getQuestionsForFeed(categoryId);
+        List<FeedDto.Story> storyList = storyService.getStoriesForFeed(loginMemberId, categoryId);
 
-        log.info("get feed");
+        log.info("get feed, categoryId: {}", categoryId);
 
         return FeedDto.builder()
                 .storyDto(storyList)

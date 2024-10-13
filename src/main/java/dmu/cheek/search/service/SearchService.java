@@ -1,6 +1,8 @@
 package dmu.cheek.search.service;
 
+import dmu.cheek.global.config.security.service.MemberDetails;
 import dmu.cheek.member.model.Member;
+import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.repository.MemberRepository;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.repository.QuestionRepository;
@@ -42,6 +44,9 @@ public class SearchService {
                 .memberDto(memberList)
                 .storyDto(storyList)
                 .questionDto(questionList)
+                .memberResCnt(memberList.size())
+                .storyResCnt(storyList.size())
+                .questionResCnt(questionList.size())
                 .build();
     }
 
@@ -59,12 +64,12 @@ public class SearchService {
 
                     return SearchDto.Member.builder()
                             .memberId(memberData.getMemberId())
+                            .nickname(memberData.getNickname())
                             .profilePicture(s3Service.getResourceUrl(memberData.getProfilePicture()))
                             .description(memberData.getDescription())
                             .information(memberData.getInformation())
                             .isFollowing(isFollowing)
                             .followerCnt(followerCnt)
-                            .resultCnt(memberList.size())
                             .build();
                 })
                 .toList();
@@ -81,7 +86,7 @@ public class SearchService {
                         .storyId(storyData.getStoryId())
                         .storyPicture(s3Service.getResourceUrl(storyData.getStoryPicture()))
                         .text(storyData.getText())
-                        .resultCnt(storyList.size())
+                        .modifiedAt(storyData.getModifiedAt())
                         .build())
                 .toList();
     }
@@ -96,7 +101,14 @@ public class SearchService {
                 .map(questionData -> SearchDto.Question.builder()
                         .questionId(questionData.getQuestionId())
                         .content(questionData.getContent())
-                        .resultCnt(questionList.size())
+                        .modifiedAt(questionData.getModifiedAt())
+                        .categoryId(questionData.getCategory().getCategoryId())
+                        .memberDto(MemberDto.Concise.builder()
+                                .memberId(questionData.getMember().getMemberId())
+                                .nickname(questionData.getMember().getNickname())
+                                .profilePicture(questionData.getMember().getProfilePicture())
+                                .build()
+                        )
                         .build())
                 .toList();
 

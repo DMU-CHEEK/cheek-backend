@@ -25,18 +25,18 @@ public class WebConfig implements WebMvcConfigurer {
                 .maxAge(3600); //pre-flight 요청의 캐시 시간(초 단위)
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry interceptorRegistry) {
-        interceptorRegistry.addInterceptor(authInterceptor)
-                .addPathPatterns("/**")
-                .excludePathPatterns(
-                        "/member/login",
-                        "/swagger-ui/**",
-                        "/swagger-resources/**",
-                        "/v2/api-docs",
-                        "/v2/api-docs/**",
-                        "/webjars/**"
-                )
-                .order(1);
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry interceptorRegistry) {
+//        interceptorRegistry.addInterceptor(authInterceptor)
+//                .addPathPatterns("/**")
+//                .excludePathPatterns(
+//                        "/member/login",
+//                        "/swagger-ui/**",
+//                        "/swagger-resources/**",
+//                        "/v2/api-docs",
+//                        "/v2/api-docs/**",
+//                        "/webjars/**"
+//                )
+//                .order(1);
+//    }
 }
