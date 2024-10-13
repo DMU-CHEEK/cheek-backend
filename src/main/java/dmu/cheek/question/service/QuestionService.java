@@ -73,7 +73,7 @@ public class QuestionService {
 
     public List<QuestionDto.Response> searchByMember(long memberId) {
         Member member = memberService.findById(memberId);
-        List<Question> questionList = questionRepository.findByMember(member);
+        List<Question> questionList = questionRepository.findByMemberOrderByModifiedAtDesc(member);
 
         List<QuestionDto.Response> responseList = questionList.stream()
                 .map(q -> QuestionDto.Response.builder()

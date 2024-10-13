@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionRepositoryCustom {
 
-    @Query("select q from Question q where q.member = :member")
-    List<Question> findByMember(Member member);
+    @Query("select q from Question q where q.member = :member order by q.modifiedAt desc")
+    List<Question> findByMemberOrderByModifiedAtDesc(Member member);
 
     @Override
     List<Question> findListByCategoryAndText(long categoryId, String keyword);
