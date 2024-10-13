@@ -105,7 +105,7 @@ public class QuestionService {
     }
 
     public List<FeedDto.Question> getQuestionsForFeed(long categoryId) {
-        return questionRepository.findByCategoryIdOrderByModifiedAtDesc(categoryId)
+        return questionRepository.findListByIdOrderByModifiedAtDesc(categoryId)
                 .stream()
                 .map(question ->
                         FeedDto.Question.builder()

@@ -9,14 +9,11 @@ import java.util.List;
 
 public interface StoryRepository extends JpaRepository<Story, Long>, StoryRepositoryCustom {
 
-    @Query("select s from Story s where s.member = :member")
-    List<Story> findByMember(Member member);
-
-    @Query("select s from Story s where s.category.categoryId = :categoryId and s.text like '%:keyword%'")
-    List<Story> findByCategoryAndText(long categoryId, String keyword);
+    @Query("select s from Story s where s.member = :member order by s.storyId desc")
+    List<Story> findByMemberOrderByIdDesc(Member member);
 
     @Override
-    List<Story> findListByCategoryAndText(long categoryId, String keyword);
+    List<Story> findByCategoryIdAndText(long categoryId, String keyword);
 
     @Query("select s from Story s where s.category.categoryId = :categoryId order by s.modifiedAt desc")
     List<Story> findByCategoryIdOrderByModifiedAtDesc(long categoryId);

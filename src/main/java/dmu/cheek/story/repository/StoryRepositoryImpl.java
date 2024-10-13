@@ -15,7 +15,7 @@ public class StoryRepositoryImpl implements StoryRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public List<Story> findListByCategoryAndText(long categoryId, String keyword) {
+    public List<Story> findByCategoryIdAndText(long categoryId, String keyword) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
         if (categoryId > 0)

@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface StoryRepositoryCustom {
 
-    List<Story> findListByCategoryAndText(long categoryId, String keyword);
+    List<Story> findByCategoryIdAndText(long categoryId, String keyword);
 }

@@ -77,7 +77,7 @@ public class SearchService {
     }
 
     public List<SearchDto.Story> searchStory(String keyword, long categoryId) {
-        List<Story> storyList = storyRepository.findListByCategoryAndText(categoryId, keyword);
+        List<Story> storyList = storyRepository.findByCategoryIdAndText(categoryId, keyword);
 
         log.info("search in stories, keyword: {}", keyword);
 

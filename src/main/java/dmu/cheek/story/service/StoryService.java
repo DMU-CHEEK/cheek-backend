@@ -73,7 +73,7 @@ public class StoryService {
         //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
         Member targetMember = memberService.findById(targetMemberId);
 
-        List<Story> storyList = storyRepository.findByMember(targetMember);
+        List<Story> storyList = storyRepository.findByMemberOrderByIdDesc(targetMember);
 
         log.info("search story list by memberId: {}", targetMemberId);
 
