@@ -6,6 +6,7 @@ import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.service.HighlightService;
 import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
+import dmu.cheek.story.model.StoryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +38,7 @@ public class HighlightController {
 
     @DeleteMapping("/{highlightId}")
     @Operation(summary = "하이라이트 삭제", description = "하이하이트 삭제 API")
-    public ResponseEntity<String> delete(@PathVariable(value = "highlightId") long highlightId) {
+    public ResponseEntity<String> delete(@PathVariable(name = "highlightId") long highlightId) {
         //TODO: refactor to create a token
         if (memberService.checkRole(highlightService.findById(highlightId).getMember().getMemberId(), Role.MENTOR))
             highlightService.delete(highlightId);
@@ -48,7 +49,7 @@ public class HighlightController {
 
     @GetMapping("/member/{memberId}")
     @Operation(summary = "하이라이트 리스트 조회", description = "특정 회원의 하이라이트 리스트 조회 API(썸네일만 노출)")
-    public ResponseEntity<List> searchByMember(@PathVariable(value = "memberId") long memberId) {
+    public ResponseEntity<List> searchByMember(@PathVariable(name = "memberId") long memberId) {
 
         List<HighlightDto> highlightList = highlightService.searchByMember(memberId);
 
@@ -57,11 +58,12 @@ public class HighlightController {
 
     @GetMapping("/{highlightId}")
     @Operation(summary = "하이라이트 단건 조회", description = "하이라이트 단건 조회 API")
-    public ResponseEntity<HighlightDto.ResponseOne> search(@PathVariable(value = "highlightId") long highlightId) {
+    public ResponseEntity<List> search(@PathVariable(name = "highlightId") long highlightId,
+                                       @RequestParam(name = "loginMemberId") long loginMemberId) {
 
-        HighlightDto.ResponseOne highlight = highlightService.search(highlightId);
+        List<StoryDto.Response> storyList = highlightService.search(highlightId, loginMemberId);
 
-        return ResponseEntity.ok(highlight);
+        return ResponseEntity.ok(storyList);
     }
 
     @PatchMapping("/{highlightId}")

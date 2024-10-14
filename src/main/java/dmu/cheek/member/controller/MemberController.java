@@ -83,7 +83,7 @@ public class MemberController {
 
     @GetMapping("/info")
     @Operation(summary = "회원정보 조회", description = "회원정보 조회 API")
-    public ResponseEntity<MemberDto> getMemberInfo(@RequestParam(value = "accessToken") String accessToken) {
+    public ResponseEntity<MemberDto> getMemberInfo(@RequestParam(name = "accessToken") String accessToken) {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
         MemberDto memberDto = memberConverter.convertToDto(memberService.findByEmail(kakaoLoginResponseDto.getKakaoAccount().getEmail()));

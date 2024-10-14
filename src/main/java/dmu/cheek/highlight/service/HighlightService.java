@@ -6,6 +6,7 @@ import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.repository.HighlightRepository;
 import dmu.cheek.member.model.Member;
+import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.service.S3Service;
 import dmu.cheek.story.converter.StoryConverter;
@@ -77,20 +78,30 @@ public class HighlightService {
                 ).collect(Collectors.toList());
     }
 
-    public HighlightDto.ResponseOne search(long highlightId) {
+    public List<StoryDto.Response> search(long highlightId, long loginMemberId) {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
-        List<StoryDto> storyList = highlight.getStoryList().stream()
-                .map(storyConverter::convertToDto)
-                .sorted(Comparator.comparing(StoryDto::getStoryId).reversed())
-                .toList();
-
         log.info("search highlight: {}", highlightId);
 
-        return HighlightDto.ResponseOne.builder()
-                .storyList(storyList)
-                .build();
+        return highlight.getStoryList().stream()
+                .map(story ->
+                        StoryDto.Response.builder()
+                                .storyId(story.getStoryId())
+                                .categoryId(story.getCategory().getCategoryId())
+                                .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
+                                .isUpvoted(story.getUpvoteList().stream()
+                                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
+                                .upvoteCount(story.getUpvoteList().size())
+                                .memberDto(MemberDto.Concise.builder()
+                                        .memberId(story.getMember().getMemberId())
+                                        .nickname(story.getMember().getNickname())
+                                        .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
+                                        .build()
+                                ).build())
+                .sorted(Comparator.comparing(StoryDto.Response::getStoryId).reversed())
+                .toList();
+
     }
 
     public Highlight findById(long highlightId) {
