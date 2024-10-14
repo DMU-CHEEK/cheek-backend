@@ -77,7 +77,7 @@ public class HighlightService {
                 ).collect(Collectors.toList());
     }
 
-    public HighlightDto.Response search(long highlightId) {
+    public HighlightDto.ResponseOne search(long highlightId) {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
@@ -88,7 +88,7 @@ public class HighlightService {
 
         log.info("search highlight: {}", highlightId);
 
-        return HighlightDto.Response.builder()
+        return HighlightDto.ResponseOne.builder()
                 .storyList(storyList)
                 .build();
     }

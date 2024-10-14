@@ -1,5 +1,6 @@
 package dmu.cheek.highlight.model;
 
+import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.story.model.StoryDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -29,8 +30,19 @@ public class HighlightDto {
     }
 
     @Getter @Builder
-    public static class Response {
+    public static class ResponseOne {
         private List<StoryDto> storyList;
+        private long categoryId;
+        private boolean isUpvoted;
+        private int upvoteCount;
+        private MemberDto.Concise memberDto;
+    }
+
+    @Getter @Builder
+    public static class ResponseList {
+        private long highlightId;
+        private long categoryId;
+        private String thumbnailPicture;
     }
 
     @Builder

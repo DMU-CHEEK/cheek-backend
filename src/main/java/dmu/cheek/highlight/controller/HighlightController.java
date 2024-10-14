@@ -57,9 +57,9 @@ public class HighlightController {
 
     @GetMapping("/{highlightId}")
     @Operation(summary = "하이라이트 단건 조회", description = "하이라이트 단건 조회 API")
-    public ResponseEntity<HighlightDto.Response> search(@PathVariable(value = "highlightId") long highlightId) {
+    public ResponseEntity<HighlightDto.ResponseOne> search(@PathVariable(value = "highlightId") long highlightId) {
 
-        HighlightDto.Response highlight = highlightService.search(highlightId);
+        HighlightDto.ResponseOne highlight = highlightService.search(highlightId);
 
         return ResponseEntity.ok(highlight);
     }
