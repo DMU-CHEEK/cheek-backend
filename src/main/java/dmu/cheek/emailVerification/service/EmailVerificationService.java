@@ -103,10 +103,11 @@ public class EmailVerificationService {
 
     private void isEmailDuplicated(String email) {
         EmailVerification emailVerification = emailVerificationRepository.findLatestByEmail(email).orElse(null);
-        if (emailVerification != null && emailVerification.isVerified() == true)
+        if (emailVerification != null && emailVerification.isVerified())
             throw new BusinessException(ErrorCode.MEMBER_NOT_FOUND);
     }
 
+    @Transactional
     public void verifyCode(EmailVerificationDto emailVerificationDto) {
         EmailVerification emailVerification = emailVerificationRepository.findLatestByEmail(emailVerificationDto.getEmail())
                 .orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
