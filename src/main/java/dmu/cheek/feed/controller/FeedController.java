@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/feed")
 @RequiredArgsConstructor
@@ -18,9 +20,9 @@ public class FeedController {
 
     @GetMapping("/{categoryId}")
     @Operation(summary = "피드 조회", description = "피드 조회 API")
-    public ResponseEntity<FeedDto> getFeed(@PathVariable(name = "categoryId") long categoryId,
-                                           @RequestParam(name = "loginMemberId") long loginMemberId) {
-        FeedDto feed = feedService.getFeed(loginMemberId, categoryId);
+    public ResponseEntity<List> getFeed(@PathVariable(name = "categoryId") long categoryId,
+                                        @RequestParam(name = "loginMemberId") long loginMemberId) {
+        List<FeedDto> feed = feedService.getFeed(loginMemberId, categoryId);
         return ResponseEntity.ok(feed);
     }
 }

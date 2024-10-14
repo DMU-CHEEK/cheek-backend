@@ -7,14 +7,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Builder @Getter
 @NoArgsConstructor @AllArgsConstructor
 public class FeedDto {
 
-    private List<Story> storyDto;
-    private List<Question> questionDto;
+    private String type; //QUESTION|STORY
+    private Story storyDto;
+    private Question questionDto;
+    private MemberDto.Concise memberDto;
+    private LocalDateTime modifiedAt;
 
     @Builder @Getter
     @NoArgsConstructor @AllArgsConstructor
@@ -23,8 +25,6 @@ public class FeedDto {
         private String storyPicture;
         private boolean isUpvoted;
         private int upvoteCount;
-        private LocalDateTime modifiedAt;
-        private MemberDto.Concise memberDto;
     }
 
     @Builder @Getter
@@ -32,8 +32,6 @@ public class FeedDto {
     public static class Question {
         private long questionId;
         private String content;
-        private MemberDto.Concise memberDto;
-        private LocalDateTime modifiedAt;
     }
 
 }

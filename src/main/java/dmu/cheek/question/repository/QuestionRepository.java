@@ -15,6 +15,6 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, Quest
     @Override
     List<Question> findListByCategoryAndText(long categoryId, String keyword);
 
-    @Query("select q from Question q where q.category.categoryId = :categoryId order by q.modifiedAt desc")
-    List<Question> findListByIdOrderByModifiedAtDesc(long categoryId);
+    @Query("select q from Question q where q.category.categoryId = :categoryId")
+    List<Question> findByCategoryId(long categoryId);
 }

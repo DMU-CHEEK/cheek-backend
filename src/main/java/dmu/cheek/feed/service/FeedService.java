@@ -8,7 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -19,15 +21,20 @@ public class FeedService {
     private final QuestionService questionService;
     private final StoryService storyService;
 
-    public FeedDto getFeed(long loginMemberId, long categoryId) {
-        List<FeedDto.Question> questionList = questionService.getQuestionsForFeed(categoryId);
-        List<FeedDto.Story> storyList = storyService.getStoriesForFeed(loginMemberId, categoryId);
+    public List<FeedDto> getFeed(long loginMemberId, long categoryId) {
+        List<FeedDto> questionList = questionService.getQuestionsForFeed(categoryId);
+        List<FeedDto> storyList = storyService.getStoriesForFeed(loginMemberId, categoryId);
+
 
         log.info("get feed, categoryId: {}", categoryId);
 
-        return FeedDto.builder()
-                .storyDto(storyList)
-                .questionDto(questionList)
-                .build();
+        return Stream.concat(questionList.stream(), storyList.stream())
+                .sorted((o1, o2) -> {
+                    LocalDateTime date1 = o1.getModifiedAt();
+                    LocalDateTime date2 = o2.getModifiedAt();
+
+                    return date2.compareTo(date1);
+                })
+                .toList();
     }
 }

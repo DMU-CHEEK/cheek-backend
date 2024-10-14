@@ -110,23 +110,27 @@ public class StoryService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
     }
 
-    public List<FeedDto.Story> getStoriesForFeed(long loginMemberId, long categoryId) {
-        return storyRepository.findByCategoryIdOrderByModifiedAtDesc(categoryId)
+    public List<FeedDto> getStoriesForFeed(long loginMemberId, long categoryId) {
+        return storyRepository.findByCategoryId(categoryId)
                 .stream()
                 .map(story ->
-                        FeedDto.Story.builder()
-                                .storyId(story.getStoryId())
-                                .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
-                                .isUpvoted(story.getUpvoteList().stream()
-                                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId)
-                                )
-                                .upvoteCount((int) story.getUpvoteList().size())
+                        FeedDto.builder()
+                                .type("STORY")
                                 .memberDto(MemberDto.Concise.builder()
                                         .memberId(story.getMember().getMemberId())
                                         .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
                                         .nickname(story.getMember().getNickname())
                                         .build()
                                 )
+                                .storyDto(FeedDto.Story.builder()
+                                        .storyId(story.getStoryId())
+                                        .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
+                                        .isUpvoted(story.getUpvoteList().stream()
+                                                .anyMatch(u -> u.getMember().getMemberId() == loginMemberId)
+                                        )
+                                        .upvoteCount((int) story.getUpvoteList().size())
+                                        .build()
+                                ).questionDto(null)
                                 .modifiedAt(story.getModifiedAt())
                                 .build()
                 ).toList();

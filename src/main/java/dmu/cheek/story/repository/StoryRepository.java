@@ -15,6 +15,6 @@ public interface StoryRepository extends JpaRepository<Story, Long>, StoryReposi
     @Override
     List<Story> findByCategoryIdAndText(long categoryId, String keyword);
 
-    @Query("select s from Story s where s.category.categoryId = :categoryId order by s.modifiedAt desc")
-    List<Story> findByCategoryIdOrderByModifiedAtDesc(long categoryId);
+    @Query("select s from Story s where s.category.categoryId = :categoryId")
+    List<Story> findByCategoryId(long categoryId);
 }

@@ -104,21 +104,26 @@ public class QuestionService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
     }
 
-    public List<FeedDto.Question> getQuestionsForFeed(long categoryId) {
-        return questionRepository.findListByIdOrderByModifiedAtDesc(categoryId)
+    public List<FeedDto> getQuestionsForFeed(long categoryId) {
+        return questionRepository.findByCategoryId(categoryId)
                 .stream()
                 .map(question ->
-                        FeedDto.Question.builder()
-                                .questionId(question.getQuestionId())
-                                .content(question.getContent())
+                        FeedDto.builder()
+                                .type("QUESTION")
                                 .memberDto(MemberDto.Concise.builder()
                                         .memberId(question.getMember().getMemberId())
                                         .profilePicture(s3Service.getResourceUrl(question.getMember().getProfilePicture()))
                                         .nickname(question.getMember().getNickname())
                                         .build()
                                 )
+                                .questionDto(FeedDto.Question.builder()
+                                        .questionId(question.getQuestionId())
+                                        .content(question.getContent())
+                                        .build()
+                                ).storyDto(null)
                                 .modifiedAt(question.getModifiedAt())
                                 .build()
                 ).toList();
+
     }
 }
