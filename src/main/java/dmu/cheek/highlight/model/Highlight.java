@@ -40,9 +40,9 @@ public class Highlight extends BaseTimeEntity {
         this.member = member;
     }
 
-    public void update(String subject, List<Story> storyList) {
+    public void update(String subject, List<Story> storyList, String thumbnailPicture) {
         this.subject = subject;
         this.storyList = storyList;
-        this.thumbnailPicture = storyList.getFirst().getStoryPicture();
+        this.thumbnailPicture = thumbnailPicture;
     }
 }

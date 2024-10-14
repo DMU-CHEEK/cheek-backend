@@ -42,7 +42,10 @@ public class HighlightService {
                 .toList();
 
         Highlight highlight = Highlight.withoutPrimaryKey()
-                .thumbnailPicture(storyList.getFirst().getStoryPicture())
+                .thumbnailPicture(
+                        highlightDto.getThumbnailPicture() != null ?
+                                highlightDto.getThumbnailPicture() : storyList.getFirst().getStoryPicture()
+                )
                 .storyList(storyList)
                 .subject(highlightDto.getSubject())
                 .member(member)
@@ -110,7 +113,7 @@ public class HighlightService {
     }
 
     @Transactional
-    public void updateHighlightStorylist(long highlightId, HighlightDto.Request highlightDto) {
+    public void updateHighlightStoryList(long highlightId, HighlightDto.Request highlightDto) {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
@@ -118,7 +121,10 @@ public class HighlightService {
                 .map(storyService::findById)
                 .toList();
 
-        highlight.update(highlightDto.getSubject(), storyList);
+        String thumbnailPicture = highlightDto.getThumbnailPicture() != null ?
+                highlightDto.getThumbnailPicture() : storyList.getFirst().getStoryPicture();
+
+        highlight.update(highlightDto.getSubject(), storyList, thumbnailPicture);
 
         log.info("update highlight: {}", highlightId);
     }
