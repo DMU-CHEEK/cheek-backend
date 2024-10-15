@@ -1,7 +1,7 @@
 package dmu.cheek.story.model;
 
 import dmu.cheek.global.auditing.BaseTimeEntity;
-import dmu.cheek.highlight.model.Highlight;
+import dmu.cheek.highlight.model.HighlightStory;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.question.model.Question;
@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Entity
 @Getter
@@ -40,9 +39,8 @@ public class Story extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;
 
-    @JoinColumn(name = "highlight_id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Highlight highlight;
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<HighlightStory> highlightStoryList = new ArrayList<>();
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Upvote> upvoteList = new ArrayList<>();
@@ -62,5 +60,4 @@ public class Story extends BaseTimeEntity {
         this.storyPicture = storyPicture;
         this.text = text;
     }
-
 }

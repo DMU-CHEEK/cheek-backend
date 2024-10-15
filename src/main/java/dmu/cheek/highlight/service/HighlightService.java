@@ -4,7 +4,9 @@ import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.highlight.model.HighlightDto;
+import dmu.cheek.highlight.model.HighlightStory;
 import dmu.cheek.highlight.repository.HighlightRepository;
+import dmu.cheek.highlight.repository.HighlightStoryRepository;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
@@ -33,6 +35,7 @@ public class HighlightService {
     private final HighlightRepository highlightRepository;
     private final StoryConverter storyConverter;
     private final S3Service s3Service;
+    private final HighlightStoryRepository highlightStoryRepository;
 
     @Transactional
     public void register(HighlightDto.Request highlightDto) {
@@ -41,31 +44,35 @@ public class HighlightService {
                 .map(storyService::findById)
                 .toList();
 
-        log.info("storyList: {}, {}, {}", storyList.get(0).getStoryId(), storyList.get(1).getStoryId(), storyList.get(2).getStoryId());
-
         Highlight highlight = Highlight.withoutPrimaryKey()
                 .thumbnailPicture(
                         highlightDto.getThumbnailPicture() != null ?
                                 highlightDto.getThumbnailPicture() : storyList.getFirst().getStoryPicture()
                 )
-                .storyList(storyList)
                 .subject(highlightDto.getSubject())
                 .member(member)
                 .build();
 
-        log.info("highlight story list: {}, {}, {}", highlight.getStoryList().get(0).getStoryId(), highlight.getStoryList().get(1).getStoryId(), highlight.getStoryList().get(2).getStoryId());
-
         highlightRepository.save(highlight);
+
+        List<HighlightStory> highlightStoryList = storyList.stream()
+                .map(story -> HighlightStory.withoutPrimaryKey()
+                        .story(story)
+                        .highlight(highlight)
+                        .build()
+                ).toList();
+
+        highlightStoryRepository.saveAll(highlightStoryList);
 
         log.info("register new highlight: {}, memberId: {}", highlight.getHighlightId(), highlightDto.getMemberId());
     }
 
     @Transactional
     public void delete(long highlightId) {
-        Highlight highlight = highlightRepository.findById(highlightId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+        List<HighlightStory> highlightStoryList = highlightStoryRepository.findByHighlightId(highlightId);
 
-        highlightRepository.delete(highlight);
+        highlightStoryRepository.deleteAll(highlightStoryList);
+        highlightRepository.delete(highlightStoryList.getFirst().getHighlight());
 
         log.info("delete highlight: {}", highlightId);
     }
@@ -91,24 +98,23 @@ public class HighlightService {
 
         log.info("search highlight: {}", highlightId);
 
-        return highlight.getStoryList().stream()
-                .map(story ->
+        return highlight.getHighlightStoryList().stream()
+                .map(highlightStory ->
                         StoryDto.Response.builder()
-                                .storyId(story.getStoryId())
-                                .categoryId(story.getCategory().getCategoryId())
-                                .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
-                                .isUpvoted(story.getUpvoteList().stream()
+                                .storyId(highlightStory.getStory().getStoryId())
+                                .categoryId(highlightStory.getStory().getCategory().getCategoryId())
+                                .storyPicture(s3Service.getResourceUrl(highlightStory.getStory().getStoryPicture()))
+                                .isUpvoted(highlightStory.getStory().getUpvoteList().stream()
                                         .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
-                                .upvoteCount(story.getUpvoteList().size())
+                                .upvoteCount(highlightStory.getStory().getUpvoteList().size())
                                 .memberDto(MemberDto.Concise.builder()
-                                        .memberId(story.getMember().getMemberId())
-                                        .nickname(story.getMember().getNickname())
-                                        .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
+                                        .memberId(highlightStory.getStory().getMember().getMemberId())
+                                        .nickname(highlightStory.getStory().getMember().getNickname())
+                                        .profilePicture(s3Service.getResourceUrl(highlightStory.getStory().getMember().getProfilePicture()))
                                         .build()
                                 ).build())
                 .sorted(Comparator.comparing(StoryDto.Response::getStoryId).reversed())
                 .toList();
-
     }
 
     public Highlight findById(long highlightId) {
@@ -118,8 +124,8 @@ public class HighlightService {
 
     @Transactional
     public void updateHighlightStoryList(long highlightId, HighlightDto.Request highlightDto) {
-        Highlight highlight = highlightRepository.findById(highlightId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
+        List<HighlightStory> highlightStoryList = highlightStoryRepository.findByHighlightId(highlightId);
+        highlightStoryRepository.deleteAll(highlightStoryList);
 
         List<Story> storyList = highlightDto.getStoryIdList().stream()
                 .map(storyService::findById)
@@ -128,7 +134,17 @@ public class HighlightService {
         String thumbnailPicture = highlightDto.getThumbnailPicture() != null ?
                 highlightDto.getThumbnailPicture() : storyList.getFirst().getStoryPicture();
 
-        highlight.update(highlightDto.getSubject(), storyList, thumbnailPicture);
+        Highlight highlight = highlightStoryList.getFirst().getHighlight();
+        highlight.update(highlightDto.getSubject(), thumbnailPicture);
+
+        highlightStoryRepository.saveAll(
+                storyList.stream()
+                        .map(story -> HighlightStory.withoutPrimaryKey()
+                                .story(story)
+                                .highlight(highlight)
+                                .build()
+                        ).toList()
+        );
 
         log.info("update highlight: {}", highlightId);
     }

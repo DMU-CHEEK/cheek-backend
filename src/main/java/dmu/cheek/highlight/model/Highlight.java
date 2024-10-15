@@ -2,7 +2,7 @@ package dmu.cheek.highlight.model;
 
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.member.model.Member;
-import dmu.cheek.story.model.Story;
+import dmu.cheek.highlight.model.HighlightStory;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,24 +26,22 @@ public class Highlight extends BaseTimeEntity {
     private String subject;
 
     @OneToMany(mappedBy = "highlight", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<Story> storyList = new ArrayList<>();
+    private List<HighlightStory> highlightStoryList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public Highlight(String thumbnailPicture, String subject, List<Story> storyList, Member member) {
+    public Highlight(String thumbnailPicture, String subject, List<HighlightStory> highlightStoryList, Member member) {
         this.thumbnailPicture = thumbnailPicture;
         this.subject = subject;
-        this.storyList = storyList;
+        this.highlightStoryList = highlightStoryList;
         this.member = member;
     }
 
-    public void update(String subject, List<Story> storyList, String thumbnailPicture) {
+    public void update(String subject, String thumbnailPicture) {
         this.subject = subject;
-        this.storyList.clear();
-        this.storyList = storyList;
         this.thumbnailPicture = thumbnailPicture;
     }
 }
