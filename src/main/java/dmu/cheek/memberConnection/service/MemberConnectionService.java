@@ -32,6 +32,12 @@ public class MemberConnectionService {
         Member fromMember = memberService.findById(memberConnectionDto.getFromMemberId()); //요청한 회원
         Member toMember = memberService.findById(memberConnectionDto.getToMemberId()); //요청받은 회원
 
+        if (memberConnectionRepository.findByToMemberAndFromMember(
+                memberConnectionDto.getToMemberId(),
+                memberConnectionDto.getFromMemberId()
+        ).isPresent())
+            throw new BusinessException(ErrorCode.DUPLICATED_CONNECTION);
+
         memberConnectionRepository.save(
                 MemberConnection.withoutPrimaryKey()
                         .toMember(toMember)
