@@ -41,6 +41,8 @@ public class HighlightService {
                 .map(storyService::findById)
                 .toList();
 
+        log.info("storyList: {}, {}, {}", storyList.get(0).getStoryId(), storyList.get(1).getStoryId(), storyList.get(2).getStoryId());
+
         Highlight highlight = Highlight.withoutPrimaryKey()
                 .thumbnailPicture(
                         highlightDto.getThumbnailPicture() != null ?
@@ -50,6 +52,8 @@ public class HighlightService {
                 .subject(highlightDto.getSubject())
                 .member(member)
                 .build();
+
+        log.info("highlight story list: {}, {}, {}", highlight.getStoryList().get(0).getStoryId(), highlight.getStoryList().get(1).getStoryId(), highlight.getStoryList().get(2).getStoryId());
 
         highlightRepository.save(highlight);
 

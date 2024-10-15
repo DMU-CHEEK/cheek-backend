@@ -20,7 +20,7 @@ public class MemberConnectionDto {
         private String profilePicture;
         private String nickname;
         private String information;
-        private long followerCnt;
+        private int followerCnt;
         private boolean isFollowing;
     }
 }

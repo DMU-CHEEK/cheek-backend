@@ -57,7 +57,7 @@ public class SearchService {
 
         return memberList.stream()
                 .map(memberData -> {
-                    long followerCnt = memberData.getToMemberConnectionList().size();
+                    int followerCnt = memberData.getToMemberConnectionList().size();
                     boolean isFollowing = memberData.getToMemberConnectionList()
                             .stream()
                             .anyMatch(memberConnection -> memberConnection.getFromMember().getMemberId() == loginMemberId);

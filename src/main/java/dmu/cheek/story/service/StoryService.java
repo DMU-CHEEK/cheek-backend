@@ -101,7 +101,13 @@ public class StoryService {
                 .categoryId(story.getCategory().getCategoryId())
                 .isUpvoted(story.getUpvoteList().stream()
                         .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
-                .upvoteCount((int) story.getUpvoteList().stream().count())
+                .upvoteCount(story.getUpvoteList().size())
+                .memberDto(MemberDto.Concise.builder()
+                        .memberId(story.getMember().getMemberId())
+                        .profilePicture(story.getMember().getProfilePicture())
+                        .nickname(story.getMember().getNickname())
+                        .build()
+                )
                 .build();
     }
 

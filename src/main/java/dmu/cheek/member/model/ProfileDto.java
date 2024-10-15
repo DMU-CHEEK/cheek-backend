@@ -34,6 +34,8 @@ public class ProfileDto {
         private String description;
         private Role role;
         private boolean isFollowing;
+        private int followerCnt;
+        private int followingCnt;
     }
 }
 

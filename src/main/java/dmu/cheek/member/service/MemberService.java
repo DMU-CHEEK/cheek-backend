@@ -120,6 +120,8 @@ public class MemberService {
                 .description(targetMember.getDescription())
                 .information(targetMember.getInformation())
                 .isFollowing(isFollowing)
+                .followerCnt(targetMember.getToMemberConnectionList().size())
+                .followingCnt(targetMember.getFromMemberConnectionList().size())
                 .role(targetMember.getRole())
                 .build();
     }

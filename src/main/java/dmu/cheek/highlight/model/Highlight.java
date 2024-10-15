@@ -25,7 +25,7 @@ public class Highlight extends BaseTimeEntity {
 
     private String subject;
 
-    @OneToMany(mappedBy = "highlight", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "highlight", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Story> storyList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,6 +42,7 @@ public class Highlight extends BaseTimeEntity {
 
     public void update(String subject, List<Story> storyList, String thumbnailPicture) {
         this.subject = subject;
+        this.storyList.clear();
         this.storyList = storyList;
         this.thumbnailPicture = thumbnailPicture;
     }

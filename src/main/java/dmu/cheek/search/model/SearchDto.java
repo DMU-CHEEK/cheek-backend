@@ -29,7 +29,7 @@ public class SearchDto {
         private String profilePicture;
         private String description;
         private String information;
-        private long followerCnt;
+        private int followerCnt;
         private boolean isFollowing;
     }
 
