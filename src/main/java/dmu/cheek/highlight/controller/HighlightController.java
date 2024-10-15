@@ -28,7 +28,7 @@ public class HighlightController {
     private final MemberService memberService;
     private final S3Service s3Service;
 
-    @PostMapping()
+    @PostMapping("/mentor")
     @Operation(summary = "하이라이트 등록", description = "하이라이트 등록 API")
     public ResponseEntity<String> register(@RequestPart(name = "highlightDto") HighlightDto.Request highlightDto,
                                            @RequestPart(name = "thumbnailPicture", required = false) MultipartFile thumbnailPicture) {
@@ -45,7 +45,7 @@ public class HighlightController {
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping("/{highlightId}")
+    @DeleteMapping("/mentor/{highlightId}")
     @Operation(summary = "하이라이트 삭제", description = "하이하이트 삭제 API")
     public ResponseEntity<String> delete(@PathVariable(name = "highlightId") long highlightId) {
         //TODO: refactor to create a token
@@ -75,7 +75,7 @@ public class HighlightController {
         return ResponseEntity.ok(storyList);
     }
 
-    @PatchMapping("/{highlightId}")
+    @PatchMapping("/mentor/{highlightId}")
     @Operation(summary = "하이라이트 수정", description = "하이라이트 스토리 리스트 수정 API")
     public ResponseEntity<String> update(@PathVariable(name = "highlightId") long highlightId,
                                          @RequestPart(name = "highlightDto") HighlightDto.Request highlightDto,

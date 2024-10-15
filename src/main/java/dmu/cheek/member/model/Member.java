@@ -40,6 +40,8 @@ public class Member extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Status status;
 
+    private String firebaseToken;
+
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Question> questionList = new ArrayList<>();
 
@@ -104,5 +106,9 @@ public class Member extends BaseTimeEntity {
 
     public void updateRole(Role role) {
         this.role = role;
+    }
+
+    public void setFirebaseToken(String firebaseToken) {
+        this.firebaseToken = firebaseToken;
     }
 }

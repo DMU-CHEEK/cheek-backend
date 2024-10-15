@@ -13,11 +13,11 @@ import java.io.InputStream;
 import java.util.List;
 
 @Configuration
-public class FCMConfig {
+public class FcmConfig {
 
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        ClassPathResource classPathResource = new ClassPathResource("/firebase/cheek-581d2-firebase-adminsdk-yjcxm-81b360d2f9.json");
+        ClassPathResource classPathResource = new ClassPathResource("/firebase/cheek-fcm.json");
 
         InputStream refreshToken = classPathResource.getInputStream();
 

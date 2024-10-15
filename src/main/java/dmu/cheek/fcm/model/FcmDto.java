@@ -9,8 +9,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
-public class FCMNotificationRequestDto {
+public class FcmDto {
     private long memberId;
     private String title;
     private String body;
+
+    @Getter
+    public static class Token {
+        private long memberId;
+        private String firebaseToken;
+    }
 }
