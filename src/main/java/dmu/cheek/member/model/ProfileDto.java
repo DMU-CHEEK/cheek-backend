@@ -32,6 +32,7 @@ public class ProfileDto {
         private String nickname;
         private String information;
         private String description;
+        private String profilePicture;
         private Role role;
         private boolean isFollowing;
         private int followerCnt;

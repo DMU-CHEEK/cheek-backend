@@ -119,6 +119,7 @@ public class MemberService {
                 .nickname(targetMember.getNickname())
                 .description(targetMember.getDescription())
                 .information(targetMember.getInformation())
+                .profilePicture(s3Service.getResourceUrl(targetMember.getProfilePicture()))
                 .isFollowing(isFollowing)
                 .followerCnt(targetMember.getToMemberConnectionList().size())
                 .followingCnt(targetMember.getFromMemberConnectionList().size())

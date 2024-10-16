@@ -4,10 +4,12 @@ import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.member.converter.MemberConverter;
+import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.model.ProfileDto;
 import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
+import dmu.cheek.s3.service.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,6 +34,7 @@ public class MemberController {
     private final MemberService memberService;
     private final KakaoLoginClient kakaoLoginClient;
     private final MemberConverter memberConverter;
+    private final S3Service s3Service;
 
     @PostMapping("/login")
     @Operation(summary = "로그인", description = "로그인(회원가입) API")
@@ -83,10 +86,22 @@ public class MemberController {
 
     @GetMapping("/info")
     @Operation(summary = "회원정보 조회", description = "회원정보 조회 API")
-    public ResponseEntity<MemberDto> getMemberInfo(@RequestParam(name = "accessToken") String accessToken) {
+    public ResponseEntity<MemberDto.Info> getMemberInfo(@RequestParam(name = "accessToken") String accessToken) {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
-        MemberDto memberDto = memberConverter.convertToDto(memberService.findByEmail(kakaoLoginResponseDto.getKakaoAccount().getEmail()));
+        Member member = memberService.findByEmail(kakaoLoginResponseDto.getKakaoAccount().getEmail());
+        MemberDto.Info memberDto = MemberDto.Info.builder()
+                .memberId(member.getMemberId())
+                .email(member.getEmail())
+                .information(member.getInformation())
+                .description(member.getDescription())
+                .nickname(member.getNickname())
+                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
+                .role(member.getRole())
+                .status(member.getStatus())
+                .followerCnt(member.getToMemberConnectionList().size())
+                .followingCnt(member.getFromMemberConnectionList().size())
+                .build();
 
         return ResponseEntity.ok(memberDto);
     }

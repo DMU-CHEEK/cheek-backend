@@ -50,4 +50,18 @@ public class MemberDto {
         private String profilePicture;
     }
 
+    @Getter @Builder
+    public static class Info {
+        private long memberId;
+        private String email;
+        private String nickname;
+        private String description;
+        private String information;
+        private String profilePicture;
+        private Role role;
+        private Status status;
+        private int followerCnt;
+        private int followingCnt;
+    }
+
 }
