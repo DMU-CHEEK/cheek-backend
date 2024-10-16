@@ -40,13 +40,16 @@ public class QuestionDto {
     }
 
     @Getter @Builder
-    public static class Response {
+    public static class ResponseList {
         private long questionId;
-
         private String content;
+    }
 
-        private long memberId;
-
+    @Getter @Builder
+    public static class ResponseOne {
+        private long questionId;
+        private String content;
         private long categoryId;
+        private MemberDto.Concise memberDto;
     }
 }

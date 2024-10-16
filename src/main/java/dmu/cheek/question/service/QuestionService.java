@@ -57,32 +57,36 @@ public class QuestionService {
         log.info("register new question: {}, memberId: {}", question.getQuestionId(), member.getMemberId());
     }
 
-    public QuestionDto.Response search(long questionId) {
+    public QuestionDto.ResponseOne search(long questionId) {
         Question question = questionRepository.findById(questionId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
 
         log.info("get question by id: {}", questionId);
 
-        return QuestionDto.Response.builder()
+        return QuestionDto.ResponseOne.builder()
                 .questionId(question.getQuestionId())
                 .content(question.getContent())
-                .memberId(question.getMember().getMemberId())
                 .categoryId(question.getCategory().getCategoryId())
+                .memberDto(
+                        MemberDto.Concise.builder()
+                                .memberId(question.getMember().getMemberId())
+                                .nickname(question.getMember().getNickname())
+                                .profilePicture(s3Service.getResourceUrl(question.getMember().getProfilePicture()))
+                                .build()
+                )
                 .build();
     }
 
-    public List<QuestionDto.Response> searchByMember(long memberId) {
+    public List<QuestionDto.ResponseList> searchByMember(long memberId) {
         Member member = memberService.findById(memberId);
         List<Question> questionList = questionRepository.findByMemberOrderByModifiedAtDesc(member);
 
-        List<QuestionDto.Response> responseList = questionList.stream()
-                .map(q -> QuestionDto.Response.builder()
+        List<QuestionDto.ResponseList> responseList = questionList.stream()
+                .map(q -> QuestionDto.ResponseList.builder()
                         .questionId(q.getQuestionId())
                         .content(q.getContent())
-                        .memberId(memberId)
-                        .categoryId(q.getCategory().getCategoryId())
                         .build())
-                .collect(Collectors.toList());
+                .toList();
 
         log.info("get question list by member: {}, number of posts: {}", memberId, responseList.size());
 

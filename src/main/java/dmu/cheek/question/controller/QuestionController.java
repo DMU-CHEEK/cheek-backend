@@ -31,15 +31,15 @@ public class QuestionController {
     @GetMapping("/member/{memberId}")
     @Operation(summary = "특정 유저의 질문 리스트 조회", description = "특정 유저의 질문 리스트 조회 API")
     public ResponseEntity<List> searchByMember(@PathVariable(name = "memberId") long memberId) {
-        List<QuestionDto.Response> questionList = questionService.searchByMember(memberId);
+        List<QuestionDto.ResponseList> questionList = questionService.searchByMember(memberId);
 
         return ResponseEntity.ok(questionList);
     }
 
     @GetMapping("/{questionId}")
-    @Operation(summary = "질문 조회", description = "질문 조회 API")
-    public ResponseEntity<QuestionDto.Response> search(@PathVariable(name = "questionId") long questionId) {
-        QuestionDto.Response question = questionService.search(questionId);
+    @Operation(summary = "질문 조회", description = "질문 단건 조회 API")
+    public ResponseEntity<QuestionDto.ResponseOne> search(@PathVariable(name = "questionId") long questionId) {
+        QuestionDto.ResponseOne question = questionService.search(questionId);
 
         return ResponseEntity.ok(question);
     }
