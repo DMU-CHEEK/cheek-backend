@@ -72,6 +72,26 @@ public class MemberService {
                 () -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
     }
 
+    public MemberDto.Info getMemberAllInfo(String email) {
+        Member member = memberRepository.findByEmail(email).orElseThrow(
+                () -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
+
+        log.info("get member {}'s all info", member.getMemberId());
+
+        return MemberDto.Info.builder()
+                .memberId(member.getMemberId())
+                .email(member.getEmail())
+                .information(member.getInformation())
+                .description(member.getDescription())
+                .nickname(member.getNickname())
+                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
+                .role(member.getRole())
+                .status(member.getStatus())
+                .followerCnt(member.getToMemberConnectionList().size())
+                .followingCnt(member.getFromMemberConnectionList().size())
+                .build();
+    }
+
     public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, KakaoLoginResponseDto kakaoLoginResponseDto) throws ParseException {
         String email = kakaoLoginResponseDto.getKakaoAccount().getEmail();
         Member member = memberRepository.findByEmail(email).orElseThrow(

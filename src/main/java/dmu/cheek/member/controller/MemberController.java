@@ -86,22 +86,11 @@ public class MemberController {
 
     @GetMapping("/info")
     @Operation(summary = "회원정보 조회", description = "회원정보 조회 API")
-    public ResponseEntity<MemberDto.Info> getMemberInfo(@RequestParam(name = "accessToken") String accessToken) {
+    public ResponseEntity<MemberDto.Info> getMemberInfo(@RequestBody MemberDto.Token tokenDto) {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
-        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
-        Member member = memberService.findByEmail(kakaoLoginResponseDto.getKakaoAccount().getEmail());
-        MemberDto.Info memberDto = MemberDto.Info.builder()
-                .memberId(member.getMemberId())
-                .email(member.getEmail())
-                .information(member.getInformation())
-                .description(member.getDescription())
-                .nickname(member.getNickname())
-                .profilePicture(s3Service.getResourceUrl(member.getProfilePicture()))
-                .role(member.getRole())
-                .status(member.getStatus())
-                .followerCnt(member.getToMemberConnectionList().size())
-                .followingCnt(member.getFromMemberConnectionList().size())
-                .build();
+        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, tokenDto.getAccessToken());
+
+        MemberDto.Info memberDto = memberService.getMemberAllInfo(kakaoLoginResponseDto.getKakaoAccount().getEmail());
 
         return ResponseEntity.ok(memberDto);
     }
