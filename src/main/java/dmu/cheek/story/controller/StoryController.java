@@ -55,16 +55,16 @@ public class StoryController {
                                                @RequestParam(name = "loginMemberId") long loginMemberId) {
 
         //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
-        List<StoryDto.Response> storyList = storyService.searchListByMember(loginMemberId, targetMemberId);
+        List<StoryDto.ResponseList> storyList = storyService.searchListByMember(loginMemberId, targetMemberId);
 
         return ResponseEntity.ok(storyList);
     }
 
     @GetMapping("/{storyId}")
     @Operation(summary = "스토리 조회", description = "특정 유저의 스토리 단건 조회 API")
-    public ResponseEntity<StoryDto.Response> search(@PathVariable(name = "storyId") long storyId,
+    public ResponseEntity<StoryDto.ResponseOne> search(@PathVariable(name = "storyId") long storyId,
                                                     @RequestParam(name = "loginMemberId") long loginMemberId) {
-        StoryDto.Response storyDto = storyService.searchByMember(storyId, loginMemberId);
+        StoryDto.ResponseOne storyDto = storyService.searchByMember(storyId, loginMemberId);
 
         return ResponseEntity.ok(storyDto);
     }

@@ -63,7 +63,7 @@ public class StoryService {
         log.info("delete story: {}", story.getStoryId());
     }
 
-    public List<StoryDto.Response> searchListByMember(long loginMemberId, long targetMemberId) {
+    public List<StoryDto.ResponseList> searchListByMember(long loginMemberId, long targetMemberId) {
         //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
         Member targetMember = memberService.findById(targetMemberId);
 
@@ -72,30 +72,24 @@ public class StoryService {
         log.info("search story list by memberId: {}", targetMemberId);
 
         return storyList.stream()
-                .map(s -> StoryDto.Response.builder()
+                .map(s -> StoryDto.ResponseList.builder()
                         .storyId(s.getStoryId())
                         .categoryId(s.getCategory().getCategoryId())
                         .storyPicture(s3Service.getResourceUrl(s.getStoryPicture()))
                         .isUpvoted(s.getUpvoteList().stream()
                                 .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
                         .upvoteCount(s.getUpvoteList().size())
-                        .memberDto(MemberDto.Concise.builder()
-                                .memberId(s.getMember().getMemberId())
-                                .nickname(s.getMember().getNickname())
-                                .profilePicture(s3Service.getResourceUrl(s.getStoryPicture()))
-                                .build()
-                        )
                         .build())
                 .toList();
     }
 
-    public StoryDto.Response searchByMember(long storyId, long loginMemberId) {
+    public StoryDto.ResponseOne searchByMember(long storyId, long loginMemberId) {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
 
         log.info("search story by storyId: {}", storyId);
 
-        return StoryDto.Response.builder()
+        return StoryDto.ResponseOne.builder()
                 .storyId(storyId)
                 .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                 .categoryId(story.getCategory().getCategoryId())

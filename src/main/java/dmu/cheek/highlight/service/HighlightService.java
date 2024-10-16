@@ -92,7 +92,7 @@ public class HighlightService {
                 ).collect(Collectors.toList());
     }
 
-    public List<StoryDto.Response> search(long highlightId, long loginMemberId) {
+    public List<StoryDto.ResponseOne> search(long highlightId, long loginMemberId) {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
@@ -100,7 +100,7 @@ public class HighlightService {
 
         return highlight.getHighlightStoryList().stream()
                 .map(highlightStory ->
-                        StoryDto.Response.builder()
+                        StoryDto.ResponseOne.builder()
                                 .storyId(highlightStory.getStory().getStoryId())
                                 .categoryId(highlightStory.getStory().getCategory().getCategoryId())
                                 .storyPicture(s3Service.getResourceUrl(highlightStory.getStory().getStoryPicture()))
@@ -113,7 +113,7 @@ public class HighlightService {
                                         .profilePicture(s3Service.getResourceUrl(highlightStory.getStory().getMember().getProfilePicture()))
                                         .build()
                                 ).build())
-                .sorted(Comparator.comparing(StoryDto.Response::getStoryId).reversed())
+                .sorted(Comparator.comparing(StoryDto.ResponseOne::getStoryId).reversed())
                 .toList();
     }
 

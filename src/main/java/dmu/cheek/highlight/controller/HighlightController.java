@@ -70,7 +70,7 @@ public class HighlightController {
     public ResponseEntity<List> search(@PathVariable(name = "highlightId") long highlightId,
                                        @RequestParam(name = "loginMemberId") long loginMemberId) {
 
-        List<StoryDto.Response> storyList = highlightService.search(highlightId, loginMemberId);
+        List<StoryDto.ResponseOne> storyList = highlightService.search(highlightId, loginMemberId);
 
         return ResponseEntity.ok(storyList);
     }

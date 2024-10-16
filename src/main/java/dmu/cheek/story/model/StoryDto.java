@@ -23,7 +23,16 @@ public class StoryDto {
     }
 
     @Getter @Builder
-    public static class Response {
+    public static class ResponseList {
+        private long storyId;
+        private long categoryId;
+        private String storyPicture;
+        private boolean isUpvoted;
+        private int upvoteCount;
+    }
+
+    @Getter @Builder
+    public static class ResponseOne {
         private long storyId;
         private long categoryId;
         private String storyPicture;
