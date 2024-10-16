@@ -98,7 +98,7 @@ public class StoryService {
                 .upvoteCount(story.getUpvoteList().size())
                 .memberDto(MemberDto.Concise.builder()
                         .memberId(story.getMember().getMemberId())
-                        .profilePicture(story.getMember().getProfilePicture())
+                        .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
                         .nickname(story.getMember().getNickname())
                         .build()
                 )
