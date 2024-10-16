@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/email")
-@Tag(name = "EmailVerification API", description = "이메일 검증 API")
+@Tag(name = "EmailVerification API", description = "이메일 인증")
 @Slf4j
 public class EmailVerificationController {
 
