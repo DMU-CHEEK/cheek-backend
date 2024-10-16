@@ -43,11 +43,6 @@ public class MemberDto {
         private String description;
     }
 
-    @Getter
-    public static class Token {
-        private String accessToken;
-    }
-
     @Builder @Getter @NoArgsConstructor @AllArgsConstructor
     public static class Concise {
         private long memberId;

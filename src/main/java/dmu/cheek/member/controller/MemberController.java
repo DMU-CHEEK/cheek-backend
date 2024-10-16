@@ -86,9 +86,9 @@ public class MemberController {
 
     @GetMapping("/info")
     @Operation(summary = "회원정보 조회", description = "회원정보 조회 API")
-    public ResponseEntity<MemberDto.Info> getMemberInfo(@RequestBody MemberDto.Token tokenDto) {
+    public ResponseEntity<MemberDto.Info> getMemberInfo(@RequestHeader(name = "Authorization") String accessToken) {
         String contentType = "application/x-www-form-urlencoded/charset=utf-8";
-        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, tokenDto.getAccessToken());
+        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
 
         MemberDto.Info memberDto = memberService.getMemberAllInfo(kakaoLoginResponseDto.getKakaoAccount().getEmail());
 
