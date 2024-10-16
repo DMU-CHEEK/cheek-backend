@@ -8,7 +8,6 @@ import dmu.cheek.highlight.model.HighlightStory;
 import dmu.cheek.highlight.repository.HighlightRepository;
 import dmu.cheek.highlight.repository.HighlightStoryRepository;
 import dmu.cheek.member.model.Member;
-import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.service.S3Service;
 import dmu.cheek.story.converter.StoryConverter;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -89,32 +87,25 @@ public class HighlightService {
                                 .thumbnailPicture(s3Service.getResourceUrl(h.getThumbnailPicture()))
                                 .subject(h.getSubject())
                                 .build()
-                ).collect(Collectors.toList());
+                ).toList();
     }
 
-    public List<StoryDto.ResponseOne> search(long highlightId, long loginMemberId) {
+    public HighlightDto.Response search(long highlightId, long loginMemberId) {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
         log.info("search highlight: {}", highlightId);
 
-        return highlight.getHighlightStoryList().stream()
-                .map(highlightStory ->
-                        StoryDto.ResponseOne.builder()
-                                .storyId(highlightStory.getStory().getStoryId())
-                                .categoryId(highlightStory.getStory().getCategory().getCategoryId())
-                                .storyPicture(s3Service.getResourceUrl(highlightStory.getStory().getStoryPicture()))
-                                .isUpvoted(highlightStory.getStory().getUpvoteList().stream()
-                                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
-                                .upvoteCount(highlightStory.getStory().getUpvoteList().size())
-                                .memberDto(MemberDto.Concise.builder()
-                                        .memberId(highlightStory.getStory().getMember().getMemberId())
-                                        .nickname(highlightStory.getStory().getMember().getNickname())
-                                        .profilePicture(s3Service.getResourceUrl(highlightStory.getStory().getMember().getProfilePicture()))
-                                        .build()
-                                ).build())
-                .sorted(Comparator.comparing(StoryDto.ResponseOne::getStoryId).reversed())
+        // 모든 storyId를 수집하여 하나의 리스트로 반환
+        List<Long> storyIds = highlight.getHighlightStoryList().stream()
+                .map(highlightStory -> highlightStory.getStory().getStoryId()) // 각 HighlightStory에서 storyId 추출
+                .sorted(Comparator.reverseOrder()) // 내림차순 정렬
                 .toList();
+
+        // DTO에 전체 storyId 리스트를 담아서 반환
+        return HighlightDto.Response.builder()
+                .storyId(storyIds)
+                .build();
     }
 
     public Highlight findById(long highlightId) {

@@ -38,4 +38,9 @@ public class HighlightDto {
         this.thumbnailPicture = thumbnailPicture;
         this.subject = subject;
     }
+
+    @Getter @Builder
+    public static class Response {
+        private List<Long> storyId;
+    }
 }
