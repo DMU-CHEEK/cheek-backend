@@ -41,9 +41,6 @@ public class QuestionService {
     public void register(QuestionDto.RegisterReq registerReq) {
         Member member = memberService.findById(registerReq.getMemberId());
 
-        if (member.getRole() != Role.MENTOR)
-            throw new BusinessException(ErrorCode.EXPIRED_TOKEN);
-
         Category category = categoryService.findById(registerReq.getCategoryId());
 
         Question question = Question.withoutPrimaryKey()
