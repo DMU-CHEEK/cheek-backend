@@ -72,13 +72,13 @@ public class StoryService {
         log.info("search story list by memberId: {}", targetMemberId);
 
         return storyList.stream()
-                .map(s -> StoryDto.ResponseList.builder()
-                        .storyId(s.getStoryId())
-                        .categoryId(s.getCategory().getCategoryId())
-                        .storyPicture(s3Service.getResourceUrl(s.getStoryPicture()))
-                        .isUpvoted(s.getUpvoteList().stream()
-                                .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
-                        .upvoteCount(s.getUpvoteList().size())
+                .map(story -> StoryDto.ResponseList.builder()
+                        .storyId(story.getStoryId())
+                        .categoryId(story.getCategory().getCategoryId())
+                        .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
+                        .isUpvoted(story.getUpvoteList().stream()
+                                .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
+                        .upvoteCount(story.getUpvoteList().size())
                         .build())
                 .toList();
     }
@@ -94,7 +94,7 @@ public class StoryService {
                 .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                 .categoryId(story.getCategory().getCategoryId())
                 .isUpvoted(story.getUpvoteList().stream()
-                        .anyMatch(u -> u.getMember().getMemberId() == loginMemberId))
+                        .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
                 .upvoteCount(story.getUpvoteList().size())
                 .memberDto(MemberDto.Concise.builder()
                         .memberId(story.getMember().getMemberId())
@@ -126,13 +126,30 @@ public class StoryService {
                                         .storyId(story.getStoryId())
                                         .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                                         .isUpvoted(story.getUpvoteList().stream()
-                                                .anyMatch(u -> u.getMember().getMemberId() == loginMemberId)
+                                                .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId)
                                         )
                                         .upvoteCount((int) story.getUpvoteList().size())
                                         .build()
                                 ).questionDto(null)
                                 .modifiedAt(story.getModifiedAt())
                                 .build()
+                ).toList();
+    }
+
+    public List<StoryDto.ResponseList> getAnsweredStoryList(long questionId, long loginMemberId) {
+        Question question = questionService.findById(questionId);
+
+        log.info("get answered story list, questionId: {}", questionId);
+
+        return question.getStoryList().stream()
+                .map(story -> StoryDto.ResponseList.builder()
+                        .storyId(story.getStoryId())
+                        .storyPicture(story.getStoryPicture())
+                        .categoryId(story.getCategory().getCategoryId())
+                        .isUpvoted(story.getUpvoteList().stream()
+                                .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
+                        .upvoteCount(story.getUpvoteList().size())
+                        .build()
                 ).toList();
     }
 }

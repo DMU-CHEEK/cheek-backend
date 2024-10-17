@@ -68,4 +68,13 @@ public class StoryController {
 
         return ResponseEntity.ok(storyDto);
     }
+
+    @GetMapping("/{questionId}/answered-stories")
+    @Operation(summary = "질문에 답변된 스토리 모아보기", description = "질문에 답변된 스토리 모아보기 API")
+    public ResponseEntity<List> getAnsweredStoryList(@PathVariable(name = "questionId") long questionId,
+                                                     @RequestParam(name = "loginMemberId") long loginMemberId) {
+        List<StoryDto.ResponseList> answeredStoryList = storyService.getAnsweredStoryList(questionId, loginMemberId);
+
+        return ResponseEntity.ok(answeredStoryList);
+    }
 }
