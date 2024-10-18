@@ -79,6 +79,7 @@ public class StoryService {
                         .isUpvoted(story.getUpvoteList().stream()
                                 .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
                         .upvoteCount(story.getUpvoteList().size())
+                        .modifiedAt(story.getModifiedAt())
                         .build())
                 .toList();
     }

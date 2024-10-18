@@ -4,6 +4,8 @@ import dmu.cheek.member.model.MemberDto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Builder
 public class StoryDto {
@@ -29,6 +31,7 @@ public class StoryDto {
         private String storyPicture;
         private boolean isUpvoted;
         private int upvoteCount;
+        private LocalDateTime modifiedAt;
     }
 
     @Getter @Builder
