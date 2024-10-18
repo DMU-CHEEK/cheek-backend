@@ -96,14 +96,13 @@ public class HighlightService {
 
         log.info("search highlight: {}", highlightId);
 
-        // 모든 storyId를 수집하여 하나의 리스트로 반환
         List<Long> storyIds = highlight.getHighlightStoryList().stream()
-                .map(highlightStory -> highlightStory.getStory().getStoryId()) // 각 HighlightStory에서 storyId 추출
-                .sorted(Comparator.reverseOrder()) // 내림차순 정렬
+                .map(highlightStory -> highlightStory.getStory().getStoryId())
+                .sorted(Comparator.reverseOrder())
                 .toList();
 
-        // DTO에 전체 storyId 리스트를 담아서 반환
         return HighlightDto.Response.builder()
+                .highlightId(highlightId)
                 .storyId(storyIds)
                 .build();
     }

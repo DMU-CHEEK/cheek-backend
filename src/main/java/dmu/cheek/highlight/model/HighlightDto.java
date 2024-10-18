@@ -41,6 +41,7 @@ public class HighlightDto {
 
     @Getter @Builder
     public static class Response {
+        private long highlightId;
         private List<Long> storyId;
     }
 }
