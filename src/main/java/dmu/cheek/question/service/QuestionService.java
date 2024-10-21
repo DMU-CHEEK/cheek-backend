@@ -121,6 +121,7 @@ public class QuestionService {
                                 .questionDto(FeedDto.Question.builder()
                                         .questionId(question.getQuestionId())
                                         .content(question.getContent())
+                                        .storyCnt(question.getStoryList().size())
                                         .build()
                                 ).storyDto(null)
                                 .modifiedAt(question.getModifiedAt())

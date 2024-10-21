@@ -32,6 +32,7 @@ public class FeedDto {
     public static class Question {
         private long questionId;
         private String content;
+        private int storyCnt;
     }
 
 }
