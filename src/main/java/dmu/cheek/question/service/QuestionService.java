@@ -82,6 +82,7 @@ public class QuestionService {
                 .map(q -> QuestionDto.ResponseList.builder()
                         .questionId(q.getQuestionId())
                         .content(q.getContent())
+                        .storyCnt(q.getStoryList().size())
                         .build())
                 .toList();
 

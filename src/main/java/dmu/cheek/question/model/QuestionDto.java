@@ -43,6 +43,7 @@ public class QuestionDto {
     public static class ResponseList {
         private long questionId;
         private String content;
+        private int storyCnt;
     }
 
     @Getter @Builder
