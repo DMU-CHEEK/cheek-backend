@@ -103,6 +103,7 @@ public class SearchService {
                         .content(questionData.getContent())
                         .modifiedAt(questionData.getModifiedAt())
                         .categoryId(questionData.getCategory().getCategoryId())
+                        .storyCnt(questionData.getStoryList().size())
                         .memberDto(MemberDto.Concise.builder()
                                 .memberId(questionData.getMember().getMemberId())
                                 .nickname(questionData.getMember().getNickname())

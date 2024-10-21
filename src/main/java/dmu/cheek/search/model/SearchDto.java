@@ -16,9 +16,9 @@ public class SearchDto {
     private List<Member> memberDto;
     private List<Story> storyDto;
     private List<Question> questionDto;
-    private long memberResCnt; //TODO
-    private long storyResCnt; //TODO
-    private long questionResCnt; //TODO
+    private long memberResCnt;
+    private long storyResCnt;
+    private long questionResCnt;
 
 
     @Builder @Getter
@@ -50,6 +50,7 @@ public class SearchDto {
         private LocalDateTime modifiedAt;
         private long categoryId;
         private MemberDto.Concise memberDto;
+        private int storyCnt;
     }
 
     @Builder @Getter
