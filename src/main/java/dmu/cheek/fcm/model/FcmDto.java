@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FcmDto {
     private long memberId;
+    private String firebaseToken;
     private String title;
     private String body;
 

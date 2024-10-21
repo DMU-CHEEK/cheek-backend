@@ -1,6 +1,9 @@
 package dmu.cheek.fcm.service;
 
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingException;
+import com.google.firebase.messaging.Message;
+import com.google.firebase.messaging.Notification;
 import dmu.cheek.fcm.model.FcmDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
@@ -18,10 +21,22 @@ public class FcmService {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberService memberService;
 
-    public void sendNotificationByToken(FcmDto fcmDto) {
-
+    public void sendNotificationByToken(FcmDto fcmDto) throws FirebaseMessagingException {
         Member member = memberService.findById(fcmDto.getMemberId());
-        //TODO
+
+        String message = FirebaseMessaging.getInstance().send(
+                Message.builder()
+                        .setNotification(Notification.builder()
+                                .setTitle(fcmDto.getTitle())
+                                .setBody(fcmDto.getBody())
+                                .build()
+                        )
+                        .setToken(fcmDto.getFirebaseToken())
+                        .build()
+        );
+
+        log.info("send notification: {}", message);
+
     }
 
     @Transactional
