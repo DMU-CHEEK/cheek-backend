@@ -93,7 +93,7 @@ public class FolderService {
                 .map(collection -> StoryDto.Collection.builder()
                         .collectionId(collection.getCollectionId())
                         .storyId(collection.getStory().getStoryId())
-                        .modifiedAt(collection.getStory().getModifiedAt())
+                        .modifiedAt(collection.getModifiedAt())
                         .storyPicture(s3Service.getResourceUrl(collection.getStory().getStoryPicture()))
                         .build()
                 )
