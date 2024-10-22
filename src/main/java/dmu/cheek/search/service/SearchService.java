@@ -107,7 +107,7 @@ public class SearchService {
                         .memberDto(MemberDto.Concise.builder()
                                 .memberId(questionData.getMember().getMemberId())
                                 .nickname(questionData.getMember().getNickname())
-                                .profilePicture(questionData.getMember().getProfilePicture())
+                                .profilePicture(s3Service.getResourceUrl(questionData.getMember().getProfilePicture()))
                                 .build()
                         )
                         .build())
