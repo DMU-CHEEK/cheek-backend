@@ -26,10 +26,10 @@ public class CollectionController {
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping("/{collectionId}")
+    @DeleteMapping("")
     @Operation(summary = "스크랩 삭제", description = "스크랩 스토리 삭제 API")
-    public ResponseEntity<String> delete(@PathVariable(name = "collectionId") long collectionId) {
-        collectionService.delete(collectionId);
+    public ResponseEntity<String> delete(@RequestBody CollectionDto.Delete collectionDto) {
+        collectionService.delete(collectionDto);
 
         return ResponseEntity.ok("ok");
     }

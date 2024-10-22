@@ -3,6 +3,8 @@ package dmu.cheek.collection.model;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class CollectionDto {
@@ -17,6 +19,8 @@ public class CollectionDto {
         private String folderName;
     }
 
-    public static class ResponseList {
+    @Getter
+    public static class Delete {
+        private List<Long> collectionIdList;
     }
 }

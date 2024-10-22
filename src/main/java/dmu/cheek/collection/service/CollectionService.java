@@ -61,12 +61,14 @@ public class CollectionService {
     }
 
     @Transactional
-    public void delete(long collectionId) {
-        Collection collection = collectionRepository.findById(collectionId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.COLLECTION_NOT_FOUND));
+    public void delete(CollectionDto.Delete collectionDto) {
+        for (long collectionId : collectionDto.getCollectionIdList()) {
+            Collection collection = collectionRepository.findById(collectionId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.COLLECTION_NOT_FOUND));
 
-        collectionRepository.delete(collection);
+            collectionRepository.delete(collection);
+        }
 
-        log.info("delete collection, collectionId: {}", collectionId);
+        log.info("delete collection list");
     }
 }
