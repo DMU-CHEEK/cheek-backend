@@ -28,17 +28,22 @@ public class Notification {
 
     private long typeId;
 
-    private String title;
-
     private String body;
 
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public Notification(Member toMember, Member fromMember, Type type, long typeId, String title, String body) {
+    public Notification(Member toMember, Member fromMember, Type type, long typeId, String body) {
         this.toMember = toMember;
         this.fromMember = fromMember;
         this.type = type;
         this.typeId = typeId;
-        this.title = title;
+        this.body = body;
+    }
+
+    @Builder(builderMethodName = "naturalFields")
+    public Notification(long notificationId, Type type, long typeId, String body) {
+        this.notificationId = notificationId;
+        this.type = type;
+        this.typeId = typeId;
         this.body = body;
     }
 }

@@ -3,6 +3,7 @@ package dmu.cheek.member.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.messaging.FirebaseMessagingException;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.kakao.model.KakaoLoginDto;
@@ -10,6 +11,10 @@ import dmu.cheek.kakao.model.KakaoLoginResponseDto;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.*;
 import dmu.cheek.member.repository.MemberRepository;
+import dmu.cheek.noti.model.Notification;
+import dmu.cheek.noti.model.NotificationDto;
+import dmu.cheek.noti.model.Type;
+import dmu.cheek.noti.service.NotificationService;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +40,7 @@ public class MemberService {
     private final S3Service s3Service;
     private final MemberConverter memberConverter;
     private final RedisTemplate<String, Object> redisTemplate;
+    private final NotificationService notificationService;
 
     public boolean isExistMember(String email) {
         return memberRepository.findByEmail(email).isPresent();
@@ -168,17 +174,28 @@ public class MemberService {
             }
         }
 
-        log.info("retrieving top 3 members by upvotes");
+        log.info("retrieving top 3 members by upvote count");
 
         return memberInfoList;
     }
 
     @Transactional
-    public void updateRole(long memberId, String role) {
+    public void updateRole(long memberId, String role) throws FirebaseMessagingException {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         member.updateRole(Role.from(role));
+
+        String notiBody = "멘토 회원 승인이 정상적으로 완료되었어요!";
+
+        notificationService.register(
+                Notification.withoutPrimaryKey()
+                        .type(Type.from("ROLE"))
+                        .typeId(memberId)
+                        .toMember(member)
+                        .body(notiBody)
+                        .build()
+        );
 
         log.info("update member {} role: {} to {}", memberId, member.getRole(), role);
     }

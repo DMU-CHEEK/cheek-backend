@@ -5,8 +5,10 @@ import com.google.firebase.messaging.FirebaseMessagingException;
 import com.google.firebase.messaging.Message;
 import com.google.firebase.messaging.Notification;
 import dmu.cheek.fcm.model.FcmDto;
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
-import dmu.cheek.member.service.MemberService;
+import dmu.cheek.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,29 +21,37 @@ import org.springframework.transaction.annotation.Transactional;
 public class FcmService {
 
     private final FirebaseMessaging firebaseMessaging;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     public void sendNotificationByToken(FcmDto fcmDto) throws FirebaseMessagingException {
-        Member member = memberService.findById(fcmDto.getMemberId());
+        Member member = memberRepository.findById(fcmDto.getMemberId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
-        String message = FirebaseMessaging.getInstance().send(
-                Message.builder()
-                        .setNotification(Notification.builder()
-                                .setTitle(fcmDto.getTitle())
-                                .setBody(fcmDto.getBody())
-                                .build()
-                        )
-                        .setToken(fcmDto.getFirebaseToken())
-                        .build()
-        );
+        if (member.getFirebaseToken() != null) {
 
-        log.info("send notification: {}", message);
+            Message message = Message.builder()
+                    .setNotification(Notification.builder()
+                            .setBody(fcmDto.getBody())
+                            .build()
+                    )
+                    .setToken(fcmDto.getFirebaseToken())
+                    .build();
 
+            try {
+                String response = firebaseMessaging.send(message);
+                log.info("send notification, toMemberId: {}, response: {}", fcmDto.getMemberId(), response);
+            } catch (FirebaseMessagingException e) {
+                log.info("notification delivery failed: {}", e.toString());
+            }
+        } else {
+            throw new BusinessException(ErrorCode.TOKEN_NOT_FOUND);
+        }
     }
 
     @Transactional
     public void registerToken(FcmDto.Token fcmDto) {
-        Member member = memberService.findById(fcmDto.getMemberId());
+        Member member = memberRepository.findById(fcmDto.getMemberId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
         member.setFirebaseToken(fcmDto.getFirebaseToken());
 
         log.info("set firebase token, memberId: {}", member.getMemberId());

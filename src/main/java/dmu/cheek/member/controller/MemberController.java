@@ -1,5 +1,6 @@
 package dmu.cheek.member.controller;
 
+import com.google.firebase.messaging.FirebaseMessagingException;
 import dmu.cheek.kakao.controller.KakaoLoginClient;
 import dmu.cheek.kakao.model.KakaoLoginDto;
 import dmu.cheek.kakao.model.KakaoLoginResponseDto;
@@ -104,8 +105,6 @@ public class MemberController {
         return ResponseEntity.ok(profile);
     }
 
-
-
     @GetMapping("/top-members")
     @Operation(summary = "상위 회원 3명 조회", description = "주간 좋아요 상위 회원 3명 조회 API")
     public ResponseEntity<List> getTop3MembersWithMostUpvotesInWeek() {
@@ -117,7 +116,7 @@ public class MemberController {
     @PostMapping("/role/{memberId}")
     @Operation(summary = "상태(역할) 변경", description = "상태(역할) 변경 API")
     public ResponseEntity<String> updateRole(@PathVariable(name = "memberId") long memberId,
-                                             @RequestParam(name = "role") String role) {
+                                             @RequestParam(name = "role") String role) throws FirebaseMessagingException {
         memberService.checkRole(memberId, Role.valueOf(role)); //TODO: @PreAuthorize 적용
         memberService.updateRole(memberId, role);
 
