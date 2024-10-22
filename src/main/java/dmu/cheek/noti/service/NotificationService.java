@@ -26,12 +26,6 @@ public class NotificationService {
 
         log.info("register notification: {}", registerNoti.getNotificationId());
 
-        fcmService.sendNotificationByToken(
-                FcmDto.builder()
-                        .memberId(notification.getToMember().getMemberId())
-                        .firebaseToken(notification.getToMember().getFirebaseToken())
-                        .body(notification.getBody())
-                .build()
-        );
+        fcmService.sendNotificationByToken(notification);
     }
 }

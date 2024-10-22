@@ -23,23 +23,20 @@ public class FcmService {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
 
-    public void sendNotificationByToken(FcmDto fcmDto) {
-        Member member = memberRepository.findById(fcmDto.getMemberId())
-                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
-
-        if (member.getFirebaseToken() != null) {
+    public void sendNotificationByToken(dmu.cheek.noti.model.Notification notification) {
+        if (notification.getToMember().getFirebaseToken() != null) {
 
             Message message = Message.builder()
                     .setNotification(Notification.builder()
-                            .setBody(fcmDto.getBody())
+                            .setBody(notification.getBody())
                             .build()
                     )
-                    .setToken(fcmDto.getFirebaseToken())
+                    .setToken(notification.getToMember().getFirebaseToken())
                     .build();
 
             try {
                 String response = firebaseMessaging.send(message);
-                log.info("send notification, toMemberId: {}, response: {}", fcmDto.getMemberId(), response);
+                log.info("send notification, toMemberId: {}, response: {}", notification.getToMember().getMemberId(), response);
             } catch (FirebaseMessagingException e) {
                 log.info("notification delivery failed: {}", e.toString());
                 throw new BusinessException(ErrorCode.NOTIFICATION_SENDING_FAILED);

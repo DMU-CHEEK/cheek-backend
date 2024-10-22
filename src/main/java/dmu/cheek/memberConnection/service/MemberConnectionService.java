@@ -7,6 +7,9 @@ import dmu.cheek.member.service.MemberService;
 import dmu.cheek.memberConnection.model.MemberConnection;
 import dmu.cheek.memberConnection.model.MemberConnectionDto;
 import dmu.cheek.memberConnection.repository.MemberConnectionRepository;
+import dmu.cheek.noti.model.Notification;
+import dmu.cheek.noti.model.Type;
+import dmu.cheek.noti.service.NotificationService;
 import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,7 @@ public class MemberConnectionService {
     private final MemberConnectionRepository memberConnectionRepository;
     private final MemberService memberService;
     private final S3Service s3Service;
+    private final NotificationService notificationService;
 
     @Transactional
     public void register(MemberConnectionDto.Request memberConnectionDto) {
@@ -38,7 +42,7 @@ public class MemberConnectionService {
         ).isPresent())
             throw new BusinessException(ErrorCode.DUPLICATED_CONNECTION);
 
-        memberConnectionRepository.save(
+        MemberConnection memberConnection = memberConnectionRepository.save(
                 MemberConnection.withoutPrimaryKey()
                         .toMember(toMember)
                         .fromMember(fromMember)
@@ -46,6 +50,18 @@ public class MemberConnectionService {
         );
 
         log.info("member {} is following member {}", fromMember.getMemberId(), toMember.getMemberId());
+
+        String notiBody = String.format("%s 님이 나를 팔로우했어요.", fromMember.getNickname());
+
+        notificationService.register(
+                Notification.withoutPrimaryKey()
+                        .type(Type.from("MEMBER_CONNECTION"))
+                        .typeId(memberConnection.getMemberConnectionId())
+                        .fromMember(fromMember)
+                        .toMember(toMember)
+                        .body(notiBody)
+                        .build()
+        );
     }
 
     @Transactional

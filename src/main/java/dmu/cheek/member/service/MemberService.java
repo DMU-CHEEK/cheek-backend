@@ -186,6 +186,9 @@ public class MemberService {
 
         member.updateRole(Role.from(role));
 
+        log.info("update member {} role: {} to {}", memberId, member.getRole(), role);
+
+        //send notification
         String notiBody = "멘토 회원 승인이 정상적으로 완료되었어요!";
 
         notificationService.register(
@@ -196,8 +199,6 @@ public class MemberService {
                         .body(notiBody)
                         .build()
         );
-
-        log.info("update member {} role: {} to {}", memberId, member.getRole(), role);
     }
 
     public boolean checkRole(long memberId, Role role) {
