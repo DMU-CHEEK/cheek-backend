@@ -2,6 +2,7 @@ package dmu.cheek.folder.controller;
 
 import dmu.cheek.folder.model.FolderDto;
 import dmu.cheek.folder.service.FolderService;
+import dmu.cheek.story.model.StoryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -32,5 +33,13 @@ public class FolderController {
         folderService.delete(folderId);
 
         return ResponseEntity.ok("ok");
+    }
+
+    @GetMapping("/story/{folderId}")
+    @Operation(summary = "폴더 별 스크랩 스토리 조회", description = "폴더 별 스크랩 스토리 조회 API")
+    public ResponseEntity<List> searchStoryList(@PathVariable(name = "folderId") long folderId) {
+        List<StoryDto.Collection> storyList = folderService.search(folderId);
+
+        return ResponseEntity.ok(storyList);
     }
 }

@@ -12,11 +12,14 @@ import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.question.service.CategoryService;
 import dmu.cheek.story.model.Story;
+import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.service.StoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 @Service

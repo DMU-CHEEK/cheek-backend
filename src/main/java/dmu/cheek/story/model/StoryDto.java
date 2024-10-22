@@ -50,4 +50,12 @@ public class StoryDto {
         private int upvoteCount;
         private MemberDto.Concise memberDto;
     }
+
+    @Getter @Builder
+    public static class Collection {
+        private long collectionId;
+        private long storyId;
+        private String storyPicture;
+        private LocalDateTime modifiedAt;
+    }
 }

@@ -8,6 +8,7 @@ import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.service.S3Service;
+import dmu.cheek.story.model.StoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class FolderService {
         Member member = memberService.findById(memberId);
         List<Folder> folderList = folderRepository.findByMember(member);
 
-        log.info("search folder list, memberId: {]", memberId);
+        log.info("search folder list, memberId: {}", memberId);
 
         return folderList.stream()
                 .map(folder -> FolderDto.Response.builder()
@@ -80,5 +81,22 @@ public class FolderService {
     @Transactional
     public void updateThumbnail(Folder folder, String thumbnailPicture) {
         folder.updateThumbnailPicture(thumbnailPicture);
+    }
+
+    public List<StoryDto.Collection> search(long folderId) {
+        Folder folder = folderRepository.findById(folderId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.FOLDER_NOT_FOUND));
+
+        log.info("retrieve scraped story list, folderId: {}", folderId);
+
+        return folder.getCollectionList().stream()
+                .map(collection -> StoryDto.Collection.builder()
+                        .collectionId(collection.getCollectionId())
+                        .storyId(collection.getStory().getStoryId())
+                        .modifiedAt(collection.getStory().getModifiedAt())
+                        .storyPicture(s3Service.getResourceUrl(collection.getStory().getStoryPicture()))
+                        .build()
+                )
+                .toList();
     }
 }
