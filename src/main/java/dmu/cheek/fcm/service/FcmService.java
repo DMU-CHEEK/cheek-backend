@@ -23,7 +23,7 @@ public class FcmService {
     private final FirebaseMessaging firebaseMessaging;
     private final MemberRepository memberRepository;
 
-    public void sendNotificationByToken(FcmDto fcmDto) throws FirebaseMessagingException {
+    public void sendNotificationByToken(FcmDto fcmDto) {
         Member member = memberRepository.findById(fcmDto.getMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
@@ -42,6 +42,7 @@ public class FcmService {
                 log.info("send notification, toMemberId: {}, response: {}", fcmDto.getMemberId(), response);
             } catch (FirebaseMessagingException e) {
                 log.info("notification delivery failed: {}", e.toString());
+                throw new BusinessException(ErrorCode.NOTIFICATION_SENDING_FAILED);
             }
         } else {
             throw new BusinessException(ErrorCode.TOKEN_NOT_FOUND);

@@ -180,7 +180,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateRole(long memberId, String role) throws FirebaseMessagingException {
+    public void updateRole(long memberId, String role) {
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 

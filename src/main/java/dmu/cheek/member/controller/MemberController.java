@@ -116,7 +116,7 @@ public class MemberController {
     @PostMapping("/role/{memberId}")
     @Operation(summary = "상태(역할) 변경", description = "상태(역할) 변경 API")
     public ResponseEntity<String> updateRole(@PathVariable(name = "memberId") long memberId,
-                                             @RequestParam(name = "role") String role) throws FirebaseMessagingException {
+                                             @RequestParam(name = "role") String role) {
         memberService.checkRole(memberId, Role.valueOf(role)); //TODO: @PreAuthorize 적용
         memberService.updateRole(memberId, role);
 

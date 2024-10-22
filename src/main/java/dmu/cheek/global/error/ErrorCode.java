@@ -55,6 +55,9 @@ public enum ErrorCode {
 
     //Image
     UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "I-001", "failed to upload image"),
+
+    //Notification
+    NOTIFICATION_SENDING_FAILED(HttpStatus.BAD_REQUEST, "N-001", "notification sending failed")
     ;
 
     ErrorCode(HttpStatus httpStatus, String errorCode, String message) {

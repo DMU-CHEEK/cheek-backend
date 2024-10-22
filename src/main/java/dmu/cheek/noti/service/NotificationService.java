@@ -21,7 +21,7 @@ public class NotificationService {
     private final FcmService fcmService;
 
     @Transactional
-    public void register(Notification notification) throws FirebaseMessagingException {
+    public void register(Notification notification) {
         Notification registerNoti = notificationRepository.save(notification);
 
         log.info("register notification: {}", registerNoti.getNotificationId());
