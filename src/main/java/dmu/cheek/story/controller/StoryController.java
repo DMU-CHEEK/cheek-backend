@@ -38,12 +38,12 @@ public class StoryController {
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping("/mentor/{storyId}")
+    @DeleteMapping("/mentor")
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 API")
-    public ResponseEntity<String> delete(@PathVariable(name = "storyId") long storyId) {
+    public ResponseEntity<String> delete(@RequestBody StoryDto.Delete storyDto) {
         //TODO: refactor to create a token
-        if (memberService.checkRole(storyService.findById(storyId).getMember().getMemberId(), Role.MENTOR))
-            storyService.delete(storyId);
+        if (memberService.checkRole(storyDto.getMemberId(), Role.MENTOR))
+            storyService.delete(storyDto);
         else throw new BusinessException(ErrorCode.ACCESS_DENIED);
 
         return ResponseEntity.ok("ok");

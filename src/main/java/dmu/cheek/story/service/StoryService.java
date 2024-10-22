@@ -55,12 +55,19 @@ public class StoryService {
     }
 
     @Transactional
-    public void delete(long storyId) {
-        Story story = storyRepository.findById(storyId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
-        storyRepository.delete(story);
+    public void delete(StoryDto.Delete storyDto) {
+        for (long storyId : storyDto.getStoryIdList()) {
+            Story story = storyRepository.findById(storyId)
+                    .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
 
-        log.info("delete story: {}", story.getStoryId());
+            storyRepository.delete(story);
+        }
+
+        log.info("delete story list");
+    }
+
+    public void deleteOne(long storyId) {
+
     }
 
     public List<StoryDto.ResponseList> searchListByMember(long loginMemberId, long targetMemberId) {

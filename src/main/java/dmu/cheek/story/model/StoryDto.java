@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Builder
@@ -15,6 +16,12 @@ public class StoryDto {
     private String storyPicture;
 
     private String text;
+
+    @Getter
+    public static class Delete {
+        private long memberId;
+        private List<Long> storyIdList;
+    }
 
     @Getter
     public static class Request {
