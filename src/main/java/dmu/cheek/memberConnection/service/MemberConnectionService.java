@@ -51,7 +51,8 @@ public class MemberConnectionService {
 
         log.info("member {} is following member {}", fromMember.getMemberId(), toMember.getMemberId());
 
-        String notiBody = String.format("%s 님이 나를 팔로우했어요.", fromMember.getNickname());
+        //send notification
+        String notiBody = String.format("%s님이 나를 팔로우했어요.", fromMember.getNickname());
 
         notificationService.register(
                 Notification.withoutPrimaryKey()

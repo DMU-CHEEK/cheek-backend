@@ -6,6 +6,9 @@ import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
+import dmu.cheek.noti.model.Notification;
+import dmu.cheek.noti.model.Type;
+import dmu.cheek.noti.service.NotificationService;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.service.CategoryService;
@@ -34,6 +37,7 @@ public class StoryService {
     private final MemberService memberService;
     private final QuestionService questionService;
     private final CategoryService categoryService;
+    private final NotificationService notificationService;
 
     @Transactional
     public void register(MultipartFile storyPicture, StoryDto.Request storyDto) {
@@ -52,6 +56,19 @@ public class StoryService {
 
         storyRepository.save(story);
         log.info("register new story: {}, memberId: {}, questionId: {}", story.getStoryId(), story.getMember().getMemberId(), story.getQuestion().getQuestionId());
+
+        //send notification
+        String notiBody = String.format("%s님이 내 질문에 스토리로 답변했어요.", member.getNickname());
+
+        notificationService.register(
+                Notification.withoutPrimaryKey()
+                        .body(notiBody)
+                        .type(Type.from("STORY"))
+                        .typeId(story.getStoryId())
+                        .fromMember(member)
+                        .toMember(memberService.findById(story.getQuestion().getMember().getMemberId()))
+                        .build()
+        );
     }
 
     @Transactional
