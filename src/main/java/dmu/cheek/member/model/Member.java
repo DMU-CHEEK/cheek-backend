@@ -4,6 +4,7 @@ import dmu.cheek.collection.model.Collection;
 import dmu.cheek.memberConnection.model.MemberConnection;
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
+import dmu.cheek.noti.model.Notification;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.story.model.Story;
 import dmu.cheek.upvote.model.Upvote;
@@ -41,6 +42,12 @@ public class Member extends BaseTimeEntity {
     private Status status;
 
     private String firebaseToken;
+
+    @OneToMany(mappedBy = "toMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Notification> toNotificationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY)
+    private List<Notification> fromNotificationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Question> questionList = new ArrayList<>();
