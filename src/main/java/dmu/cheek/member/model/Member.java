@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +26,10 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
 
+    @Column(unique = true, nullable = false, length = 20)
     private String nickname;
 
+    @Column(unique = true, nullable = false, length = 50)
     private String email;
 
     private String information;
@@ -35,6 +38,10 @@ public class Member extends BaseTimeEntity {
 
     private String profilePicture;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 10 )
+    private MemberType memberType;
+
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
@@ -42,6 +49,10 @@ public class Member extends BaseTimeEntity {
     private Status status;
 
     private String firebaseToken;
+
+    private String refreshToken;
+
+    private LocalDateTime tokenExpirationTime;
 
     @OneToMany(mappedBy = "toMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Notification> toNotificationList = new ArrayList<>();
@@ -70,17 +81,6 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberConnection> fromMemberConnectionList = new ArrayList<>();
 
-
-    @Builder(builderMethodName = "withoutPrimaryKey")
-    public Member(String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
-        this.nickname = nickname;
-        this.email = email;
-        this.information = information;
-        this.description = description;
-        this.profilePicture = profilePicture;
-        this.role = role;
-        this.status = status;
-    }
 
     @Builder(builderMethodName = "withEmail")
     public Member(String email) {

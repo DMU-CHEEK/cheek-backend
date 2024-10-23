@@ -14,6 +14,7 @@ public enum ErrorCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A-002", "expired token"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-003", "invalid token"),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "A-004", "token not found"),
+    NOT_VALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-005", "not valid token"),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-004", "do not have permission to access this resource"),
 
     //Member

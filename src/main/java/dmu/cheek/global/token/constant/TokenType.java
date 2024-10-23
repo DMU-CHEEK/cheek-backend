@@ -1,4 +1,4 @@
-package dmu.cheek.global.token;
+package dmu.cheek.global.token.constant;
 
 public enum TokenType {
 
