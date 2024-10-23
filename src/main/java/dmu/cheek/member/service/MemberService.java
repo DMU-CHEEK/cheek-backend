@@ -3,7 +3,10 @@ package dmu.cheek.member.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.AuthenticationException;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.token.constant.TokenType;
+import dmu.cheek.global.token.service.TokenManager;
 import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.constant.Status;
 import dmu.cheek.oauth.kakao.dto.KakaoLoginDto;
@@ -16,6 +19,7 @@ import dmu.cheek.noti.model.Type;
 import dmu.cheek.noti.service.NotificationService;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +30,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 
@@ -40,6 +45,7 @@ public class MemberService {
     private final MemberConverter memberConverter;
     private final RedisTemplate<String, Object> redisTemplate;
     private final NotificationService notificationService;
+    private final TokenManager tokenManager;
 
     public boolean isExistMember(String email) {
         return memberRepository.findByEmail(email).isPresent();
@@ -222,4 +228,33 @@ public class MemberService {
         return member.getRole() == role;
     }
 
+    public Member findByRefreshToken(String refreshToken) {
+        Member member = memberRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new AuthenticationException(ErrorCode.REFRESH_TOKEN_NOT_FOUND));
+
+        LocalDateTime tokenExpirationTime = member.getTokenExpirationTime();
+
+        if (tokenExpirationTime.isBefore(LocalDateTime.now()))
+            throw new BusinessException(ErrorCode.REFRESH_TOKEN_EXPIRED);
+
+        return member;
+    }
+
+    @Transactional
+    public void logout(String accessToken) {
+        tokenManager.validateToken(accessToken);
+
+        Claims tokenClaims = tokenManager.getTokenClaims(accessToken);
+        String tokenType = tokenClaims.getSubject();
+
+        if (!TokenType.isAccessType(tokenType))
+            throw new AuthenticationException(ErrorCode.NOT_ACCESS_TOKEN_TYPE);
+
+        //refresh token 만료 처리
+        long memberId = Long.valueOf((Integer) tokenClaims.get("memberId"));
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        member.expireRefreshToken(LocalDateTime.now());
+    }
 }

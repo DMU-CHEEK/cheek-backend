@@ -18,6 +18,9 @@ public enum ErrorCode {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-006", "do not have permission to access this resource"),
     NOT_EXIST_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A-007", "not exist authorization"),
     NOT_VALID_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A-008", "not valid Bearer grant type"),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A-009", "refresh token not found"),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A-010", "refresh token expired"),
+    NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-011", "not access token type"),
 
     //Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),

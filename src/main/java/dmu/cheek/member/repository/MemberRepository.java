@@ -16,4 +16,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByNickname(String nickname);
 
     List<Member> findByNicknameContaining(String keyword);
+
+    @Query("select m from Member m where m.refreshToken = :refreshToken")
+    Optional<Member> findByRefreshToken(String refreshToken);
 }

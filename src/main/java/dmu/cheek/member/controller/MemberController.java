@@ -1,7 +1,7 @@
 package dmu.cheek.member.controller;
 
+import dmu.cheek.global.util.AuthorizationHeaderUtils;
 import dmu.cheek.oauth.kakao.client.KakaoLoginClient;
-import dmu.cheek.oauth.kakao.dto.KakaoLoginDto;
 import dmu.cheek.oauth.kakao.dto.KakaoLoginResponseDto;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.MemberDto;
@@ -16,11 +16,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -137,5 +135,17 @@ public class MemberController {
         boolean result = memberService.checkRole(memberId, Role.valueOf(role));
 
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest httpServletRequest) {
+        String authorization = httpServletRequest.getHeader("Authorization");
+        AuthorizationHeaderUtils.validateAuthorization(authorization);
+
+        String accessToken = authorization.split(" ")[1];
+
+        memberService.logout(accessToken);
+
+        return ResponseEntity.ok("ok");
     }
 }

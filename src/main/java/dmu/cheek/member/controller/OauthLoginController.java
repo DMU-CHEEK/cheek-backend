@@ -1,10 +1,12 @@
 package dmu.cheek.member.controller;
 
+import dmu.cheek.global.util.AuthorizationHeaderUtils;
 import dmu.cheek.member.constant.MemberType;
 import dmu.cheek.member.model.OauthLoginDto;
 import dmu.cheek.member.service.OauthLoginService;
 import dmu.cheek.member.validator.OauthValidator;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public class OauthLoginController {
                                                              HttpServletRequest httpServletRequest) {
 
         String authorization = httpServletRequest.getHeader("Authorization");
-        oauthValidator.validateAuthorization(authorization);
+        AuthorizationHeaderUtils.validateAuthorization(authorization);
         oauthValidator.validateMemberType(oauthLoginRequestDto.getMemberType());
 
         String accessToken = authorization.split(" ")[1];

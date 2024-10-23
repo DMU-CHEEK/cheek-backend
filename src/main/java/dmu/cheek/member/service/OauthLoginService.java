@@ -6,7 +6,6 @@ import dmu.cheek.member.constant.MemberType;
 import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.OauthLoginDto;
-import dmu.cheek.oauth.kakao.dto.KakaoLoginResponseDto;
 import dmu.cheek.oauth.model.OAuthAttributes;
 import dmu.cheek.oauth.service.SocialLoginApiService;
 import dmu.cheek.oauth.service.SocialLoginApiServiceFactory;
@@ -47,6 +46,7 @@ public class OauthLoginService {
             //토큰 생성
             jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
             member.updateRefreshToken(jwtTokenDto);
+
         } else { //기존 회원
             Member member = existMember.get();
 
@@ -57,5 +57,6 @@ public class OauthLoginService {
 
         return OauthLoginDto.Response.of(jwtTokenDto);
     }
+
 
 }
