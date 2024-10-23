@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.Optional;
 
@@ -31,6 +32,7 @@ public class OauthLoginService {
         OAuthAttributes userInfo = socialLoginApiService.getUserInfo(accessToken);
 
         JwtTokenDto jwtTokenDto;
+        boolean isProfileComplete;
 
         Optional<Member> existMember = memberService.findByEmailOrNull(userInfo.getEmail());
 
@@ -42,6 +44,7 @@ public class OauthLoginService {
                     .build();
 
             member = memberService.register(member); //가입
+            isProfileComplete = StringUtils.hasText(member.getNickname()) && StringUtils.hasText(member.getInformation());
 
             //토큰 생성
             jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
@@ -49,13 +52,15 @@ public class OauthLoginService {
 
         } else { //기존 회원
             Member member = existMember.get();
+            isProfileComplete = StringUtils.hasText(member.getNickname()) && StringUtils.hasText(member.getInformation());
+
 
             //토큰 생성
             jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
             member.updateRefreshToken(jwtTokenDto);
         }
 
-        return OauthLoginDto.Response.of(jwtTokenDto);
+        return OauthLoginDto.Response.of(jwtTokenDto, isProfileComplete);
     }
 
 

@@ -33,36 +33,6 @@ public class MemberController {
     private final MemberConverter memberConverter;
     private final S3Service s3Service;
 
-//    @PostMapping("/login")
-//    @Operation(summary = "로그인", description = "로그인(회원가입) API")
-//    public ResponseEntity<Boolean> loginController(@RequestBody KakaoLoginDto.Request requestDto,
-//                                                  HttpServletRequest httpServletResponse) throws ParseException {
-//        String authorization = httpServletResponse.getHeader("Authorization");
-//        log.info("Authorization: {}", authorization);
-//
-//        String contentType = "application/x-www-form-urlencoded/charset=utf-8";
-//        KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, authorization);
-//
-//        boolean isNewMember = memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail());
-//
-//        if (!isNewMember) {
-//            log.info("member does not exist, registering new member");
-//            memberService.register(kakaoLoginResponseDto);
-//        } else {
-//            log.info("member already exists, logging in");
-//            KakaoLoginDto.Response loginResponse = memberService.login(requestDto, kakaoLoginResponseDto);
-//
-//            if (!ObjectUtils.isEmpty(loginResponse.getNickname()) && !ObjectUtils.isEmpty(loginResponse.getInformation()))
-//                log.info("profile is complete");
-//            else
-//                log.info("profile is not complete");
-//        }
-//
-//        // TODO: token 발급 로직
-//
-//        return ResponseEntity.ok(isNewMember);
-//    }
-
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "프로필 설정", description = "회원 등록 시 프로필 설정 API")
     public ResponseEntity<String> setProfile(@RequestPart(value = "profileDto") ProfileDto profileDto,
@@ -138,6 +108,7 @@ public class MemberController {
     }
 
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃", description = "로그아웃 API")
     public ResponseEntity<String> logout(HttpServletRequest httpServletRequest) {
         String authorization = httpServletRequest.getHeader("Authorization");
         AuthorizationHeaderUtils.validateAuthorization(authorization);

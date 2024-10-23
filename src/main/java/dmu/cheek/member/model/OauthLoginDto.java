@@ -29,13 +29,16 @@ public class OauthLoginDto {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
         private Date refreshTokenExpireTime;
 
-        public static Response of(JwtTokenDto jwtTokenDto) {
+        private boolean isProfileComplete;
+
+        public static Response of(JwtTokenDto jwtTokenDto, boolean isProfileComplete) {
             return Response.builder()
                     .grantType(jwtTokenDto.getGrantType())
                     .accessToken(jwtTokenDto.getAccessToken())
                     .accessTokenExpireTime(jwtTokenDto.getAccessTokenExpireTime())
                     .refreshToken(jwtTokenDto.getRefreshToken())
                     .refreshTokenExpireTime(jwtTokenDto.getRefreshTokenExpireTime())
+                    .isProfileComplete(isProfileComplete)
                     .build();
         }
     }
