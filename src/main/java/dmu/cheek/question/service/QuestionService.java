@@ -6,10 +6,8 @@ import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
-import dmu.cheek.member.model.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.converter.CategoryConverter;
-import dmu.cheek.question.converter.QuestionConverter;
 import dmu.cheek.question.model.Category;
 import dmu.cheek.question.model.Question;
 import dmu.cheek.question.model.QuestionDto;
@@ -20,9 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

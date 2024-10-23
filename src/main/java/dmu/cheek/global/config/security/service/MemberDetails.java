@@ -1,6 +1,6 @@
 package dmu.cheek.global.config.security.service;
 
-import dmu.cheek.member.model.Role;
+import dmu.cheek.member.constant.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

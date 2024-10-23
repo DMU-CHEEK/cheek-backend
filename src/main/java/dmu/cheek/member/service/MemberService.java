@@ -1,18 +1,17 @@
 package dmu.cheek.member.service;
 
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.firebase.messaging.FirebaseMessagingException;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
-import dmu.cheek.kakao.model.KakaoLoginDto;
-import dmu.cheek.kakao.model.KakaoLoginResponseDto;
+import dmu.cheek.member.constant.Role;
+import dmu.cheek.member.constant.Status;
+import dmu.cheek.oauth.kakao.dto.KakaoLoginDto;
+import dmu.cheek.oauth.kakao.dto.KakaoLoginResponseDto;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.*;
 import dmu.cheek.member.repository.MemberRepository;
 import dmu.cheek.noti.model.Notification;
-import dmu.cheek.noti.model.NotificationDto;
 import dmu.cheek.noti.model.Type;
 import dmu.cheek.noti.service.NotificationService;
 import dmu.cheek.s3.model.S3Dto;
@@ -46,16 +45,19 @@ public class MemberService {
         return memberRepository.findByEmail(email).isPresent();
     }
 
+    public Optional<Member> findByEmailOrNull(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
 
     @Transactional
-    public void register(KakaoLoginResponseDto kakaoLoginResponseDto) {
-        Member member = Member.withEmail()
-                .email(kakaoLoginResponseDto.getKakaoAccount().getEmail())
-                .build();
+    public Member register(Member member) {
 
-        memberRepository.save(member);
+        Member registerMember = memberRepository.save(member);
 
         log.info("save member: {}", member.getEmail());
+
+        return registerMember;
     }
 
     @Transactional

@@ -1,7 +1,7 @@
 package dmu.cheek.global.interceptor;
 
-import dmu.cheek.kakao.controller.KakaoLoginClient;
-import dmu.cheek.kakao.model.KakaoTokenInfoDto;
+import dmu.cheek.oauth.kakao.client.KakaoLoginClient;
+import dmu.cheek.oauth.kakao.dto.KakaoTokenInfoDto;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;

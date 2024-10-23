@@ -1,6 +1,11 @@
 package dmu.cheek.member.model;
 
 import dmu.cheek.collection.model.Collection;
+import dmu.cheek.global.token.dto.JwtTokenDto;
+import dmu.cheek.global.util.DateTimeUtils;
+import dmu.cheek.member.constant.MemberType;
+import dmu.cheek.member.constant.Role;
+import dmu.cheek.member.constant.Status;
 import dmu.cheek.memberConnection.model.MemberConnection;
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
@@ -82,7 +87,7 @@ public class Member extends BaseTimeEntity {
     private List<MemberConnection> fromMemberConnectionList = new ArrayList<>();
 
 
-    @Builder(builderMethodName = "withEmail")
+    @Builder(builderMethodName = "withEmail") //TODO: delete
     public Member(String email) {
         this.email = email;
     }
@@ -99,6 +104,12 @@ public class Member extends BaseTimeEntity {
         this.status = status;
     }
 
+    @Builder(builderMethodName = "joinBuilder")
+    public Member(MemberType memberType, String email, Role role) {
+        this.memberType = memberType;
+        this.email = email;
+        this.role = role;
+    }
 
     public void setProfile(String nickname, String information, Role role, Status status) {
         this.nickname = nickname;
@@ -123,5 +134,10 @@ public class Member extends BaseTimeEntity {
 
     public void setFirebaseToken(String firebaseToken) {
         this.firebaseToken = firebaseToken;
+    }
+
+    public void updateRefreshToken(JwtTokenDto jwtTokenDto) {
+        this.refreshToken = jwtTokenDto.getRefreshToken();
+        this.tokenExpirationTime = DateTimeUtils.convertToLocalDateTime(jwtTokenDto.getRefreshTokenExpireTime());
     }
 }

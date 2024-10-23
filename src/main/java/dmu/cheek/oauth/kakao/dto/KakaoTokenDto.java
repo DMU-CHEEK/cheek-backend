@@ -1,4 +1,4 @@
-package dmu.cheek.kakao.model;
+package dmu.cheek.oauth.kakao.dto;
 
 import lombok.Builder;
 import lombok.Data;

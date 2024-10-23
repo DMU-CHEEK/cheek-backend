@@ -1,17 +1,16 @@
-package dmu.cheek.kakao.controller;
+package dmu.cheek.oauth.kakao.controller;
 
-import dmu.cheek.kakao.model.KakaoLoginResponseDto;
-import dmu.cheek.kakao.model.KakaoTokenDto;
-import dmu.cheek.kakao.model.KakaoTokenInfoDto;
+import dmu.cheek.oauth.kakao.dto.KakaoLoginResponseDto;
+import dmu.cheek.oauth.kakao.dto.KakaoTokenDto;
+import dmu.cheek.oauth.kakao.dto.KakaoTokenInfoDto;
 import dmu.cheek.member.service.MemberService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import dmu.cheek.oauth.kakao.client.KakaoLoginClient;
+import dmu.cheek.oauth.kakao.client.KakaoTokenClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 
@@ -58,8 +57,8 @@ public class KakaoLoginController {
 
         KakaoLoginResponseDto kakaoLoginResponseDto = kakaoLoginClient.getKakaoUserInfo(contentType, accessToken);
 
-        if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail()))
-            memberService.register(kakaoLoginResponseDto);
+//        if (!memberService.isExistMember(kakaoLoginResponseDto.getKakaoAccount().getEmail()))
+//            memberService.register(kakaoLoginResponseDto);
 
 //        response.sendRedirect(UriComponentsBuilder
 //                .fromUriString("http://localhost:3000/kakao/login/callback")

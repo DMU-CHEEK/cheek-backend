@@ -2,7 +2,7 @@ package dmu.cheek.story.controller;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
-import dmu.cheek.member.model.Role;
+import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.service.StoryService;

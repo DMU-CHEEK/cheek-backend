@@ -15,11 +15,14 @@ public enum ErrorCode {
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-003", "invalid token"),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "A-004", "token not found"),
     NOT_VALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-005", "not valid token"),
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-004", "do not have permission to access this resource"),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-006", "do not have permission to access this resource"),
+    NOT_EXIST_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A-007", "not exist authorization"),
+    NOT_VALID_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A-008", "not valid Bearer grant type"),
 
     //Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),
     MENTEE_NOT_AVAILABLE(HttpStatus.BAD_REQUEST, "M-002", "mentee not available"),
+    INVALID_MEMBER_TYPE(HttpStatus.BAD_REQUEST, "M-003", "invalid member type"),
 
     //Member Connection
     CONNECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "member connection not found"),

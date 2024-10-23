@@ -1,7 +1,7 @@
-package dmu.cheek.kakao.model;
+package dmu.cheek.oauth.kakao.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import dmu.cheek.member.model.Role;
+import dmu.cheek.member.constant.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

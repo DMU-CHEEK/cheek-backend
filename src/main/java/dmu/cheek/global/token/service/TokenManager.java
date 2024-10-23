@@ -2,19 +2,15 @@ package dmu.cheek.global.token.service;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.AuthenticationException;
-import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.token.constant.GrantType;
 import dmu.cheek.global.token.constant.TokenType;
-import dmu.cheek.global.token.dto.JwtProperties;
 import dmu.cheek.global.token.dto.JwtTokenDto;
-import dmu.cheek.member.model.Role;
+import dmu.cheek.member.constant.Role;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Signature;
-import java.security.SignatureException;
 import java.util.Date;
 
 @Slf4j
@@ -23,7 +19,7 @@ public class TokenManager {
 
     private final String accessTokenExpirationTime;
     private final String refreshTokenExpirationTime;
-    private final String  tokenSecret;
+    private final String tokenSecret;
 
     public JwtTokenDto createJwtTokenDto(long memberId, Role role) {
         Date accessTokenExpireTime = createAccessTokenExpireTime();
@@ -100,10 +96,10 @@ public class TokenManager {
     }
 
     public Claims getTokenClaims(String token) {
-        Claims claims = null;
+        Claims claims;
 
         try {
-            Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
+            claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
                     .parseClaimsJws(token).getBody();
         } catch (Exception e) {
             log.info("유효하지 않은 토큰입니다.");
