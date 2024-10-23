@@ -11,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -27,5 +29,21 @@ public class NotificationService {
         log.info("register notification: {}", registerNoti.getNotificationId());
 
         fcmService.sendNotificationByToken(notification);
+    }
+
+    public List<NotificationDto> getList(long memberId) {
+        List<NotificationDto> notificationList = notificationRepository.findByToMemberId(memberId)
+                .stream()
+                .map(notification -> NotificationDto.builder()
+                        .notificationId(notification.getNotificationId())
+                        .type(notification.getType())
+                        .typeId(notification.getTypeId())
+                        .body(notification.getBody())
+                        .build()
+                ).toList();
+
+        log.info("get notification list, memberId: {}", memberId);
+
+        return notificationList;
     }
 }

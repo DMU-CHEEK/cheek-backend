@@ -19,4 +19,9 @@ public class NotificationDto {
         this.type = type;
         this.typeId = typeId;
     }
+
+    public static class Response {
+        private long notificationId;
+        private String body;
+    }
 }
