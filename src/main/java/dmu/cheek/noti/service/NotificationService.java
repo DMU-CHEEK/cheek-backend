@@ -1,7 +1,5 @@
 package dmu.cheek.noti.service;
 
-import com.google.firebase.messaging.FirebaseMessagingException;
-import dmu.cheek.fcm.model.FcmDto;
 import dmu.cheek.fcm.service.FcmService;
 import dmu.cheek.noti.model.Notification;
 import dmu.cheek.noti.model.NotificationDto;
@@ -45,5 +43,19 @@ public class NotificationService {
         log.info("get notification list, memberId: {}", memberId);
 
         return notificationList;
+    }
+
+    @Transactional
+    public void deleteOne(long notificationId) {
+        notificationRepository.deleteById(notificationId);
+
+        log.info("delete single notification: {}", notificationId);
+    }
+
+    @Transactional
+    public void deleteAll(long memberId) {
+        notificationRepository.deleteAllByToMemberId(memberId);
+
+        log.info("delete batch notification: {}", memberId);
     }
 }

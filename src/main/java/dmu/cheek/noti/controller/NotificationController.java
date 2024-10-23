@@ -36,4 +36,20 @@ public class NotificationController {
 
         return ResponseEntity.ok(notificationDtoList);
     }
+
+    @DeleteMapping("/{notificationId}")
+    @Operation(summary = "알림 단건 삭제", description = "알림 단건 삭제 API")
+    public ResponseEntity<String> deleteOne(@PathVariable(name = "notificationId") long notificationId) {
+        notificationService.deleteOne(notificationId);
+
+        return ResponseEntity.ok("ok");
+    }
+
+    @DeleteMapping("/member/{memberId}")
+    @Operation(summary = "알림 전체 삭제", description = "알림 전체 삭제 API")
+    public ResponseEntity<String> deleteAll(@PathVariable(name = "memberId") long memberId) {
+        notificationService.deleteAll(memberId);
+
+        return ResponseEntity.ok("ok");
+    }
 }

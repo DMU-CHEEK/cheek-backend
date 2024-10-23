@@ -10,4 +10,7 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
 
     @Query("select n from Notification n where n.toMember.memberId = :memberId")
     List<Notification> findByToMemberId(long memberId);
+
+    @Query("select n from Notification n where n.toMember.memberId = :memberId")
+    void deleteAllByToMemberId(long memberId);
 }
