@@ -77,6 +77,15 @@ public class MemberController {
         return ResponseEntity.ok("ok");
     }
 
+    @PatchMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @Operation(summary = "프로필 수정", description = "프로필 수정 API")
+    public ResponseEntity<String> updateProfile(@RequestPart(value = "profileDto") ProfileDto.Update profileDto,
+                                                @RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture) {
+        memberService.updateProfile(profileDto, profilePicture);
+
+        return ResponseEntity.ok("ok");
+    }
+
     @GetMapping("check-nickname")
     @Operation(summary = "닉네임 유효성 검증", description = "닉네임 유효성 검증 API")
     public ResponseEntity<Boolean> checkNicknameValidity(@RequestParam(name = "nickname") String nickname) {

@@ -38,5 +38,13 @@ public class ProfileDto {
         private int followerCnt;
         private int followingCnt;
     }
+
+    @Getter
+    public static class Update {
+        private long memberId;
+        private String nickname;
+        private String information;
+        private String description;
+    }
 }
 
