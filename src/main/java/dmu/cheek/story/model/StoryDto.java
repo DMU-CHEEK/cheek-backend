@@ -19,14 +19,12 @@ public class StoryDto {
 
     @Getter
     public static class Delete {
-        private long memberId;
         private List<Long> storyIdList;
     }
 
     @Getter
     public static class Request {
         private long categoryId;
-        private long memberId;
         private long questionId;
         private String text;
     }

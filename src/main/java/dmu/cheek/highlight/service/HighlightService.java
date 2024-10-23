@@ -2,6 +2,7 @@ package dmu.cheek.highlight.service;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.model.HighlightStory;
@@ -36,8 +37,8 @@ public class HighlightService {
     private final HighlightStoryRepository highlightStoryRepository;
 
     @Transactional
-    public void register(HighlightDto.Request highlightDto) {
-        Member member = memberService.findById(highlightDto.getMemberId());
+    public void register(HighlightDto.Request highlightDto, MemberInfoDto memberInfoDto) {
+        Member member = memberService.findById(memberInfoDto.getMemberId());
         List<Story> storyList = highlightDto.getStoryIdList().stream()
                 .map(storyService::findById)
                 .toList();
@@ -62,7 +63,7 @@ public class HighlightService {
 
         highlightStoryRepository.saveAll(highlightStoryList);
 
-        log.info("register new highlight: {}, memberId: {}", highlight.getHighlightId(), highlightDto.getMemberId());
+        log.info("register new highlight: {}, memberId: {}", highlight.getHighlightId(), memberInfoDto.getMemberId());
     }
 
     @Transactional

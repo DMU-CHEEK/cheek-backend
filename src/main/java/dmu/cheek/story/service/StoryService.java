@@ -3,6 +3,8 @@ package dmu.cheek.story.service;
 import dmu.cheek.feed.model.FeedDto;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
@@ -40,8 +42,8 @@ public class StoryService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void register(MultipartFile storyPicture, StoryDto.Request storyDto) {
-        Member member = memberService.findById(storyDto.getMemberId());
+    public void register(MultipartFile storyPicture, StoryDto.Request storyDto, MemberInfoDto memberInfoDto) {
+        Member member = memberService.findById(memberInfoDto.getMemberId());
         Question question = questionService.findById(storyDto.getQuestionId());
         Category category = categoryService.findById(storyDto.getCategoryId());
 

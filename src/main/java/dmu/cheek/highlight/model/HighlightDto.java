@@ -23,8 +23,6 @@ public class HighlightDto {
     public static class Request {
         private List<Long> storyIdList;
 
-        private long memberId;
-
         private String thumbnailPicture;
 
         @Size(max = 8, message = "subject must be between 1 and 8 characters")

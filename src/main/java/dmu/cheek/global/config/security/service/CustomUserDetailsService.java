@@ -1,5 +1,7 @@
 package dmu.cheek.global.config.security.service;
 
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +25,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        return memberRepository.findByEmail(email).map(this::createUser)
-                .orElseThrow(() -> new UsernameNotFoundException("user not found"));
+        return memberRepository.findByEmail(email)
+                .map(this::createUser)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    // memberId로 사용자 정보를 로드하는 메서드 추가
+    public UserDetails loadUserByMemberId(Long memberId) throws UsernameNotFoundException {
+        return memberRepository.findById(memberId)
+                .map(this::createUser)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
     }
 
     private User createUser(Member member) {
@@ -32,6 +42,6 @@ public class CustomUserDetailsService implements UserDetailsService {
                 new SimpleGrantedAuthority(ROLE_PREFIX + member.getRole().name())
         );
 
-        return new User(member.getEmail(), null, grantedAuthorities);
+        return new User(member.getEmail(), "", grantedAuthorities);
     }
 }

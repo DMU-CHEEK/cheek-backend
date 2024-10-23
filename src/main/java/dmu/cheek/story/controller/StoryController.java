@@ -2,6 +2,8 @@ package dmu.cheek.story.controller;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.story.model.StoryDto;
@@ -11,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,25 +29,22 @@ public class StoryController {
     private final StoryService storyService;
     private final MemberService memberService;
 
-    @PostMapping("/mentor")
+    @PostMapping()
+    @PreAuthorize("hasRole('MENTOR')")
     @Operation(summary = "스토리 등록", description = "스토리 등록 API")
     public ResponseEntity<String> register(@RequestPart(value = "storyPicture") MultipartFile storyPicture,
-                                           @RequestPart(value = "storyDto") StoryDto.Request storyDto) {
-        //TODO: refactor to create a token
-        if (memberService.checkRole(storyDto.getMemberId(), Role.MENTOR))
-            storyService.register(storyPicture, storyDto);
-        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
+                                           @RequestPart(value = "storyDto") StoryDto.Request storyDto,
+                                           @MemberInfo MemberInfoDto memberInfoDto) {
+        storyService.register(storyPicture, storyDto, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping("/mentor")
+    @DeleteMapping()
+    @PreAuthorize("hasRole('MENTOR')")
     @Operation(summary = "스토리 삭제", description = "스토리 삭제 API")
     public ResponseEntity<String> delete(@RequestBody StoryDto.Delete storyDto) {
-        //TODO: refactor to create a token
-        if (memberService.checkRole(storyDto.getMemberId(), Role.MENTOR))
-            storyService.delete(storyDto);
-        else throw new BusinessException(ErrorCode.ACCESS_DENIED);
+        storyService.delete(storyDto);
 
         return ResponseEntity.ok("ok");
     }

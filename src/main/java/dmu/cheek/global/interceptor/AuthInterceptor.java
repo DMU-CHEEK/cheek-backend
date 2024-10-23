@@ -1,5 +1,6 @@
 package dmu.cheek.global.interceptor;
 
+import dmu.cheek.global.config.security.service.CustomUserDetailsService;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.AuthenticationException;
 import dmu.cheek.global.token.constant.TokenType;
@@ -13,6 +14,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -24,6 +28,8 @@ public class AuthInterceptor implements HandlerInterceptor {
     private KakaoLoginClient kakaoLoginClient;
     @Autowired
     private TokenManager tokenManager;
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     private boolean isSwaggerRequest(HttpServletRequest request) {
         String uri = request.getRequestURI();
@@ -39,11 +45,24 @@ public class AuthInterceptor implements HandlerInterceptor {
         Claims tokenClaims = tokenManager.getTokenClaims(accessToken);
         String tokenType = tokenClaims.getSubject();
 
-        if (!TokenType.isAccessType(tokenType))
+        if (!TokenType.isAccessType(tokenType)) {
             throw new AuthenticationException(ErrorCode.NOT_ACCESS_TOKEN_TYPE);
+        }
+
+        // 멤버 ID를 사용하여 사용자 정보를 조회
+        Long memberId = tokenClaims.get("memberId", Long.class);
+        UserDetails userDetails = userDetailsService.loadUserByMemberId(memberId);
+
+        // SecurityContextHolder에 인증 정보 설정
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                userDetails, null, userDetails.getAuthorities()
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return true;
     }
+
+
 
     private String getTokenFromRequest(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
