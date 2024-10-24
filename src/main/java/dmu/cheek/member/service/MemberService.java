@@ -47,14 +47,9 @@ public class MemberService {
     private final NotificationService notificationService;
     private final TokenManager tokenManager;
 
-    public boolean isExistMember(String email) {
-        return memberRepository.findByEmail(email).isPresent();
-    }
-
     public Optional<Member> findByEmailOrNull(String email) {
         return memberRepository.findByEmail(email);
     }
-
 
     @Transactional
     public Member register(Member member) {
@@ -220,12 +215,6 @@ public class MemberService {
                         .body(notiBody)
                         .build()
         );
-    }
-
-    public boolean checkRole(long memberId, Role role) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCESS_DENIED));
-        return member.getRole() == role;
     }
 
     public Member findByRefreshToken(String refreshToken) {

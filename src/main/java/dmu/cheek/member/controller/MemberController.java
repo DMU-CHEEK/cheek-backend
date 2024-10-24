@@ -92,19 +92,9 @@ public class MemberController {
     @Operation(summary = "상태(역할) 변경", description = "상태(역할) 변경 API")
     public ResponseEntity<String> updateRole(@PathVariable(name = "memberId") long memberId,
                                              @RequestParam(name = "role") String role) {
-        memberService.checkRole(memberId, Role.valueOf(role)); //TODO: @PreAuthorize 적용
         memberService.updateRole(memberId, role);
 
         return ResponseEntity.ok("ok");
-    }
-
-    @PostMapping("/role/check/{memberId}")
-    @Operation(summary = "역할 검증", description = "역할 검증 API(임시)")
-    public ResponseEntity<Boolean> checkRole(@PathVariable(name = "memberId") long memberId,
-                                             @RequestParam(name = "role") String role) {
-        boolean result = memberService.checkRole(memberId, Role.valueOf(role));
-
-        return ResponseEntity.ok(result);
     }
 
     @PostMapping("/logout")
