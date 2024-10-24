@@ -91,7 +91,7 @@ public class HighlightService {
                 ).toList();
     }
 
-    public HighlightDto.Response search(long highlightId, long loginMemberId) {
+    public HighlightDto.Response search(long highlightId) {
         Highlight highlight = highlightRepository.findById(highlightId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 

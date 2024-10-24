@@ -2,6 +2,8 @@ package dmu.cheek.noti.controller;
 
 import dmu.cheek.fcm.model.FcmDto;
 import dmu.cheek.fcm.service.FcmService;
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.noti.model.NotificationDto;
 import dmu.cheek.noti.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,16 +25,17 @@ public class NotificationController {
 
     @PostMapping("/token")
     @Operation(summary = "토큰 등록", description = "Firebase 토큰 등록 API")
-    public ResponseEntity<String> registerToken(@RequestBody FcmDto.Token fcmDto) {
-        fcmService.registerToken(fcmDto);
+    public ResponseEntity<String> registerToken(@RequestBody FcmDto.Token fcmDto,
+                                                @MemberInfo MemberInfoDto memberInfoDto) {
+        fcmService.registerToken(fcmDto, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }
 
-    @GetMapping("/{memberId}")
+    @GetMapping()
     @Operation(summary = "알림 목록 조회", description = "알림 목록 조회 API")
-    public ResponseEntity<List> getList(@PathVariable(name = "memberId") long memberId) {
-        List<NotificationDto> notificationDtoList = notificationService.getList(memberId);
+    public ResponseEntity<List> getList(@MemberInfo MemberInfoDto memberInfoDto) {
+        List<NotificationDto> notificationDtoList = notificationService.getList(memberInfoDto);
 
         return ResponseEntity.ok(notificationDtoList);
     }
@@ -45,10 +48,10 @@ public class NotificationController {
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping("/member/{memberId}")
+    @DeleteMapping()
     @Operation(summary = "알림 전체 삭제", description = "알림 전체 삭제 API")
-    public ResponseEntity<String> deleteAll(@PathVariable(name = "memberId") long memberId) {
-        notificationService.deleteAll(memberId);
+    public ResponseEntity<String> deleteAll(@MemberInfo MemberInfoDto memberInfoDto) {
+        notificationService.deleteAll(memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }

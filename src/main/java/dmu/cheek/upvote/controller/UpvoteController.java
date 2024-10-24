@@ -1,5 +1,7 @@
 package dmu.cheek.upvote.controller;
 
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.upvote.model.UpvoteDto;
 import dmu.cheek.upvote.service.UpvoteService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +24,10 @@ public class UpvoteController {
 
     @PostMapping()
     @Operation(summary = "좋아요 등록/삭제", description = "좋아요 등록/삭제 API")
-    public ResponseEntity<String> upvote(@RequestBody UpvoteDto.Request upvoteDto) {
+    public ResponseEntity<String> upvote(@RequestBody UpvoteDto.Request upvoteDto,
+                                         @MemberInfo MemberInfoDto memberInfoDto) {
 
-        upvoteService.toggleUpvote(upvoteDto);
+        upvoteService.toggleUpvote(upvoteDto, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }

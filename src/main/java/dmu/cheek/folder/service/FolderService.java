@@ -5,6 +5,7 @@ import dmu.cheek.folder.model.FolderDto;
 import dmu.cheek.folder.repository.FolderRepository;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.service.S3Service;
@@ -63,11 +64,11 @@ public class FolderService {
         log.info("delete folder, memberId: {}", folder.getMember().getMemberId(), folder.getFolderId());
     }
 
-    public List<FolderDto.Response> findDtoByMember(long memberId) {
-        Member member = memberService.findById(memberId);
+    public List<FolderDto.Response> findDtoByMember(MemberInfoDto memberInfoDto) {
+        Member member = memberService.findById(memberInfoDto.getMemberId());
         List<Folder> folderList = folderRepository.findByMember(member);
 
-        log.info("search folder list, memberId: {}", memberId);
+        log.info("search folder list, memberId: {}", memberInfoDto.getMemberId());
 
         return folderList.stream()
                 .map(folder -> FolderDto.Response.builder()

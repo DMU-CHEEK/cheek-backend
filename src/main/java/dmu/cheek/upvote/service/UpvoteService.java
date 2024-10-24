@@ -1,5 +1,6 @@
 package dmu.cheek.upvote.service;
 
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.noti.model.Notification;
@@ -32,8 +33,8 @@ public class UpvoteService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void toggleUpvote(UpvoteDto.Request upvoteDto) {
-        Member member = memberService.findById(upvoteDto.getMemberId());
+    public void toggleUpvote(UpvoteDto.Request upvoteDto, MemberInfoDto memberInfoDto) {
+        Member member = memberService.findById(memberInfoDto.getMemberId());
         Story story = storyService.findById(upvoteDto.getStoryId());
 
         Upvote upvote = upvoteRepository.findByStoryAndMember(member, story)

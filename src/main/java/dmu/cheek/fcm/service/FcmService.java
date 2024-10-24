@@ -7,6 +7,7 @@ import com.google.firebase.messaging.Notification;
 import dmu.cheek.fcm.model.FcmDto;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,8 +48,8 @@ public class FcmService {
     }
 
     @Transactional
-    public void registerToken(FcmDto.Token fcmDto) {
-        Member member = memberRepository.findById(fcmDto.getMemberId())
+    public void registerToken(FcmDto.Token fcmDto, MemberInfoDto memberInfoDto) {
+        Member member = memberRepository.findById(memberInfoDto.getMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
         member.setFirebaseToken(fcmDto.getFirebaseToken());
 

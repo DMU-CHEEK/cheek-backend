@@ -52,10 +52,8 @@ public class StoryController {
     @GetMapping("/member/{targetMemberId}")
     @Operation(summary = "스토리 리스트 조회", description = "특정 유저의 스토리 리스트 조회 API")
     public ResponseEntity<List> searchByMember(@PathVariable(name = "targetMemberId") long targetMemberId,
-                                               @RequestParam(name = "loginMemberId") long loginMemberId) {
-
-        //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
-        List<StoryDto.ResponseList> storyList = storyService.searchListByMember(loginMemberId, targetMemberId);
+                                               @MemberInfo MemberInfoDto memberInfoDto) {
+        List<StoryDto.ResponseList> storyList = storyService.searchListByMember(memberInfoDto, targetMemberId);
 
         return ResponseEntity.ok(storyList);
     }
@@ -63,8 +61,8 @@ public class StoryController {
     @GetMapping("/{storyId}")
     @Operation(summary = "스토리 조회", description = "특정 유저의 스토리 단건 조회 API")
     public ResponseEntity<StoryDto.ResponseOne> search(@PathVariable(name = "storyId") long storyId,
-                                                    @RequestParam(name = "loginMemberId") long loginMemberId) {
-        StoryDto.ResponseOne storyDto = storyService.searchByMember(storyId, loginMemberId);
+                                                       @MemberInfo MemberInfoDto memberInfoDto) {
+        StoryDto.ResponseOne storyDto = storyService.searchByMember(storyId, memberInfoDto);
 
         return ResponseEntity.ok(storyDto);
     }

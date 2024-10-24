@@ -89,8 +89,7 @@ public class StoryService {
 
     }
 
-    public List<StoryDto.ResponseList> searchListByMember(long loginMemberId, long targetMemberId) {
-        //loginMemberId: 조회하는 유저, targetMemberId: 스토리를 조회할 대상 유저
+    public List<StoryDto.ResponseList> searchListByMember(MemberInfoDto memberInfoDto, long targetMemberId) {
         Member targetMember = memberService.findById(targetMemberId);
 
         List<Story> storyList = storyRepository.findByMemberOrderByIdDesc(targetMember);
@@ -103,14 +102,14 @@ public class StoryService {
                         .categoryId(story.getCategory().getCategoryId())
                         .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                         .isUpvoted(story.getUpvoteList().stream()
-                                .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
+                                .anyMatch(upvote -> upvote.getMember().getMemberId() == memberInfoDto.getMemberId()))
                         .upvoteCount(story.getUpvoteList().size())
                         .modifiedAt(story.getModifiedAt())
                         .build())
                 .toList();
     }
 
-    public StoryDto.ResponseOne searchByMember(long storyId, long loginMemberId) {
+    public StoryDto.ResponseOne searchByMember(long storyId, MemberInfoDto memberInfoDto) {
         Story story = storyRepository.findById(storyId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
 
@@ -121,7 +120,7 @@ public class StoryService {
                 .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                 .categoryId(story.getCategory().getCategoryId())
                 .isUpvoted(story.getUpvoteList().stream()
-                        .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
+                        .anyMatch(upvote -> upvote.getMember().getMemberId() == memberInfoDto.getMemberId()))
                 .upvoteCount(story.getUpvoteList().size())
                 .memberDto(MemberDto.Concise.builder()
                         .memberId(story.getMember().getMemberId())

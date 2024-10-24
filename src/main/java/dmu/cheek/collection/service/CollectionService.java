@@ -7,6 +7,7 @@ import dmu.cheek.collection.repository.CollectionRepository;
 import dmu.cheek.folder.service.FolderService;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.question.model.Category;
@@ -35,8 +36,8 @@ public class CollectionService {
     private final FolderService folderService;
 
     @Transactional
-    public void register(CollectionDto.Request collectionDto) {
-        Member member = memberService.findById(collectionDto.getMemberId());
+    public void register(CollectionDto.Request collectionDto, MemberInfoDto memberInfoDto) {
+        Member member = memberService.findById(memberInfoDto.getMemberId());
         Category category = categoryService.findById(collectionDto.getCategoryId());
         Story story = storyService.findById(collectionDto.getStoryId());
 
@@ -57,7 +58,7 @@ public class CollectionService {
         folderService.updateThumbnail(folder, story.getStoryPicture());
 
         log.info("register collection, memberId: {}, folderId: {}, storyId: {}",
-                collectionDto.getMemberId(), folder.getFolderId(), collectionDto.getStoryId());
+                member.getMemberId(), folder.getFolderId(), collectionDto.getStoryId());
     }
 
     @Transactional

@@ -1,5 +1,7 @@
 package dmu.cheek.member.controller;
 
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.global.util.AuthorizationHeaderUtils;
 import dmu.cheek.oauth.kakao.client.KakaoLoginClient;
 import dmu.cheek.oauth.kakao.dto.KakaoLoginResponseDto;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,8 +49,9 @@ public class MemberController {
     @PatchMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "프로필 수정", description = "프로필 수정 API")
     public ResponseEntity<String> updateProfile(@RequestPart(value = "profileDto") ProfileDto.Update profileDto,
-                                                @RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture) {
-        memberService.updateProfile(profileDto, profilePicture);
+                                                @RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture,
+                                                @MemberInfo MemberInfoDto memberInfoDto) {
+        memberService.updateProfile(profileDto, profilePicture, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }
@@ -74,8 +78,8 @@ public class MemberController {
     @GetMapping("/info/{targetMemberId}")
     @Operation(summary = "프로필 조회", description = "회원 프로필 조회 API")
     public ResponseEntity<ProfileDto.Profile> getProfile(@PathVariable(name = "targetMemberId") long targetMemberId,
-                                                @RequestParam(name = "loginMemberId") long loginMemberId) {
-        ProfileDto.Profile profile = memberService.getProfile(targetMemberId, loginMemberId);
+                                                         @MemberInfo MemberInfoDto memberInfoDto) {
+        ProfileDto.Profile profile = memberService.getProfile(targetMemberId, memberInfoDto);
 
         return ResponseEntity.ok(profile);
     }
@@ -88,11 +92,12 @@ public class MemberController {
         return ResponseEntity.ok(top3MembersWithMostUpvotesInWeek);
     }
 
-    @PostMapping("/role/{memberId}")
+    @PostMapping("/role")
+    @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "상태(역할) 변경", description = "상태(역할) 변경 API")
-    public ResponseEntity<String> updateRole(@PathVariable(name = "memberId") long memberId,
+    public ResponseEntity<String> updateRole(@MemberInfo MemberInfoDto memberInfoDto,
                                              @RequestParam(name = "role") String role) {
-        memberService.updateRole(memberId, role);
+        memberService.updateRole(memberInfoDto, role);
 
         return ResponseEntity.ok("ok");
     }

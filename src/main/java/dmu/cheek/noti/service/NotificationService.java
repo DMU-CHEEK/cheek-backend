@@ -1,6 +1,7 @@
 package dmu.cheek.noti.service;
 
 import dmu.cheek.fcm.service.FcmService;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.noti.model.Notification;
 import dmu.cheek.noti.model.NotificationDto;
 import dmu.cheek.noti.repository.NotificationRepository;
@@ -29,8 +30,8 @@ public class NotificationService {
         fcmService.sendNotificationByToken(notification);
     }
 
-    public List<NotificationDto> getList(long memberId) {
-        List<NotificationDto> notificationList = notificationRepository.findByToMemberId(memberId)
+    public List<NotificationDto> getList(MemberInfoDto memberInfoDto) {
+        List<NotificationDto> notificationList = notificationRepository.findByToMemberId(memberInfoDto.getMemberId())
                 .stream()
                 .map(notification -> NotificationDto.builder()
                         .notificationId(notification.getNotificationId())
@@ -40,7 +41,7 @@ public class NotificationService {
                         .build()
                 ).toList();
 
-        log.info("get notification list, memberId: {}", memberId);
+        log.info("get notification list, memberId: {}", memberInfoDto.getMemberId());
 
         return notificationList;
     }
@@ -53,9 +54,9 @@ public class NotificationService {
     }
 
     @Transactional
-    public void deleteAll(long memberId) {
-        notificationRepository.deleteAllByToMemberId(memberId);
+    public void deleteAll(MemberInfoDto memberInfoDto) {
+        notificationRepository.deleteAllByToMemberId(memberInfoDto.getMemberId());
 
-        log.info("delete batch notification: {}", memberId);
+        log.info("delete batch notification: {}", memberInfoDto.getMemberId());
     }
 }

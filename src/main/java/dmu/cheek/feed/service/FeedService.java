@@ -1,6 +1,7 @@
 package dmu.cheek.feed.service;
 
 import dmu.cheek.feed.model.FeedDto;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.question.service.QuestionService;
 import dmu.cheek.story.service.StoryService;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class FeedService {
     private final QuestionService questionService;
     private final StoryService storyService;
 
-    public List<FeedDto> getFeed(long loginMemberId, long categoryId) {
+    public List<FeedDto> getFeed(MemberInfoDto memberInfoDto, long categoryId) {
         List<FeedDto> questionList = questionService.getQuestionsForFeed(categoryId);
-        List<FeedDto> storyList = storyService.getStoriesForFeed(loginMemberId, categoryId);
+        List<FeedDto> storyList = storyService.getStoriesForFeed(memberInfoDto.getMemberId(), categoryId);
 
 
         log.info("get feed, categoryId: {}", categoryId);

@@ -1,6 +1,7 @@
 package dmu.cheek.search.service;
 
 import dmu.cheek.global.config.security.service.MemberDetails;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.repository.MemberRepository;
@@ -33,8 +34,8 @@ public class SearchService {
     private final S3Service s3Service;
     private final RedisTemplate<String, String> redisTemplate;
 
-    public SearchDto searchAll(String keyword, long loginMemberId, long categoryId) {
-        List<SearchDto.Member> memberList = searchMember(keyword, loginMemberId);
+    public SearchDto searchAll(String keyword, MemberInfoDto memberInfoDto, long categoryId) {
+        List<SearchDto.Member> memberList = searchMember(keyword, memberInfoDto.getMemberId());
         List<SearchDto.Story> storyList = searchStory(keyword, categoryId);
         List<SearchDto.Question> questionList = searchQuestion(keyword, categoryId);
 
@@ -115,21 +116,21 @@ public class SearchService {
 
     }
 
-    public void addRecentSearch(long memberId, String keyword) {
-        String key = "member:" + memberId + ":recent-searches";
+    public void addRecentSearch(MemberInfoDto memberInfoDto, String keyword) {
+        String key = "member:" + memberInfoDto.getMemberId() + ":recent-searches";
 
         redisTemplate.opsForList().remove(key, 0, keyword); //중복값 삭제
         redisTemplate.opsForList().leftPush(key, keyword);
         redisTemplate.opsForList().trim(key, 0, 9); //최대 10개 검색어
 
-        log.info("register recent-search, memberId: {}, keyword: {}", memberId, keyword);
+        log.info("register recent-search, memberId: {}, keyword: {}", memberInfoDto.getMemberId(), keyword);
     }
 
-    public SearchDto.Keyword getRecentSearches(long memberId) {
-        String key = "member:" + memberId + ":recent-searches";
+    public SearchDto.Keyword getRecentSearches(MemberInfoDto memberInfoDto) {
+        String key = "member:" + memberInfoDto.getMemberId() + ":recent-searches";
         List<String> recentSearches = redisTemplate.opsForList().range(key, 0, -1); //최신순 조회
 
-        log.info("get recent-searches, memberId: {}", memberId);
+        log.info("get recent-searches, memberId: {}", memberInfoDto.getMemberId());
 
         return SearchDto.Keyword
                 .builder()

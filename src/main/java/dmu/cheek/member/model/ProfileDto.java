@@ -42,7 +42,6 @@ public class ProfileDto {
 
     @Getter
     public static class Update {
-        private long memberId;
         private String nickname;
         private String information;
         private String description;

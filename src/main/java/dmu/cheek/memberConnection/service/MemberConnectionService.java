@@ -2,6 +2,7 @@ package dmu.cheek.memberConnection.service;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.memberConnection.model.MemberConnection;
@@ -32,13 +33,13 @@ public class MemberConnectionService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void register(MemberConnectionDto.Request memberConnectionDto) {
-        Member fromMember = memberService.findById(memberConnectionDto.getFromMemberId()); //요청한 회원
-        Member toMember = memberService.findById(memberConnectionDto.getToMemberId()); //요청받은 회원
+    public void register(long toMemberId, MemberInfoDto memberInfoDto) {
+        Member fromMember = memberService.findById(memberInfoDto.getMemberId()); //요청한 회원
+        Member toMember = memberService.findById(toMemberId); //요청받은 회원
 
         if (memberConnectionRepository.findByToMemberAndFromMember(
-                memberConnectionDto.getToMemberId(),
-                memberConnectionDto.getFromMemberId()
+                toMemberId,
+                memberInfoDto.getMemberId()
         ).isPresent())
             throw new BusinessException(ErrorCode.DUPLICATED_CONNECTION);
 
@@ -66,18 +67,18 @@ public class MemberConnectionService {
     }
 
     @Transactional
-    public void delete(MemberConnectionDto.Request memberConnectionDto) {
-        MemberConnection memberConnection = memberConnectionRepository.findByToMemberAndFromMember(memberConnectionDto.getToMemberId(), memberConnectionDto.getFromMemberId())
+    public void delete(long toMemberId, MemberInfoDto memberInfoDto) {
+        MemberConnection memberConnection = memberConnectionRepository.findByToMemberAndFromMember(toMemberId, memberInfoDto.getMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.CONNECTION_NOT_FOUND));
 
         memberConnectionRepository.delete(memberConnection);
 
-        log.info("member {} unfollowed member {}", memberConnectionDto.getFromMemberId(), memberConnectionDto.getToMemberId());
+        log.info("member {} unfollowed member {}", memberInfoDto.getMemberId(), toMemberId);
     }
 
-    public List<MemberConnectionDto.Response> getFollowerList(long targetMemberId, long loginMemberId) {
+    public List<MemberConnectionDto.Response> getFollowerList(long targetMemberId, MemberInfoDto memberInfoDto) {
         List<MemberConnection> targetMemberConnectionList = memberConnectionRepository.findByToMember(targetMemberId);
-        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByFromMember(loginMemberId)
+        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByFromMember(memberInfoDto.getMemberId())
                 .stream().map(memberConnection -> memberConnection.getToMember().getMemberId()).collect(Collectors.toSet());
 
         log.info("get member {}'s follower list", targetMemberId);
@@ -95,9 +96,9 @@ public class MemberConnectionService {
                 .toList();
     }
 
-    public List<MemberConnectionDto.Response> getFollowingList(long targetMemberId, long loginMemberId) {
+    public List<MemberConnectionDto.Response> getFollowingList(long targetMemberId, MemberInfoDto memberInfoDto) {
         List<MemberConnection> targetMemberConnectionList = memberConnectionRepository.findByFromMember(targetMemberId);
-        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByToMember(loginMemberId)
+        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByToMember(memberInfoDto.getMemberId())
                 .stream().map(memberConnection -> memberConnection.getFromMember().getMemberId()).collect(Collectors.toSet());
 
         log.info("get member {}'s following list, memberId", targetMemberId);

@@ -26,8 +26,6 @@ public class QuestionDto {
         private String content;
 
         private long categoryId;
-
-        private long memberId;
     }
 
     @Getter

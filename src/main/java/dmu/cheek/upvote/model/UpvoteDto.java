@@ -12,7 +12,6 @@ public class UpvoteDto {
 
     @Getter
     public static class Request {
-        private long memberId;
         private long storyId;
     }
 }

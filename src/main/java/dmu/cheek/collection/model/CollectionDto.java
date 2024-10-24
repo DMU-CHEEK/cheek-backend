@@ -13,7 +13,6 @@ public class CollectionDto {
 
     @Getter
     public static class Request {
-        private long memberId;
         private long categoryId;
         private long storyId;
         private String folderName;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.AuthenticationException;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.global.token.constant.TokenType;
 import dmu.cheek.global.token.service.TokenManager;
 import dmu.cheek.member.constant.Role;
@@ -77,8 +78,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateProfile(ProfileDto.Update profileDto, MultipartFile profilePicture) {
-        Member member = memberRepository.findById(profileDto.getMemberId())
+    public void updateProfile(ProfileDto.Update profileDto, MultipartFile profilePicture, MemberInfoDto memberInfoDto) {
+        Member member = memberRepository.findById(memberInfoDto.getMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         if (profilePicture != null) {
@@ -147,10 +148,10 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND)));
     }
 
-    public ProfileDto.Profile getProfile(long targetMemberId, long loginMemberId) {
+    public ProfileDto.Profile getProfile(long targetMemberId, MemberInfoDto memberInfoDto) {
         Member targetMember = memberRepository.findById(targetMemberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
-        Member loginMember = memberRepository.findById(loginMemberId)
+        Member loginMember = memberRepository.findById(memberInfoDto.getMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         boolean isFollowing = loginMember.getFromMemberConnectionList().stream()
@@ -196,13 +197,13 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateRole(long memberId, String role) {
-        Member member = memberRepository.findById(memberId)
+    public void updateRole(MemberInfoDto memberInfoDto, String role) {
+        Member member = memberRepository.findById(memberInfoDto.getMemberId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         member.updateRole(Role.from(role));
 
-        log.info("update member {} role: {} to {}", memberId, member.getRole(), role);
+        log.info("update member {} role: {} to {}", member.getMemberId(), member.getRole(), role);
 
         //send notification
         String notiBody = "멘토 회원 승인이 정상적으로 완료되었어요!";
@@ -210,7 +211,7 @@ public class MemberService {
         notificationService.register(
                 Notification.withoutPrimaryKey()
                         .type(Type.from("ROLE"))
-                        .typeId(memberId)
+                        .typeId(member.getMemberId())
                         .toMember(member)
                         .body(notiBody)
                         .build()

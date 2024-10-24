@@ -2,6 +2,8 @@ package dmu.cheek.collection.controller;
 
 import dmu.cheek.collection.model.CollectionDto;
 import dmu.cheek.collection.service.CollectionService;
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.story.model.StoryDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -20,8 +22,9 @@ public class CollectionController {
 
     @PostMapping()
     @Operation(summary = "스크랩 등록", description = "스크랩 스토리 추가 API")
-    public ResponseEntity<String> register(@RequestBody CollectionDto.Request collectionDto) {
-        collectionService.register(collectionDto);
+    public ResponseEntity<String> register(@RequestBody CollectionDto.Request collectionDto,
+                                           @MemberInfo MemberInfoDto memberInfoDto) {
+        collectionService.register(collectionDto, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }

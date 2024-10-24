@@ -1,6 +1,8 @@
 package dmu.cheek.memberConnection.controller;
 
 
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.memberConnection.model.MemberConnectionDto;
 import dmu.cheek.memberConnection.service.MemberConnectionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,18 +21,20 @@ public class MemberConnectionController {
 
     private final MemberConnectionService memberConnectionService;
 
-    @PostMapping()
+    @PostMapping("/{toMemberId}")
     @Operation(summary = "팔로우 등록", description = "팔로우 등록 API")
-    public ResponseEntity<String> register(@RequestBody MemberConnectionDto.Request memberConnectionDto) {
-        memberConnectionService.register(memberConnectionDto);
+    public ResponseEntity<String> register(@PathVariable(name = "toMemberId") long toMemberId,
+                                           @MemberInfo MemberInfoDto memberInfoDto) {
+        memberConnectionService.register(toMemberId, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/{toMemberId}")
     @Operation(summary = "팔로우 취소", description = "팔로우 취소 API")
-    public ResponseEntity<String> delete(@RequestBody MemberConnectionDto.Request memberConnectionDto) {
-        memberConnectionService.delete(memberConnectionDto);
+    public ResponseEntity<String> delete(@PathVariable(name = "toMemberId") long toMemberId,
+                                         @MemberInfo MemberInfoDto memberInfoDto) {
+        memberConnectionService.delete(toMemberId, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }
@@ -38,8 +42,8 @@ public class MemberConnectionController {
     @GetMapping("/follower/{targetMemberId}")
     @Operation(summary = "팔로워 목록 조회", description = "본인을 팔로우한 회원 목록 조회 API")
     public ResponseEntity<List> getFollowerList(@PathVariable(name = "targetMemberId") long targetMemberId,
-                                                @RequestParam(name = "loginMemberId") long loginMemberId) {
-        List<MemberConnectionDto.Response> followerList = memberConnectionService.getFollowerList(targetMemberId, loginMemberId);
+                                                @MemberInfo MemberInfoDto memberInfoDto) {
+        List<MemberConnectionDto.Response> followerList = memberConnectionService.getFollowerList(targetMemberId, memberInfoDto);
 
         return ResponseEntity.ok(followerList);
     }
@@ -47,8 +51,8 @@ public class MemberConnectionController {
     @GetMapping("/following/{targetMemberId}")
     @Operation(summary = "팔로잉 목록 조회", description = "본인이 팔로우한 회원 목록 조회 API")
     public ResponseEntity<List> getFollowingList(@PathVariable(name = "targetMemberId") long targetMemberId,
-                                                 @RequestParam(name = "loginMemberId") long loginMemberId) {
-        List<MemberConnectionDto.Response> followingList = memberConnectionService.getFollowingList(targetMemberId, loginMemberId);
+                                                 @MemberInfo MemberInfoDto memberInfoDto) {
+        List<MemberConnectionDto.Response> followingList = memberConnectionService.getFollowingList(targetMemberId, memberInfoDto);
 
         return ResponseEntity.ok(followingList);
     }

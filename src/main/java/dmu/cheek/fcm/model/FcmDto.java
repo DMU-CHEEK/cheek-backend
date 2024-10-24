@@ -17,7 +17,6 @@ public class FcmDto {
 
     @Getter
     public static class Token {
-        private long memberId;
         private String firebaseToken;
     }
 }

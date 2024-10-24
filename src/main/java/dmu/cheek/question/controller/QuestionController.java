@@ -1,5 +1,7 @@
 package dmu.cheek.question.controller;
 
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.question.model.QuestionDto;
 import dmu.cheek.question.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,8 +24,9 @@ public class QuestionController {
 
     @PostMapping()
     @Operation(summary = "질문 등록", description = "질문 등록 API")
-    public ResponseEntity<String> register(@RequestBody QuestionDto.RegisterReq registerReq) {
-        questionService.register(registerReq);
+    public ResponseEntity<String> register(@RequestBody QuestionDto.RegisterReq registerReq,
+                                           @MemberInfo MemberInfoDto memberInfoDto) {
+        questionService.register(registerReq, memberInfoDto);
 
         return ResponseEntity.ok("ok");
     }

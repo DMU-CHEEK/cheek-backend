@@ -3,6 +3,7 @@ package dmu.cheek.question.service;
 import dmu.cheek.feed.model.FeedDto;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
@@ -34,8 +35,8 @@ public class QuestionService {
     private final S3Service s3Service;
 
     @Transactional
-    public void register(QuestionDto.RegisterReq registerReq) {
-        Member member = memberService.findById(registerReq.getMemberId());
+    public void register(QuestionDto.RegisterReq registerReq, MemberInfoDto memberInfoDto) {
+        Member member = memberService.findById(memberInfoDto.getMemberId());
 
         Category category = categoryService.findById(registerReq.getCategoryId());
 

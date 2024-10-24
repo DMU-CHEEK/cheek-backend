@@ -38,6 +38,9 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if (isSwaggerRequest(request))
+            return true;
+
         String authorization = request.getHeader("Authorization");
         AuthorizationHeaderUtils.validateAuthorization(authorization);
 
@@ -49,11 +52,11 @@ public class AuthInterceptor implements HandlerInterceptor {
             throw new AuthenticationException(ErrorCode.NOT_ACCESS_TOKEN_TYPE);
         }
 
-        // 멤버 ID를 사용하여 사용자 정보를 조회
+        //memberId를 사용하여 정보 조회
         Long memberId = tokenClaims.get("memberId", Long.class);
         UserDetails userDetails = userDetailsService.loadUserByMemberId(memberId);
 
-        // SecurityContextHolder에 인증 정보 설정
+        //SecurityContextHolder에 인증 정보 설정
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userDetails, null, userDetails.getAuthorities()
         );

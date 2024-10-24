@@ -1,5 +1,7 @@
 package dmu.cheek.search.controller;
 
+import dmu.cheek.global.resolver.memberInfo.MemberInfo;
+import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.search.model.SearchDto;
 import dmu.cheek.search.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,21 +24,21 @@ public class SearchController {
     @GetMapping("/all/{categoryId}")
     @Operation(summary = "전체 검색", description = "전체 검색 API")
     public ResponseEntity<SearchDto> searchAll(@PathVariable(name = "categoryId") long categoryId,
-                                          @RequestParam(name = "keyword") String keyword,
-                                          @RequestParam(name = "loginMemberId") long loginMemberId) {
-        searchService.addRecentSearch(loginMemberId, keyword);
+                                               @RequestParam(name = "keyword") String keyword,
+                                               @MemberInfo MemberInfoDto memberInfoDto) {
+        searchService.addRecentSearch(memberInfoDto, keyword);
         searchService.saveTrendingKeyword(keyword);
 
-        SearchDto searchDto = searchService.searchAll(keyword, loginMemberId, categoryId);
+        SearchDto searchDto = searchService.searchAll(keyword, memberInfoDto, categoryId);
 
         return ResponseEntity.ok(searchDto);
     }
 
     @GetMapping("/recent")
     @Operation(summary = "최근 검색어 조회", description = "최근 검색어 조회 API")
-    public ResponseEntity<SearchDto.Keyword> getRecentSearches(@RequestParam(name = "loginMemberId") long loginMemberId) {
+    public ResponseEntity<SearchDto.Keyword> getRecentSearches(@MemberInfo MemberInfoDto memberInfoDto) {
 
-        SearchDto.Keyword recentSearches = searchService.getRecentSearches(loginMemberId);
+        SearchDto.Keyword recentSearches = searchService.getRecentSearches(memberInfoDto);
 
         return ResponseEntity.ok(recentSearches);
     }
