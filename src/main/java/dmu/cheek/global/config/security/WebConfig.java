@@ -37,6 +37,7 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 .excludePathPatterns(
                         "token/access-token/issue",
+                        "/oauth/login",
                         "/member/logout",
                         "/swagger-ui/**",
                         "/swagger-resources/**",

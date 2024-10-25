@@ -5,7 +5,6 @@ import dmu.cheek.global.token.dto.AccessTokenResponseDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

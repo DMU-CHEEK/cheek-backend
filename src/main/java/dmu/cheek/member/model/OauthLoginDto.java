@@ -17,6 +17,8 @@ public class OauthLoginDto {
     @NoArgsConstructor @AllArgsConstructor
     public static class Response {
 
+        private long memberId;
+
         private String grantType;
 
         private String accessToken;
@@ -31,8 +33,9 @@ public class OauthLoginDto {
 
         private boolean isProfileComplete;
 
-        public static Response of(JwtTokenDto jwtTokenDto, boolean isProfileComplete) {
+        public static Response of(long memberId, JwtTokenDto jwtTokenDto, boolean isProfileComplete) {
             return Response.builder()
+                    .memberId(memberId)
                     .grantType(jwtTokenDto.getGrantType())
                     .accessToken(jwtTokenDto.getAccessToken())
                     .accessTokenExpireTime(jwtTokenDto.getAccessTokenExpireTime())
