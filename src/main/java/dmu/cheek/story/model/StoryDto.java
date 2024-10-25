@@ -30,6 +30,16 @@ public class StoryDto {
     }
 
     @Getter @Builder
+    public static class AnsweredList {
+        private LocalDateTime modifiedAt;
+        private long storyId;
+        private String storyPicture;
+        private boolean isUpvoted;
+        private int upvoteCount;
+        private MemberDto.Concise memberDto;
+    }
+
+    @Getter @Builder
     public static class ResponseList {
         private long storyId;
         private long categoryId;

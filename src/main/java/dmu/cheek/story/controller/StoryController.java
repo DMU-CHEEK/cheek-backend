@@ -1,10 +1,7 @@
 package dmu.cheek.story.controller;
 
-import dmu.cheek.global.error.ErrorCode;
-import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.resolver.memberInfo.MemberInfo;
 import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
-import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.story.model.StoryDto;
 import dmu.cheek.story.service.StoryService;
@@ -70,8 +67,8 @@ public class StoryController {
     @GetMapping("/{questionId}/answered-stories")
     @Operation(summary = "질문에 답변된 스토리 모아보기", description = "질문에 답변된 스토리 모아보기 API")
     public ResponseEntity<List> getAnsweredStoryList(@PathVariable(name = "questionId") long questionId,
-                                                     @RequestParam(name = "loginMemberId") long loginMemberId) {
-        List<StoryDto.ResponseList> answeredStoryList = storyService.getAnsweredStoryList(questionId, loginMemberId);
+                                                     @MemberInfo MemberInfoDto memberInfoDto) {
+        List<StoryDto.AnsweredList> answeredStoryList = storyService.getAnsweredStoryList(questionId, memberInfoDto.getMemberId());
 
         return ResponseEntity.ok(answeredStoryList);
     }

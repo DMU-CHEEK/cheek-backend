@@ -18,11 +18,10 @@ public class MemberInfoArgumentResolver implements HandlerMethodArgumentResolver
 
     private final TokenManager tokenManager;
 
-
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         boolean hasMemberInfoAnnotation = parameter.hasParameterAnnotation(MemberInfo.class);
-        boolean hasMemberInfo = MemberInfo.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasMemberInfo = MemberInfoDto.class.isAssignableFrom(parameter.getParameterType());
         return hasMemberInfoAnnotation && hasMemberInfo;
     }
 

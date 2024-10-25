@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -162,20 +163,26 @@ public class StoryService {
                 ).toList();
     }
 
-    public List<StoryDto.ResponseList> getAnsweredStoryList(long questionId, long loginMemberId) {
+    public List<StoryDto.AnsweredList> getAnsweredStoryList(long questionId, long loginMemberId) {
         Question question = questionService.findById(questionId);
 
         log.info("get answered story list, questionId: {}", questionId);
 
         return question.getStoryList().stream()
-                .map(story -> StoryDto.ResponseList.builder()
+                .map(story -> StoryDto.AnsweredList.builder()
                         .storyId(story.getStoryId())
                         .storyPicture(story.getStoryPicture())
-                        .categoryId(story.getCategory().getCategoryId())
                         .isUpvoted(story.getUpvoteList().stream()
                                 .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
                         .upvoteCount(story.getUpvoteList().size())
+                        .modifiedAt(story.getModifiedAt())
+                        .memberDto(MemberDto.Concise.builder()
+                                .memberId(story.getMember().getMemberId())
+                                .profilePicture(s3Service.getResourceUrl(story.getMember().getProfilePicture()))
+                                .nickname(story.getMember().getNickname())
+                                .build())
                         .build()
-                ).toList();
+                ).sorted(Comparator.comparing(StoryDto.AnsweredList::getModifiedAt).reversed()) //modifiedAt 최신순 정렬
+                .toList();
     }
 }
