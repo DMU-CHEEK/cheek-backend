@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,6 +51,7 @@ public class QuestionDto {
         private long questionId;
         private String content;
         private long categoryId;
+        private LocalDateTime modifiedAt;
         private MemberDto.Concise memberDto;
     }
 }

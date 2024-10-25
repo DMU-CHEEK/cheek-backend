@@ -61,6 +61,7 @@ public class QuestionService {
                 .questionId(question.getQuestionId())
                 .content(question.getContent())
                 .categoryId(question.getCategory().getCategoryId())
+                .modifiedAt(question.getModifiedAt())
                 .memberDto(
                         MemberDto.Concise.builder()
                                 .memberId(question.getMember().getMemberId())
