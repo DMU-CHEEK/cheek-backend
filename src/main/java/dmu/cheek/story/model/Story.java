@@ -1,5 +1,6 @@
 package dmu.cheek.story.model;
 
+import dmu.cheek.collection.model.Collection;
 import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.HighlightStory;
 import dmu.cheek.member.model.Member;
@@ -44,6 +45,9 @@ public class Story extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Upvote> upvoteList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "story", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Collection> collectionList = new ArrayList<>();
 
     @Builder
     public Story(String storyPicture, String text, Member member, Category category, Question question) {

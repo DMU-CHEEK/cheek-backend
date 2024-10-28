@@ -97,4 +97,5 @@ jwt:
   issuer: sejyom
   secret_key: ENC(46UbNqJc0V0vkcFPbNde8/tTJiVpRmwO)
   access-token-expiration-time: 900000 #15분
-  refresh-token-expiration-time: 1209600000 #2주
+  refresh-token-expiration-time: 3600000 #60분
+#  refresh-token-expiration-time: 1209600000 #2주

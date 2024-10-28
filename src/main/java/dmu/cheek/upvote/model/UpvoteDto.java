@@ -10,8 +10,4 @@ public class UpvoteDto {
 
     private boolean isUpvoted;
 
-    @Getter
-    public static class Request {
-        private long storyId;
-    }
 }

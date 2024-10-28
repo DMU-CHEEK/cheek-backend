@@ -30,20 +30,24 @@ public class Notification {
 
     private String body;
 
+    private String picture;
+
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public Notification(Member toMember, Member fromMember, Type type, long typeId, String body) {
+    public Notification(Member toMember, Member fromMember, Type type, long typeId, String body, String picture) {
         this.toMember = toMember;
         this.fromMember = fromMember;
         this.type = type;
         this.typeId = typeId;
         this.body = body;
+        this.picture = picture;
     }
 
     @Builder(builderMethodName = "naturalFields")
-    public Notification(long notificationId, Type type, long typeId, String body) {
+    public Notification(long notificationId, Type type, long typeId, String body, String picture) {
         this.notificationId = notificationId;
         this.type = type;
         this.typeId = typeId;
         this.body = body;
+        this.picture = picture;
     }
 }

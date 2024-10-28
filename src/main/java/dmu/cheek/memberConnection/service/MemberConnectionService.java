@@ -37,6 +37,9 @@ public class MemberConnectionService {
         Member fromMember = memberService.findById(memberInfoDto.getMemberId()); //요청한 회원
         Member toMember = memberService.findById(toMemberId); //요청받은 회원
 
+        if (fromMember.getMemberId() == toMemberId)
+            throw new BusinessException(ErrorCode.CANNOT_READ_TEMPLATE);
+
         if (memberConnectionRepository.findByToMemberAndFromMember(
                 toMemberId,
                 memberInfoDto.getMemberId()

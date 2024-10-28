@@ -30,6 +30,7 @@ public enum ErrorCode {
     //Member Connection
     CONNECTION_NOT_FOUND(HttpStatus.NOT_FOUND, "C-001", "member connection not found"),
     DUPLICATED_CONNECTION(HttpStatus.BAD_REQUEST, "C-002", "duplicated connection"),
+    CANNOT_FOLLOW_ONESELF(HttpStatus.BAD_REQUEST, "C-003", "cannot follow oneself"),
 
     //Email Verification
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "E-001", "email not found"),

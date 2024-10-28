@@ -33,9 +33,9 @@ public class UpvoteService {
     private final NotificationService notificationService;
 
     @Transactional
-    public void toggleUpvote(UpvoteDto.Request upvoteDto, MemberInfoDto memberInfoDto) {
+    public void toggleUpvote(long storyId, MemberInfoDto memberInfoDto) {
         Member member = memberService.findById(memberInfoDto.getMemberId());
-        Story story = storyService.findById(upvoteDto.getStoryId());
+        Story story = storyService.findById(storyId);
 
         Upvote upvote = upvoteRepository.findByStoryAndMember(member, story)
                 .orElse(null);

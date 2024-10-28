@@ -21,7 +21,7 @@ public class FolderController {
 
     private final FolderService folderService;
 
-    @GetMapping("/{memberId}")
+    @GetMapping()
     @Operation(summary = "폴더 조회", description = "스크랩한 폴더 리스트 검색 API")
     public ResponseEntity<List> search(@MemberInfo MemberInfoDto memberInfoDto) {
         List<FolderDto.Response> folderList = folderService.findDtoByMember(memberInfoDto);

@@ -1,10 +1,16 @@
 package dmu.cheek.story.service;
 
+import dmu.cheek.collection.model.Collection;
+import dmu.cheek.collection.repository.CollectionRepository;
 import dmu.cheek.feed.model.FeedDto;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.resolver.memberInfo.MemberInfo;
 import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
+import dmu.cheek.highlight.model.HighlightStory;
+import dmu.cheek.highlight.repository.HighlightRepository;
+import dmu.cheek.highlight.repository.HighlightStoryRepository;
+import dmu.cheek.highlight.service.HighlightService;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
@@ -41,6 +47,8 @@ public class StoryService {
     private final QuestionService questionService;
     private final CategoryService categoryService;
     private final NotificationService notificationService;
+    private final HighlightStoryRepository highlightStoryRepository;
+    private final CollectionRepository collectionRepository;
 
     @Transactional
     public void register(MultipartFile storyPicture, StoryDto.Request storyDto, MemberInfoDto memberInfoDto) {
@@ -70,6 +78,7 @@ public class StoryService {
                         .typeId(story.getStoryId())
                         .fromMember(member)
                         .toMember(memberService.findById(story.getQuestion().getMember().getMemberId()))
+                        .picture(s3Service.getResourceUrl(story.getStoryPicture()))
                         .build()
         );
     }
@@ -79,6 +88,14 @@ public class StoryService {
         for (long storyId : storyDto.getStoryIdList()) {
             Story story = storyRepository.findById(storyId)
                     .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
+
+            if (!story.getHighlightStoryList().isEmpty()) {
+                List<HighlightStory> highlightStoryList = story.getHighlightStoryList();
+                highlightStoryRepository.deleteAll(highlightStoryList);
+            } else if (!story.getCollectionList().isEmpty()) {
+                List<Collection> collectionList = story.getCollectionList();
+                collectionRepository.deleteAll(collectionList);
+            }
 
             storyRepository.delete(story);
         }

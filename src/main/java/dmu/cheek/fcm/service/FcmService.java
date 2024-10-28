@@ -25,7 +25,7 @@ public class FcmService {
     private final MemberRepository memberRepository;
 
     public void sendNotificationByToken(dmu.cheek.noti.model.Notification notification) {
-        if (notification.getToMember().getFirebaseToken() != null) {
+        if (notification.getToMember().getFirebaseToken() != null && notification.getToMember() != notification.getFromMember()) {
 
             Message message = Message.builder()
                     .setNotification(Notification.builder()
@@ -42,8 +42,6 @@ public class FcmService {
                 log.info("notification delivery failed: {}", e.toString());
                 throw new BusinessException(ErrorCode.NOTIFICATION_SENDING_FAILED);
             }
-        } else {
-            throw new BusinessException(ErrorCode.TOKEN_NOT_FOUND);
         }
     }
 
