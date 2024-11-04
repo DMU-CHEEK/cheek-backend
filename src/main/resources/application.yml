@@ -45,6 +45,13 @@ spring:
             client-name: kakao
             scope: account_email
 
+  apple:
+    team-id: "[애플 개발자 팀 아이디]"
+    login-key: "867TWAYWVU"
+    client-id: "[Client ID]"
+    redirect-url: "[redirect url]"
+    key-path: "key/AuthKey.p8"
+
   servlet:
     multipart:
       max-file-size: 50MB

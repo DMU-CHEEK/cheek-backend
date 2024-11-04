@@ -1,12 +1,9 @@
 package dmu.cheek.highlight.controller;
 
-import dmu.cheek.global.error.ErrorCode;
-import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.resolver.memberInfo.MemberInfo;
 import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.highlight.model.HighlightDto;
 import dmu.cheek.highlight.service.HighlightService;
-import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.model.S3Dto;
 import dmu.cheek.s3.service.S3Service;
@@ -27,7 +24,6 @@ import java.util.List;
 public class HighlightController {
 
     private final HighlightService highlightService;
-    private final MemberService memberService;
     private final S3Service s3Service;
 
     @PostMapping("")

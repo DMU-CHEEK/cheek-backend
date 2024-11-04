@@ -38,3 +38,6 @@ out/
 
 ### fcm ###
 /resources/firebase/
+
+### apple ###
+/resources/apple

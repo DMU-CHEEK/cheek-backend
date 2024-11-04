@@ -38,6 +38,7 @@ public class NotificationService {
                         .type(notification.getType())
                         .typeId(notification.getTypeId())
                         .body(notification.getBody())
+                        .picture(notification.getPicture())
                         .build()
                 ).toList();
 

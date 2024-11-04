@@ -12,16 +12,13 @@ public class NotificationDto {
     private Type type;
     private long typeId;
     private String body;
+    private String picture;
 
     @Builder(builderMethodName = "withoutPrimaryKey")
-    public NotificationDto(Type type, long typeId, String body) {
+    public NotificationDto(Type type, long typeId, String body, String picture) {
         this.body = body;
         this.type = type;
         this.typeId = typeId;
-    }
-
-    public static class Response {
-        private long notificationId;
-        private String body;
+        this.picture = picture;
     }
 }
