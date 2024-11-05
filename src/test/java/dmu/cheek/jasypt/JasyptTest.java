@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 public class JasyptTest {
 
     @Test
-    @Disabled
+//    @Disabled
     public void test() {
         String password = ""; //jasypt password
 

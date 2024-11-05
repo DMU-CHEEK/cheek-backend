@@ -41,6 +41,13 @@ public class ProfileDto {
     }
 
     @Getter
+    public static class Register {
+        private String nickname;
+        private Role role;
+        private String information;
+    }
+
+    @Getter
     public static class Update {
         private String nickname;
         private String information;

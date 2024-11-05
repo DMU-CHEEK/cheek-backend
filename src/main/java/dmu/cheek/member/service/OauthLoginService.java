@@ -37,30 +37,27 @@ public class OauthLoginService {
         Optional<Member> existMember = memberService.findByEmailOrNull(userInfo.getEmail());
         long memberId;
 
+        Member member;
         if (existMember.isEmpty()) { //신규 가입
-            Member member = Member.joinBuilder()
+            member = Member.joinBuilder()
                     .email(userInfo.getEmail())
                     .role(Role.MENTEE)
                     .memberType(memberType)
                     .build();
 
             member = memberService.register(member); //가입
-            memberId = member.getMemberId();
-            isProfileComplete = StringUtils.hasText(member.getNickname()) && StringUtils.hasText(member.getInformation());
 
             //토큰 생성
-            jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
-            member.updateRefreshToken(jwtTokenDto);
 
         } else { //기존 회원
-            Member member = existMember.get();
-            memberId = member.getMemberId();
-            isProfileComplete = StringUtils.hasText(member.getNickname()) && StringUtils.hasText(member.getInformation());
+            member = existMember.get();
 
             //토큰 생성
-            jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
-            member.updateRefreshToken(jwtTokenDto);
         }
+        memberId = member.getMemberId();
+        isProfileComplete = StringUtils.hasText(member.getNickname()) && StringUtils.hasText(member.getInformation());
+        jwtTokenDto = tokenManager.createJwtTokenDto(member.getMemberId(), member.getRole());
+        member.updateRefreshToken(jwtTokenDto);
 
         return OauthLoginDto.Response.of(memberId, jwtTokenDto, isProfileComplete);
     }

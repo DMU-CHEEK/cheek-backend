@@ -14,13 +14,19 @@ public enum ErrorCode {
     EXPIRED_TOKEN(HttpStatus.UNAUTHORIZED, "A-002", "expired token"),
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-003", "invalid token"),
     TOKEN_NOT_FOUND(HttpStatus.NOT_FOUND, "A-004", "token not found"),
-    NOT_VALID_TOKEN(HttpStatus.UNAUTHORIZED, "A-005", "not valid token"),
-    ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-006", "do not have permission to access this resource"),
-    NOT_EXIST_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A-007", "not exist authorization"),
-    NOT_VALID_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A-008", "not valid Bearer grant type"),
-    REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A-009", "refresh token not found"),
-    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A-010", "refresh token expired"),
-    NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-011", "not access token type"),
+    ACCESS_DENIED(HttpStatus.FORBIDDEN, "A-005", "do not have permission to access this resource"),
+    NOT_EXIST_AUTHORIZATION(HttpStatus.UNAUTHORIZED, "A-006", "not exist authorization"),
+    NOT_VALID_BEARER_GRANT_TYPE(HttpStatus.UNAUTHORIZED, "A-007", "not valid Bearer grant type"),
+    REFRESH_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "A-008", "refresh token not found"),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "A-009", "refresh token expired"),
+    NOT_ACCESS_TOKEN_TYPE(HttpStatus.UNAUTHORIZED, "A-010", "not access token type"),
+    INVALID_KEY_SPEC(HttpStatus.INTERNAL_SERVER_ERROR, "A-011", "invalid key specification"),
+    ALGORITHM_NOT_FOUND(HttpStatus.INTERNAL_SERVER_ERROR, "A-012", "algorithm not found"),
+    JSON_MAPPING_ERROR(HttpStatus.BAD_REQUEST, "A-013", "json mapping error"),
+    JSON_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "A-014", "json processing error"),
+    UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "A-015", "unsupported token format"),
+
+
 
     //Member
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "M-001", "member not found"),

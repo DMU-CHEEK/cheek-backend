@@ -45,13 +45,6 @@ spring:
             client-name: kakao
             scope: account_email
 
-  apple:
-    team-id: "[애플 개발자 팀 아이디]"
-    login-key: "867TWAYWVU"
-    client-id: "[Client ID]"
-    redirect-url: "[redirect url]"
-    key-path: "key/AuthKey.p8"
-
   servlet:
     multipart:
       max-file-size: 50MB
@@ -104,5 +97,15 @@ jwt:
   issuer: sejyom
   secret_key: ENC(46UbNqJc0V0vkcFPbNde8/tTJiVpRmwO)
   access-token-expiration-time: 900000 #15분
-  refresh-token-expiration-time: 3600000 #60분
-#  refresh-token-expiration-time: 1209600000 #2주
+  refresh-token-expiration-time: 1209600000 #2주
+
+apple:
+  team:
+    id: ENC(WXsOYzTDb6S/iEjAMwreGeadF/kwU4Hv)
+  login:
+    key: ENC(v4WF4a3PXtcbsYfQVD3EssypArZuNpJX)
+  client:
+    id: hugesilver.dev.CHEEK
+  redirect-url: https://leadme.store/auth/apple/callback
+  key:
+    path: classpath:/apple/AuthKey.p8

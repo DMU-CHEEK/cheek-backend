@@ -76,7 +76,9 @@ public class TokenManager {
         try {
             Jwts.parser()
                     .setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
+                    .build()
                     .parseClaimsJws(token);
+
         } catch (ExpiredJwtException e) {
             log.info("토큰이 만료되었습니다.", e);
             throw new AuthenticationException(ErrorCode.EXPIRED_TOKEN);
@@ -91,7 +93,7 @@ public class TokenManager {
             throw new AuthenticationException(ErrorCode.TOKEN_NOT_FOUND);
         } catch (Exception e) {
             log.info("유효하지 않은 토큰입니다.");
-            throw new AuthenticationException(ErrorCode.NOT_VALID_TOKEN);
+            throw new AuthenticationException(ErrorCode.INVALID_TOKEN);
         }
     }
 
@@ -99,11 +101,11 @@ public class TokenManager {
         Claims claims;
 
         try {
-            claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
+            claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8)).build()
                     .parseClaimsJws(token).getBody();
         } catch (Exception e) {
             log.info("유효하지 않은 토큰입니다.");
-            throw new AuthenticationException(ErrorCode.NOT_VALID_TOKEN);
+            throw new AuthenticationException(ErrorCode.INVALID_TOKEN);
         }
 
         return claims;

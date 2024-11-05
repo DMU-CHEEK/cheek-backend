@@ -188,7 +188,7 @@ public class StoryService {
         return question.getStoryList().stream()
                 .map(story -> StoryDto.AnsweredList.builder()
                         .storyId(story.getStoryId())
-                        .storyPicture(story.getStoryPicture())
+                        .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                         .isUpvoted(story.getUpvoteList().stream()
                                 .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId))
                         .upvoteCount(story.getUpvoteList().size())

@@ -63,8 +63,9 @@ public class MemberService {
     }
 
     @Transactional
-    public void setProfile(ProfileDto profileDto, MultipartFile profilePicture) {
-        Member member = findByEmail(profileDto.getEmail());
+    public void setProfile(ProfileDto.Register profileDto, MultipartFile profilePicture, long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         if (profilePicture != null) {
             S3Dto s3Dto = s3Service.saveFile(profilePicture);
@@ -74,7 +75,7 @@ public class MemberService {
         member.setProfile(profileDto.getNickname(), profileDto.getInformation(), profileDto.getRole(), Status.COMPLETE);
 
 
-        log.info("set profile: {}", profileDto.getEmail());
+        log.info("set profile: {}", member.getMemberId());
     }
 
     @Transactional

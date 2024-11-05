@@ -8,7 +8,6 @@ import dmu.cheek.oauth.kakao.dto.KakaoLoginResponseDto;
 import dmu.cheek.member.converter.MemberConverter;
 import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.model.ProfileDto;
-import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.service.S3Service;
 import io.swagger.v3.oas.annotations.Operation;
@@ -38,10 +37,11 @@ public class MemberController {
 
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "프로필 설정", description = "회원 등록 시 프로필 설정 API")
-    public ResponseEntity<String> setProfile(@RequestPart(value = "profileDto") ProfileDto profileDto,
-                                             @RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture) {
+    public ResponseEntity<String> setProfile(@RequestPart(value = "profileDto") ProfileDto.Register profileDto,
+                                             @RequestPart(value = "profilePicture", required = false) MultipartFile profilePicture,
+                                             @MemberInfo MemberInfoDto memberInfoDto) {
 
-        memberService.setProfile(profileDto, profilePicture);
+        memberService.setProfile(profileDto, profilePicture, memberInfoDto.getMemberId());
 
         return ResponseEntity.ok("ok");
     }
