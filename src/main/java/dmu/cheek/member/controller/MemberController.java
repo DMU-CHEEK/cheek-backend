@@ -93,9 +93,9 @@ public class MemberController {
     @PostMapping("/role")
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "상태(역할) 변경", description = "상태(역할) 변경 API")
-    public ResponseEntity<String> updateRole(@MemberInfo MemberInfoDto memberInfoDto,
+    public ResponseEntity<String> updateRole(@RequestParam(name = "memberId") long memberId,
                                              @RequestParam(name = "role") String role) {
-        memberService.updateRole(memberInfoDto, role);
+        memberService.updateRole(memberId, role);
 
         return ResponseEntity.ok("ok");
     }
