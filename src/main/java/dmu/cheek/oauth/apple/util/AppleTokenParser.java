@@ -47,9 +47,8 @@ public class AppleTokenParser {
         try {
             return Jwts.parser()
                     .setSigningKey(publicKey)
-                    .build()
-                    .parseSignedClaims(appleToken)
-                    .getPayload();
+                    .parseClaimsJws(appleToken)
+                    .getBody();
 
         } catch (UnsupportedJwtException e) {
             throw new AuthenticationException(ErrorCode.UNSUPPORTED_TOKEN);

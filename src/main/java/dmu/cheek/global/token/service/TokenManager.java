@@ -2,6 +2,7 @@ package dmu.cheek.global.token.service;
 
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.AuthenticationException;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.token.constant.GrantType;
 import dmu.cheek.global.token.constant.TokenType;
 import dmu.cheek.global.token.dto.JwtTokenDto;
@@ -19,7 +20,7 @@ public class TokenManager {
 
     private final String accessTokenExpirationTime;
     private final String refreshTokenExpirationTime;
-    private final String tokenSecret;
+    private final String  tokenSecret;
 
     public JwtTokenDto createJwtTokenDto(long memberId, Role role) {
         Date accessTokenExpireTime = createAccessTokenExpireTime();
@@ -76,18 +77,13 @@ public class TokenManager {
         try {
             Jwts.parser()
                     .setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
-                    .build()
                     .parseClaimsJws(token);
-
         } catch (ExpiredJwtException e) {
             log.info("토큰이 만료되었습니다.", e);
             throw new AuthenticationException(ErrorCode.EXPIRED_TOKEN);
         } catch (MalformedJwtException e) {
             log.info("토큰 형식이 잘못되었습니다.", e);
             throw new AuthenticationException(ErrorCode.MALFORMED_TOKEN);
-        } catch (SecurityException e) {
-            log.info("토큰 서명이 올바르지 않습니다.", e);
-            throw new AuthenticationException(ErrorCode.INVALID_TOKEN);
         } catch (IllegalArgumentException e) {
             log.info("토큰을 찾을 수 없습니다.", e);
             throw new AuthenticationException(ErrorCode.TOKEN_NOT_FOUND);
@@ -98,16 +94,23 @@ public class TokenManager {
     }
 
     public Claims getTokenClaims(String token) {
-        Claims claims;
-
         try {
-            claims = Jwts.parser().setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8)).build()
-                    .parseClaimsJws(token).getBody();
+            return Jwts.parser()
+                    .setSigningKey(tokenSecret.getBytes(StandardCharsets.UTF_8))
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (ExpiredJwtException e) {
+            log.info("토큰이 만료되었습니다.", e);
+            throw new AuthenticationException(ErrorCode.EXPIRED_TOKEN);
+        } catch (MalformedJwtException e) {
+            log.info("토큰 형식이 잘못되었습니다.", e);
+            throw new AuthenticationException(ErrorCode.MALFORMED_TOKEN);
+        } catch (IllegalArgumentException e) {
+            log.info("토큰을 찾을 수 없습니다.", e);
+            throw new AuthenticationException(ErrorCode.TOKEN_NOT_FOUND);
         } catch (Exception e) {
             log.info("유효하지 않은 토큰입니다.");
             throw new AuthenticationException(ErrorCode.INVALID_TOKEN);
         }
-
-        return claims;
     }
 }

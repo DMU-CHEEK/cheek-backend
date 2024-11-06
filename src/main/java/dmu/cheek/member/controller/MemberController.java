@@ -113,6 +113,9 @@ public class MemberController {
         return ResponseEntity.ok("ok");
     }
 
+    @GetMapping("/info/all")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "전체 회원 목록 조회", description = "전체 회원 목록 조회 API")
     public ResponseEntity<List> getMemberList() {
         List<MemberDto.List> memberList = memberService.getMemberList();
 
