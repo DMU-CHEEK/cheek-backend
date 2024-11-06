@@ -32,8 +32,6 @@ public class MemberController {
 
     private final MemberService memberService;
     private final KakaoLoginClient kakaoLoginClient;
-    private final MemberConverter memberConverter;
-    private final S3Service s3Service;
 
     @PostMapping(value = "/profile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     @Operation(summary = "프로필 설정", description = "회원 등록 시 프로필 설정 API")
@@ -113,5 +111,11 @@ public class MemberController {
         memberService.logout(accessToken);
 
         return ResponseEntity.ok("ok");
+    }
+
+    public ResponseEntity<List> getMemberList() {
+        List<MemberDto.List> memberList = memberService.getMemberList();
+
+        return ResponseEntity.ok(memberList);
     }
 }

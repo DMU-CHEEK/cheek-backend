@@ -248,4 +248,19 @@ public class MemberService {
 
         member.expireRefreshToken(LocalDateTime.now());
     }
+
+    public List<MemberDto.List> getMemberList() {
+        log.info("get member list");
+
+        return memberRepository.findAll().stream()
+                .map(member -> MemberDto.List.builder()
+                        .memberId(member.getMemberId())
+                        .nickname(member.getNickname())
+                        .email(member.getEmail())
+                        .role(member.getRole())
+                        .build()
+                )
+                .toList();
+
+    }
 }

@@ -66,4 +66,12 @@ public class MemberDto {
         private int followingCnt;
     }
 
+    @Getter @Builder
+    public static class List {
+        private long memberId;
+        private String nickname;
+        private String email;
+        private Role role;
+    }
+
 }
