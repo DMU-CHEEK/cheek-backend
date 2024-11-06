@@ -36,6 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
         interceptorRegistry.addInterceptor(authInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
+                        "/health",
                         "/token/access-token/issue",
                         "/oauth/login",
                         "/member/logout",
