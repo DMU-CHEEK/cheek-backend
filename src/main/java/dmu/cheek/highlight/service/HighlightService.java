@@ -69,9 +69,12 @@ public class HighlightService {
     @Transactional
     public void delete(long highlightId) {
         List<HighlightStory> highlightStoryList = highlightStoryRepository.findByHighlightId(highlightId);
+        Highlight highlight = highlightRepository.findById(highlightId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.HIGHLIGHT_NOT_FOUND));
 
-        highlightStoryRepository.deleteAll(highlightStoryList);
-        highlightRepository.delete(highlightStoryList.getFirst().getHighlight());
+        if (!highlightStoryList.isEmpty())
+            highlightStoryRepository.deleteAll(highlightStoryList);
+        highlightRepository.delete(highlight);
 
         log.info("delete highlight: {}", highlightId);
     }
