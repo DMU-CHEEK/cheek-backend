@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -40,7 +41,8 @@ public class NotificationService {
                         .body(notification.getBody())
                         .picture(notification.getPicture())
                         .build()
-                ).toList();
+                ).sorted(Comparator.comparing(NotificationDto::getNotificationId).reversed())
+                .toList();
 
         log.info("get notification list, memberId: {}", memberInfoDto.getMemberId());
 

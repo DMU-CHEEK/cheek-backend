@@ -26,7 +26,7 @@ public class Folder {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "folder", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "folder", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Collection> collectionList;
 
     @Builder(builderMethodName = "withoutPrimaryKey")

@@ -8,6 +8,7 @@ import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.global.token.constant.TokenType;
 import dmu.cheek.global.token.service.TokenManager;
+import dmu.cheek.member.constant.MemberType;
 import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.constant.Status;
 import dmu.cheek.oauth.kakao.dto.KakaoLoginDto;
@@ -48,8 +49,8 @@ public class MemberService {
     private final NotificationService notificationService;
     private final TokenManager tokenManager;
 
-    public Optional<Member> findByEmailOrNull(String email) {
-        return memberRepository.findByEmail(email);
+    public Optional<Member> findByEmailAndMemberType(String email, MemberType memberType) {
+        return memberRepository.findByEmailAndMemberType(email, memberType);
     }
 
     @Transactional
@@ -261,6 +262,10 @@ public class MemberService {
                         .build()
                 )
                 .toList();
+    }
 
+    @Transactional
+    public void withdraw(long memberId) {
+        memberRepository.deleteById(memberId);
     }
 }

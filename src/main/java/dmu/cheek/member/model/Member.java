@@ -44,7 +44,7 @@ public class Member extends BaseTimeEntity {
     private String profilePicture;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10 )
+    @Column(nullable = false, length = 10)
     private MemberType memberType;
 
     @Enumerated(value = EnumType.STRING)
@@ -62,7 +62,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "toMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Notification> toNotificationList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Notification> fromNotificationList = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
@@ -86,14 +86,8 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberConnection> fromMemberConnectionList = new ArrayList<>();
 
-
-    @Builder(builderMethodName = "withEmail") //TODO: delete
-    public Member(String email) {
-        this.email = email;
-    }
-
     @Builder(builderMethodName = "allFields")
-    public Member(long memberId, String nickname, String email, String information, String description, String profilePicture, Role role, Status status) {
+    public Member(long memberId, String nickname, String email, String information, String description, String profilePicture, Role role, Status status, MemberType memberType) {
         this.memberId = memberId;
         this.email = email;
         this.nickname = nickname;
@@ -102,9 +96,10 @@ public class Member extends BaseTimeEntity {
         this.profilePicture = profilePicture;
         this.role = role;
         this.status = status;
+        this.memberType = memberType;
     }
 
-    @Builder(builderMethodName = "joinBuilder")
+    @Builder(builderMethodName = "join", toBuilder = true)
     public Member(MemberType memberType, String email, Role role) {
         this.memberType = memberType;
         this.email = email;

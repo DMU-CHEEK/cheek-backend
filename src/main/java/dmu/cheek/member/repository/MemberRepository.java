@@ -1,5 +1,6 @@
 package dmu.cheek.member.repository;
 
+import dmu.cheek.member.constant.MemberType;
 import dmu.cheek.member.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +20,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m from Member m where m.refreshToken = :refreshToken")
     Optional<Member> findByRefreshToken(String refreshToken);
+
+    @Query("select m from Member m where m.email = :email and m.memberType = :memberType")
+    Optional<Member> findByEmailAndMemberType(String email, MemberType memberType);
 }

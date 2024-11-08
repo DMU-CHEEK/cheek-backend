@@ -30,7 +30,7 @@ public class Question extends BaseTimeEntity {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "question", fetch = FetchType.LAZY)
     private List<Story> storyList = new ArrayList<>();
 
     @Builder(builderMethodName = "withoutPrimaryKey")

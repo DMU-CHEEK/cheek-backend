@@ -119,4 +119,12 @@ public class MemberController {
 
         return ResponseEntity.ok(memberList);
     }
+
+    @DeleteMapping()
+    @Operation(summary = "회원 탈퇴", description = "회원 탈퇴 API")
+    public ResponseEntity<String> withdraw(@MemberInfo MemberInfoDto memberInfoDto) {
+        memberService.withdraw(memberInfoDto.getMemberId());
+
+        return ResponseEntity.ok("ok");
+    }
 }
