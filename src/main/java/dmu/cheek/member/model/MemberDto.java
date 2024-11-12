@@ -1,5 +1,6 @@
 package dmu.cheek.member.model;
 
+import dmu.cheek.member.constant.MemberType;
 import dmu.cheek.member.constant.Role;
 import dmu.cheek.member.constant.Status;
 import jakarta.validation.constraints.Email;
@@ -72,6 +73,7 @@ public class MemberDto {
         private String nickname;
         private String email;
         private Role role;
+        private MemberType memberType;
     }
 
 }

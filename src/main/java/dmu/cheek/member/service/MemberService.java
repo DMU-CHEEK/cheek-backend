@@ -92,10 +92,6 @@ public class MemberService {
         member.update(profileDto.getNickname(), profileDto.getInformation(), profileDto.getDescription());
     }
 
-    public Member findByEmail(String email) {
-        return memberRepository.findByEmail(email).orElseThrow(
-                () -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
-    }
 
     public MemberDto.Info getMemberAllInfo(String email) {
         Member member = memberRepository.findByEmail(email).orElseThrow(
@@ -119,7 +115,7 @@ public class MemberService {
 
     public KakaoLoginDto.Response login(KakaoLoginDto.Request requestDto, KakaoLoginResponseDto kakaoLoginResponseDto) throws ParseException {
         String email = kakaoLoginResponseDto.getKakaoAccount().getEmail();
-        Member member = memberRepository.findByEmail(email).orElseThrow(
+        Member member = memberRepository.findByEmailAndMemberType(email, MemberType.KAKAO).orElseThrow(
                 () -> new BusinessException(ErrorCode.EMAIL_NOT_FOUND));
 
         log.info("login member: {}", member.getMemberId());
@@ -259,6 +255,7 @@ public class MemberService {
                         .nickname(member.getNickname())
                         .email(member.getEmail())
                         .role(member.getRole())
+                        .memberType(member.getMemberType())
                         .build()
                 )
                 .toList();
