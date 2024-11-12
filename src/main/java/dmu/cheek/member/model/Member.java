@@ -1,6 +1,7 @@
 package dmu.cheek.member.model;
 
 import dmu.cheek.collection.model.Collection;
+import dmu.cheek.folder.model.Folder;
 import dmu.cheek.global.token.dto.JwtTokenDto;
 import dmu.cheek.global.util.DateTimeUtils;
 import dmu.cheek.member.constant.MemberType;
@@ -85,6 +86,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<MemberConnection> fromMemberConnectionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Folder> folderList;
 
     @Builder(builderMethodName = "allFields")
     public Member(long memberId, String nickname, String email, String information, String description, String profilePicture, Role role, Status status, MemberType memberType) {

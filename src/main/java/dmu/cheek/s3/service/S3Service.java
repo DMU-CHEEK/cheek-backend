@@ -67,6 +67,9 @@ public class S3Service {
     }
 
     public String getResourceUrl(String storeFileName) {
+        if (storeFileName == null)
+            return null;
+
         //S3 Path-Style URL format: https://s3.amazonaws.com/<bucket-name>/<file-name>
         String s3Url = String.format("https://s3.amazonaws.com/%s/%s", bucketName, storeFileName);
         return s3Url;

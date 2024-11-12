@@ -175,6 +175,7 @@ public class MemberService {
 
     public List<MemberDto.Top3MemberInfo> getTop3MembersWithMostUpvotesInWeek() {
         List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
+        log.info("redis topMembers: {}", topMembers.get(0));
         ObjectMapper objectMapper = new ObjectMapper();
         List<MemberDto.Top3MemberInfo> memberInfoList = new ArrayList<>();
 
