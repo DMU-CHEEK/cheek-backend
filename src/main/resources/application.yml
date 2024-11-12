@@ -55,7 +55,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: ENC(BkmpGlE6yb5IhDgepvh8/WDb7dAZDONvA5xqnlvJL90=)
-    password: ENC(tsoycwYQTd49tDovCsEcSsySCCiQk5fuuXH5poRL76k=)
+    password: ENC(/sjzX1ustHYuT4YrFI5h7XDca1H8BeE6IV1cCSPd08Y=)
     default-encoding: utf-8
     properties:
       mail:
