@@ -84,7 +84,7 @@ public class MemberConnectionService {
         Set<Long> loginMemberConnectionList = memberConnectionRepository.findByFromMember(memberInfoDto.getMemberId())
                 .stream().map(memberConnection -> memberConnection.getToMember().getMemberId()).collect(Collectors.toSet());
 
-        log.info("get member {}'s follower list", targetMemberId);
+        log.info("get member {}'s follower list, loginMemberId: {}", targetMemberId, memberInfoDto.getMemberId());
 
         return targetMemberConnectionList.stream()
                 .map(memberConnection -> MemberConnectionDto.Response
@@ -101,10 +101,10 @@ public class MemberConnectionService {
 
     public List<MemberConnectionDto.Response> getFollowingList(long targetMemberId, MemberInfoDto memberInfoDto) {
         List<MemberConnection> targetMemberConnectionList = memberConnectionRepository.findByFromMember(targetMemberId);
-        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByToMember(memberInfoDto.getMemberId())
-                .stream().map(memberConnection -> memberConnection.getFromMember().getMemberId()).collect(Collectors.toSet());
+        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByFromMember(memberInfoDto.getMemberId())
+                .stream().map(memberConnection -> memberConnection.getToMember().getMemberId()).collect(Collectors.toSet());
 
-        log.info("get member {}'s following list, memberId", targetMemberId);
+        log.info("get member {}'s following list, loginMemberId: {}", targetMemberId, memberInfoDto.getMemberId());
 
         return targetMemberConnectionList.stream()
                 .map(memberConnection -> MemberConnectionDto.Response
@@ -114,7 +114,7 @@ public class MemberConnectionService {
                         .nickname(memberConnection.getToMember().getNickname())
                         .information(memberConnection.getToMember().getInformation())
                         .followerCnt(memberConnection.getToMember().getToMemberConnectionList().size())
-                        .isFollowing(loginMemberConnectionList.contains(memberConnection.getToMember().getMemberId()))
+                        .isFollowing(loginMemberConnectionList.contains(memberConnection.getFromMember().getMemberId()))
                         .build()
                 ).toList();
     }
