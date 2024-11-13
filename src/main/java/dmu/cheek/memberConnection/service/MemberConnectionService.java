@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -100,22 +101,24 @@ public class MemberConnectionService {
     }
 
     public List<MemberConnectionDto.Response> getFollowingList(long targetMemberId, MemberInfoDto memberInfoDto) {
-        List<MemberConnection> targetMemberConnectionList = memberConnectionRepository.findByFromMember(targetMemberId);
-        Set<Long> loginMemberConnectionList = memberConnectionRepository.findByFromMember(memberInfoDto.getMemberId())
-                .stream().map(memberConnection -> memberConnection.getToMember().getMemberId()).collect(Collectors.toSet());
+        List<MemberConnection> targetFollowingList = memberConnectionRepository.findByFromMember(targetMemberId);
+        List<Long> loginFollowginList = memberConnectionRepository.findByFromMember(memberInfoDto.getMemberId())
+                .stream().map(memberConnection -> memberConnection.getToMember().getMemberId()).toList();
 
         log.info("get member {}'s following list, loginMemberId: {}", targetMemberId, memberInfoDto.getMemberId());
 
-        return targetMemberConnectionList.stream()
-                .map(memberConnection -> MemberConnectionDto.Response
-                        .builder()
-                        .memberId(memberConnection.getToMember().getMemberId())
-                        .profilePicture(s3Service.getResourceUrl(memberConnection.getToMember().getProfilePicture()))
-                        .nickname(memberConnection.getToMember().getNickname())
-                        .information(memberConnection.getToMember().getInformation())
-                        .followerCnt(memberConnection.getToMember().getToMemberConnectionList().size())
-                        .isFollowing(loginMemberConnectionList.contains(memberConnection.getFromMember().getMemberId()))
-                        .build()
+        return targetFollowingList.stream()
+                .map(following -> MemberConnectionDto.Response
+                                .builder()
+                                .memberId(following.getToMember().getMemberId())
+                                .profilePicture(s3Service.getResourceUrl(following.getToMember().getProfilePicture()))
+                                .nickname(following.getToMember().getNickname())
+                                .information(following.getToMember().getInformation())
+                                .followerCnt(following.getToMember().getToMemberConnectionList().size())
+                                .isFollowing(loginFollowginList.contains(following.getToMember().getMemberId())
+                                || following.getToMember().getMemberId() == memberInfoDto.getMemberId())
+                                .build()
                 ).toList();
     }
+
 }
