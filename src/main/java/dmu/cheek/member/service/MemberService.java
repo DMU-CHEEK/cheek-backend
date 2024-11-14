@@ -2,6 +2,7 @@ package dmu.cheek.member.service;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.firebase.messaging.FirebaseMessaging;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.AuthenticationException;
 import dmu.cheek.global.error.exception.BusinessException;
@@ -48,6 +49,7 @@ public class MemberService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final NotificationService notificationService;
     private final TokenManager tokenManager;
+    private final FirebaseMessaging firebaseMessaging;
 
     public Optional<Member> findByEmailAndMemberType(String email, MemberType memberType) {
         return memberRepository.findByEmailAndMemberType(email, memberType);
@@ -175,7 +177,7 @@ public class MemberService {
 
     public List<MemberDto.Top3MemberInfo> getTop3MembersWithMostUpvotesInWeek() {
         List<Object> topMembers = redisTemplate.opsForList().range("topMembers", 0, -1);
-        log.info("redis topMembers: {}", topMembers.get(0));
+
         ObjectMapper objectMapper = new ObjectMapper();
         List<MemberDto.Top3MemberInfo> memberInfoList = new ArrayList<>();
 
@@ -245,6 +247,7 @@ public class MemberService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
 
         member.expireRefreshToken(LocalDateTime.now());
+        member.setFirebaseToken(null);
     }
 
     public List<MemberDto.List> getMemberList() {

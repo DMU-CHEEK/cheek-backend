@@ -51,10 +51,6 @@ public class OauthLoginService {
             member = existMember.get();
         }
 
-        // 지금 중요한건 저 조건문 위 아래로 다찍어봤는데 생성 로직에서만 안들어갔다는거네웅 빌더문제일것같은데 아무리봐도
-        // 다른건 모르겠어 일단 잠깐만
-
-
         //토큰 생성
         memberId = member.getMemberId();
         isProfileComplete = StringUtils.hasText(member.getNickname()) && StringUtils.hasText(member.getInformation());
