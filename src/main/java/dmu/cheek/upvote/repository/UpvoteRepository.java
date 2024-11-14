@@ -21,11 +21,12 @@ public interface UpvoteRepository extends JpaRepository<Upvote, Long> {
     @Query("select u from Upvote u where u.member.memberId = :memberId")
     Optional<Upvote> findByMemberId(Long memberId);
 
-    @Query("SELECT u.member FROM Upvote u " +
+    @Query("SELECT s.member FROM Upvote u " +
+            "JOIN u.story s " +
             "WHERE u.isUpvoted = true AND u.modifiedAt BETWEEN :startDate AND :endDate " +
-            "GROUP BY u.member ORDER BY COUNT(u) DESC")
-    List<Member> findTop3MembersWithMostLikesInWeek(@Param("startDate") LocalDateTime startDate,
+            "GROUP BY s.member " +
+            "ORDER BY COUNT(u.story) DESC")
+    List<Member> findTopAuthorsWithMostLikedStories(@Param("startDate") LocalDateTime startDate,
                                                     @Param("endDate") LocalDateTime endDate,
                                                     Pageable pageable);
-
 }

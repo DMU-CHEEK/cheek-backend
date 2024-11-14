@@ -85,6 +85,6 @@ public class UpvoteService {
 
     public List<Member> findTop3MembersWithMostLikesInWeek(
             LocalDateTime startOfWeek, LocalDateTime endOfWeek, Pageable pageable) {
-        return upvoteRepository.findTop3MembersWithMostLikesInWeek(startOfWeek, endOfWeek, pageable);
+        return upvoteRepository.findTopAuthorsWithMostLikedStories(startOfWeek, endOfWeek, pageable);
     }
 }
