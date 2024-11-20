@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### fcm ###
-/resources/firebase
+/resources/fcm
 
 ### apple ###
 /resources/apple
