@@ -36,8 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-### fcm ###
-src/main/resources/fcm
-
-### apple ###
-src/main/resources/apple
+### key ###
+src/main/resources/key
