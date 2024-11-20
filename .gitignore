@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### fcm ###
-/resources/fcm
+src/main/resources/fcm
 
 ### apple ###
-/resources/apple
+src/main/resources/apple
