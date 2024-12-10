@@ -1,5 +1,6 @@
 package dmu.cheek.member.model;
 
+import com.google.firebase.database.core.Repo;
 import dmu.cheek.collection.model.Collection;
 import dmu.cheek.folder.model.Folder;
 import dmu.cheek.global.token.dto.JwtTokenDto;
@@ -12,6 +13,7 @@ import dmu.cheek.global.auditing.BaseTimeEntity;
 import dmu.cheek.highlight.model.Highlight;
 import dmu.cheek.noti.model.Notification;
 import dmu.cheek.question.model.Question;
+import dmu.cheek.report.model.Report;
 import dmu.cheek.story.model.Story;
 import dmu.cheek.upvote.model.Upvote;
 import jakarta.persistence.*;
@@ -89,6 +91,12 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Folder> folderList;
+
+    @OneToMany(mappedBy = "toMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Report> toReportList;
+
+    @OneToMany(mappedBy = "fromMember", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Report> fromReportList;
 
     @Builder(builderMethodName = "allFields")
     public Member(long memberId, String nickname, String email, String information, String description, String profilePicture, Role role, Status status, MemberType memberType) {

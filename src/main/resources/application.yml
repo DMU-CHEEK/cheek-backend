@@ -110,4 +110,4 @@ apple:
     id: hugesilver.dev.CHEEK
   redirect-url: https://leadme.store/auth/apple/callback
   key:
-    path: classpath:/apple/AuthKey.p8
+    path: classpath:/key/AuthKey.p8

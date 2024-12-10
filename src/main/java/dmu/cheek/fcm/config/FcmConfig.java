@@ -17,7 +17,7 @@ public class FcmConfig {
 
     @Bean
     FirebaseMessaging firebaseMessaging() throws IOException {
-        ClassPathResource classPathResource = new ClassPathResource("/firebase/cheek-fcm.json");
+        ClassPathResource classPathResource = new ClassPathResource("/key/fcmKey.json");
 
         InputStream refreshToken = classPathResource.getInputStream();
 
