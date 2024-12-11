@@ -15,11 +15,11 @@ public class Block {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long blockId;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
     @JoinColumn(name = "to_member_id", foreignKey = @ForeignKey(name = "toMember", value = ConstraintMode.NO_CONSTRAINT))
     private Member toMember;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne()
     @JoinColumn(name = "from_member_id", foreignKey = @ForeignKey(name = "fromMember", value = ConstraintMode.NO_CONSTRAINT))
     private Member fromMember;
 

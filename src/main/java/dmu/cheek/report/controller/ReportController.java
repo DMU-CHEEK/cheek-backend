@@ -22,7 +22,7 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping()
-    @Operation(summary = "신고하기", description = "신고하기 기능")
+    @Operation(summary = "신고 등록", description = "신고 등록 API")
     public ResponseEntity<String> report(@RequestBody ReportDto.Request reportDto,
                                          @MemberInfo MemberInfoDto memberInfoDto) {
 

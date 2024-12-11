@@ -71,7 +71,10 @@ public enum ErrorCode {
     UPLOAD_FAILED(HttpStatus.BAD_REQUEST, "I-001", "failed to upload image"),
 
     //Notification
-    NOTIFICATION_SENDING_FAILED(HttpStatus.BAD_REQUEST, "N-001", "notification sending failed")
+    NOTIFICATION_SENDING_FAILED(HttpStatus.BAD_REQUEST, "N-001", "notification sending failed"),
+
+    //BLOCK
+    BLOCK_NOT_FOUND(HttpStatus.NOT_FOUND, "B-001", "block not found")
     ;
 
     ErrorCode(HttpStatus httpStatus, String errorCode, String message) {
