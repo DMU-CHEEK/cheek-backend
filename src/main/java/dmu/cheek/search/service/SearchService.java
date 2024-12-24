@@ -1,6 +1,7 @@
 package dmu.cheek.search.service;
 
-import dmu.cheek.global.config.security.service.MemberDetails;
+import dmu.cheek.global.error.ErrorCode;
+import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.global.resolver.memberInfo.MemberInfoDto;
 import dmu.cheek.member.model.Member;
 import dmu.cheek.member.model.MemberDto;
@@ -28,16 +29,19 @@ import java.util.Set;
 @Slf4j
 public class SearchService {
 
-    private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
     private final StoryRepository storyRepository;
     private final S3Service s3Service;
     private final RedisTemplate<String, String> redisTemplate;
+    private final MemberRepository memberRepository;
 
     public SearchDto searchAll(String keyword, MemberInfoDto memberInfoDto, long categoryId) {
-        List<SearchDto.Member> memberList = searchMember(keyword, memberInfoDto.getMemberId());
-        List<SearchDto.Story> storyList = searchStory(keyword, categoryId);
-        List<SearchDto.Question> questionList = searchQuestion(keyword, categoryId);
+        Member loginMember = memberRepository.findById(memberInfoDto.getMemberId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.MEMBER_NOT_FOUND));
+
+        List<SearchDto.Member> memberList = searchMember(keyword, loginMember);
+        List<SearchDto.Story> storyList = searchStory(keyword, categoryId, loginMember);
+        List<SearchDto.Question> questionList = searchQuestion(keyword, categoryId, loginMember);
 
         log.info("search all, keyword: {}", keyword);
 
@@ -51,7 +55,7 @@ public class SearchService {
                 .build();
     }
 
-    public List<SearchDto.Member> searchMember(String keyword, long loginMemberId) {
+    public List<SearchDto.Member> searchMember(String keyword, Member loginMember) {
         List<Member> memberList = memberRepository.findByNicknameContaining(keyword);
 
         log.info("search in members, keyword: {}", keyword);
@@ -61,7 +65,7 @@ public class SearchService {
                     int followerCnt = memberData.getToMemberConnectionList().size();
                     boolean isFollowing = memberData.getToMemberConnectionList()
                             .stream()
-                            .anyMatch(memberConnection -> memberConnection.getFromMember().getMemberId() == loginMemberId);
+                            .anyMatch(memberConnection -> memberConnection.getFromMember().getMemberId() == loginMember.getMemberId());
 
                     return SearchDto.Member.builder()
                             .memberId(memberData.getMemberId())
@@ -77,12 +81,16 @@ public class SearchService {
 
     }
 
-    public List<SearchDto.Story> searchStory(String keyword, long categoryId) {
+    public List<SearchDto.Story> searchStory(String keyword, long categoryId, Member loginMember) {
         List<Story> storyList = storyRepository.findByCategoryIdAndText(categoryId, keyword);
 
         log.info("search in stories, keyword: {}", keyword);
 
         return storyList.stream()
+                .filter(story ->
+                    loginMember.getFromBlockList().stream()
+                            .noneMatch(block -> block.getToMember().getMemberId() == story.getMember().getMemberId())
+                )
                 .map(storyData -> SearchDto.Story.builder()
                         .storyId(storyData.getStoryId())
                         .storyPicture(s3Service.getResourceUrl(storyData.getStoryPicture()))
@@ -92,13 +100,15 @@ public class SearchService {
                 .toList();
     }
 
-    public List<SearchDto.Question> searchQuestion(String keyword, long categoryId) {
+    public List<SearchDto.Question> searchQuestion(String keyword, long categoryId, Member loginMember) {
         List<Question> questionList = questionRepository.findListByCategoryAndText(categoryId, keyword);
 
         log.info("search in questions, keyword: {}", keyword);
-
-        return questionList
-                .stream()
+        return questionList.stream()
+                .filter(question ->
+                        loginMember.getFromBlockList().stream()
+                                .noneMatch(block -> block.getToMember().getMemberId() == question.getMember().getMemberId())
+                )
                 .map(questionData -> SearchDto.Question.builder()
                         .questionId(questionData.getQuestionId())
                         .content(questionData.getContent())
@@ -113,7 +123,6 @@ public class SearchService {
                         )
                         .build())
                 .toList();
-
     }
 
     public void addRecentSearch(MemberInfoDto memberInfoDto, String keyword) {

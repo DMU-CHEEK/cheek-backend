@@ -1,9 +1,6 @@
 package dmu.cheek.oauth.apple.service;
 
-import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.constant.MemberType;
-import dmu.cheek.member.model.Member;
-import dmu.cheek.member.service.MemberService;
 import dmu.cheek.oauth.apple.client.AppleTokenClient;
 import dmu.cheek.oauth.apple.model.ApplePublicKeys;
 import dmu.cheek.oauth.apple.util.ApplePublicKeyGenerator;
@@ -28,7 +25,6 @@ public class AppleLoginApiServiceImpl implements SocialLoginApiService {
     private final AppleTokenParser appleTokenParser;
     private final AppleTokenClient appleTokenClient;
     private final ApplePublicKeyGenerator applePublicKeyGenerator;
-    private final MemberService memberService;
 
     private final String CLAIM_EMAIL = "email";
 

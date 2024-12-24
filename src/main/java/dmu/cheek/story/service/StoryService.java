@@ -154,9 +154,16 @@ public class StoryService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.STORY_NOT_FOUND));
     }
 
-    public List<FeedDto> getStoriesForFeed(long loginMemberId, long categoryId) {
+    public List<FeedDto> getStoriesForFeed(Member member, long categoryId) {
         return storyRepository.findByCategoryId(categoryId)
                 .stream()
+                .filter(story -> {
+                    boolean isBlocked = member.getFromBlockList().stream()
+                            .anyMatch(blockedMember ->
+                                    blockedMember.getToMember().getMemberId() == story.getMember().getMemberId()
+                            );
+                    return !isBlocked;
+                })
                 .map(story ->
                         FeedDto.builder()
                                 .type("STORY")
@@ -170,7 +177,7 @@ public class StoryService {
                                         .storyId(story.getStoryId())
                                         .storyPicture(s3Service.getResourceUrl(story.getStoryPicture()))
                                         .isUpvoted(story.getUpvoteList().stream()
-                                                .anyMatch(upvote -> upvote.getMember().getMemberId() == loginMemberId)
+                                                .anyMatch(upvote -> upvote.getMember().getMemberId() == member.getMemberId())
                                         )
                                         .upvoteCount((int) story.getUpvoteList().size())
                                         .build()

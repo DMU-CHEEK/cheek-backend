@@ -6,7 +6,6 @@ import dmu.cheek.block.repository.BlockRepository;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.BusinessException;
 import dmu.cheek.member.model.Member;
-import dmu.cheek.member.model.MemberDto;
 import dmu.cheek.member.service.MemberService;
 import dmu.cheek.s3.service.S3Service;
 import lombok.RequiredArgsConstructor;

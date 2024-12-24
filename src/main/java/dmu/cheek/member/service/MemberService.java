@@ -3,6 +3,7 @@ package dmu.cheek.member.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.firebase.messaging.FirebaseMessaging;
+import dmu.cheek.block.repository.BlockRepository;
 import dmu.cheek.global.error.ErrorCode;
 import dmu.cheek.global.error.exception.AuthenticationException;
 import dmu.cheek.global.error.exception.BusinessException;

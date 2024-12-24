@@ -104,9 +104,17 @@ public class QuestionService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.QUESTION_NOT_FOUND));
     }
 
-    public List<FeedDto> getQuestionsForFeed(long categoryId) {
+    public List<FeedDto> getQuestionsForFeed(Member member, long categoryId) {
+
         return questionRepository.findByCategoryId(categoryId)
                 .stream()
+                .filter(question -> {
+                    boolean isBlocked = member.getFromBlockList().stream()
+                            .anyMatch(blockedMember ->
+                                    blockedMember.getToMember().getMemberId() == question.getMember().getMemberId()
+                            );
+                    return !isBlocked;
+                })
                 .map(question ->
                         FeedDto.builder()
                                 .type("QUESTION")
@@ -121,10 +129,10 @@ public class QuestionService {
                                         .content(question.getContent())
                                         .storyCnt(question.getStoryList().size())
                                         .build()
-                                ).storyDto(null)
+                                )
+                                .storyDto(null)
                                 .modifiedAt(question.getModifiedAt())
                                 .build()
                 ).toList();
-
     }
 }
